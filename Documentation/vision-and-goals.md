@@ -19,15 +19,13 @@ This is different from meetup.com in that they do larger events at set times, an
 - Users can see lists of people by searching for tags (they must also have the tag to search)
 
 ### Pairing
-- Search for people? Or automatically pair?
+- You tell the app which of your interests to search for, and Commonality shows you profiles of people with that interest on their profile.
+- Users can also see a list of people in their area with a specific shared interest
     - One-sided matching (not like tinder) where you can send a message to someone with shared interests
         - Can't message anyone who doesn't share at least 1 tag
 - Suggested groups to message / suggested users to invite to your group
 - NOT providing a big list for people - offering up random profiles with the same interest.
 - NOT an overall friend-finder app. Keeping it specific to the activity you want to do. If it leads to friendship, that's great.
-
-### Group sizes
-- Specify if you want to find 1 person, 3, 5, etc. for a specific search
 
 ### Groups
 - Once matches are made, it starts a group.
