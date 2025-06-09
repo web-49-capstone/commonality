@@ -1,5 +1,5 @@
 # Commonality
-#### Where People Who Aren't "People People" Meet People
+#### *Where People Who Aren't "People People" Meet People*
 
 ## Commonality connects users with common interests.
 Commonality is not an events app or a meetup app. This app exists to help people find people in their area with similar interests, to get together and DO stuff.
@@ -14,9 +14,13 @@ This is different from meetup.com in that they do larger events at set times, an
 
 ### Profile-based
 - Users create a profile and add interest tags to it
+  - Name, age, photo, about me, and list of interests
   - "I want to meet people to: ___ play tennis, play Warhammer, discuss books, play music, do pottery, have craft days, whatever!"
 - Commonality suggests other profiles of users with similar tags
 - Users can see lists of people by searching for tags (they must also have the tag to search)
+- Checkboxes on interests for absolute beginner or willing to mentor
+- Message user option
+    - Block/report user option
 
 ### Pairing
 - You tell the app which of your interests to search for, and Commonality shows you profiles of people with that interest on their profile.
@@ -24,29 +28,24 @@ This is different from meetup.com in that they do larger events at set times, an
     - One-sided matching (not like tinder) where you can send a message to someone with shared interests
         - Can't message anyone who doesn't share at least 1 tag
 - Suggested groups to message / suggested users to invite to your group
-- NOT providing a big list for people - offering up random profiles with the same interest.
+- NOT providing a big list for people - offering up profiles with the same specific interest.
 - NOT an overall friend-finder app. Keeping it specific to the activity you want to do. If it leads to friendship, that's great.
 
 ### Groups
+- *We still need to flesh out the differences between 1-on-1 connections and groups.*
 - Once matches are made, it starts a group.
-    - Users can change max group sizes
-    - 1-on-1 matches don't make groups
-    - Groups need an admin user? To kick people out / set group name / etc
-        - Groups can have a max size (set by admin)
+    - Users can change max group sizes, or start a fresh group and invite people
+    - Groups need an admin user to kick people out / set group name / etc
 
-### Communication -
-- Keep it on the app
-- Date setting tool - with small calendar in-app but google calendar push as well
-- Polling - take votes on best times to meet
-- Needs a list of your connections and a way to add/remove connections
+### Communication
+- Communication is facilitated through Commonality
+  - Messaging system for 1-on-1 connections
+  - Group messaging for groups
+  - Date setting tool - with small calendar in-app but google calendar push as well
+  - Polling for groups - take votes on best times to meet
+- Account area will have list of your connections and a way to add/remove connections
 - Steal thing from meetup.com that offers up mutual friends / friends with mutual interests to current connections
 
 ### 2 Main Functions:
 - 1-on-1 connections (don't need polls, groups, etc)
 - Groups of 3+ connections (more functionality required)
-
-### User Profiles
-- Name, age, photo, about me, and list of interests
-- Checkbox on interests for absolute beginner or not (willing to be a mentor)
-- Message user option
-    - Block/report user option
