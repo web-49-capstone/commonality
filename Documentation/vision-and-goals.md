@@ -12,23 +12,6 @@ Commonality is not an events app or a meetup app. This app exists to help people
 This is different from meetup.com in that they do larger events at set times, and our app is about finding partners/pairs/groups for something without a strict schedule.
 - E.g. finding a tennis partner, a gaming partner, a (small) group to hike with
 
-<<<<<<< HEAD
-## MAIN GOAL - Pairing profiles together with common interests.
-- Limiting to groups of 2-10
-    -  More intimate groups, NOT large events / meetups
-
-### Profile-driven
-- Add interest tags to your own profile
-- Search for people by tags
-- Suggest people based on tags
-
-### Group sizes
-- A user can specify if they want to find a singular person or multiple people for a specific search.
-
-### Pairing
-- We want to implement a search for specific people, but also want to implement the ability to automatically 
-pair individuals as well.
-=======
 ### Profile-based
 - Users create a profile and add interest tags to it
   - Name, age, photo, about me, and list of interests
@@ -42,7 +25,6 @@ pair individuals as well.
 ### Pairing
 - You tell the app which of your interests to search for, and Commonality shows you profiles of people with that interest on their profile.
 - Users can also see a list of people in their area with a specific shared interest
->>>>>>> b564560303a0658979221d51e9d0c4fd1eead0ec
     - One-sided matching (not like tinder) where you can send a message to someone with shared interests
         - Can't message anyone who doesn't share at least 1 tag
 - Suggested groups to message / suggested users to invite to your group
@@ -52,19 +34,6 @@ pair individuals as well.
 ### Groups
 - *We still need to flesh out the differences between 1-on-1 connections and groups.*
 - Once matches are made, it starts a group.
-<<<<<<< HEAD
-    - Users can change max group sizes
-    - 1-on-1 matches will not make groups initially
-    - Groups will have an admin user to kick people / set group names / etc
-        - Groups can have a max size (set by admin)
-
-### Communication -
-- Keep it on the app
-- Date setting tool - small, in-app calendar, but google, outlook, personal device calendar push is available as well.
-- Polling - take votes on best times to meet
-- Needs a list of your connections and a way to add/remove connections
-- Be able to easily find mutual friends / friends with mutual interests from current connections.
-=======
     - Users can change max group sizes, or start a fresh group and invite people
     - Groups need an admin user to kick people out / set group name / etc
 
@@ -76,7 +45,6 @@ pair individuals as well.
   - Polling for groups - take votes on best times to meet
 - Account area will have list of your connections and a way to add/remove connections
 - Steal thing from meetup.com that offers up mutual friends / friends with mutual interests to current connections
->>>>>>> b564560303a0658979221d51e9d0c4fd1eead0ec
 
 ### 2 Main Functions:
 - 1-on-1 connections (don't need polls, groups, etc)
