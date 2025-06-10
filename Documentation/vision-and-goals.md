@@ -17,7 +17,8 @@ This is different from meetup.com in that they do larger events at set times, an
   - Name, age, photo, about me, and list of interests
   - "I want to meet people to: ___ play tennis, play Warhammer, discuss books, play music, do pottery, have craft days, whatever!"
 - Commonality suggests other profiles of users with similar tags
-- Users can see lists of people by searching for tags (they must also have the tag to search)
+- We want to implement a search for specific people, but also want to implement the ability to automatically
+  pair individuals as well.
 - Checkboxes on interests for absolute beginner or willing to mentor
 - Message user option
     - Block/report user option
@@ -34,8 +35,11 @@ This is different from meetup.com in that they do larger events at set times, an
 ### Groups
 - *We still need to flesh out the differences between 1-on-1 connections and groups.*
 - Once matches are made, it starts a group.
+    - A user can specify if they want to find a singular person or multiple people for a specific search.
+    - 1-on-1 matches will not make groups initially
+
     - Users can change max group sizes, or start a fresh group and invite people
-    - Groups need an admin user to kick people out / set group name / etc
+    - Groups need an admin user to kick people / set group name / etc
 
 ### Communication
 - Communication is facilitated through Commonality
