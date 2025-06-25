@@ -9,7 +9,8 @@ import {
 
 import type { Route } from "./+types/root";
 import "./app.css";
-import { ThemeModeScript } from "flowbite-react";
+import {Footer, ThemeModeScript} from "flowbite-react";
+import {Navigation} from "../src/layouts/navigation";
 
 
 
@@ -40,14 +41,20 @@ export function Layout({ children }: { children: React.ReactNode }) {
         {children}
         <ScrollRestoration />
         <Scripts />
+        <Footer />
       </body>
     </html>
   );
 }
 
 export default function App() {
-  return <Outlet />;
-}
+  return (
+      <>
+        <Navigation />
+        <Outlet />
+        <Footer />
+      </>
+  )}
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   let message = "Oops!";
