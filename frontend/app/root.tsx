@@ -9,8 +9,9 @@ import {
 
 import type { Route } from "./+types/root";
 import "./app.css";
-import {Footer, ThemeModeScript} from "flowbite-react";
+import {ThemeModeScript} from "flowbite-react";
 import {Navigation} from "../src/layouts/navigation";
+import { Footer } from "src/layouts/footer";
 
 
 
@@ -38,6 +39,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <ThemeModeScript />
       </head>
       <body>
+        <Navigation />
         {children}
         <ScrollRestoration />
         <Scripts />
@@ -50,9 +52,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export default function App() {
   return (
       <>
-        <Navigation />
         <Outlet />
-        <Footer />
       </>
   )}
 
