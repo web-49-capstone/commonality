@@ -1,4 +1,6 @@
 import type { Route } from "./+types/home";
+import {Component} from "../../src/layouts/view-connections-messages";
+
 
 
 export function meta({}: Route.MetaArgs) {
