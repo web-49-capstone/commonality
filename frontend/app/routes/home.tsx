@@ -1,8 +1,4 @@
 import type { Route } from "./+types/home";
-import {LoginSignup} from "~/routes/login-signup";
-import {Navigation} from "../../src/layouts/navigation";
-import {Footer} from "../../src/layouts/footer";
-import {Outlet} from "react-router";
 
 
 

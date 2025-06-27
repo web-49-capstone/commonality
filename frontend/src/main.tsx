@@ -11,8 +11,9 @@ createRoot(document.getElementById('root')!).render(
             <Routes>
                 <Route element={<RootLayout />} >
                     <Route  index element={<Home />}/>
-                    {/*<Route path={'/about-us'} element={<AboutUs />} />*/}
-                    {/*<Route path={'/posts'} element={<Posts />} loader={loader}/>*/}
+                    <Route path={'/messages'} element={<Connections />} />
+                    {/*<Route path={'/connect'} element={<Matching />} />*/}
+                    <Route path={'/profile'} element={<Profile />} loader={loader}/>
                 </Route>
             </Routes>
         </BrowserRouter>
