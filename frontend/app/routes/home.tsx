@@ -1,5 +1,5 @@
 import type { Route } from "./+types/home";
-import {Component} from "../../src/layouts/view-connections-messages";
+import {Connections} from "../../src/layouts/view-connections-messages";
 
 
 
@@ -14,7 +14,7 @@ export default function Home() {
   return(
       <>
         <h1 className={'text-3xl font-bold'}> Home </h1>
-        <Component />
+        <Connections />
       </>
   )
 

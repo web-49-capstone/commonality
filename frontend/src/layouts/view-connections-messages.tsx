@@ -2,8 +2,9 @@
 import { TabItem, Tabs } from "flowbite-react";
 import { HiAdjustments, HiClipboardList, HiUserCircle } from "react-icons/hi";
 import { MdDashboard } from "react-icons/md";
+import styles from "../../app/app.css"
 
-export function Component() {
+export function Connections() {
     return (
         <>
             <h1 className={'text-5xl font-bold flex flex-wrap justify-center'}>My Connections</h1>
@@ -63,7 +64,7 @@ export function Component() {
                 </ul>
             </div>
 
-            <div className="bg-gray-200 p-8">
+            <div className="bg-gray-200 p-8 inset-shadow-sm/50">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 max-w-7xl mx-auto">
 
                 {/*/DnD United Card*/}
@@ -72,7 +73,7 @@ export function Component() {
                         <img
                             src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=60&h=60&fit=crop&crop=center"
                             alt="DnD United"
-                            className="w-16 h-16 rounded-full object-cover mr-4 flex-shrink-0"/>
+                            className="w-16 h-16 rounded-full border-3 border-solid border-gray-200 drop-shadow-xl/50 object-cover mr-4 flex-shrink-0"/>
                         <div className="flex-1 min-w-0">
                             <div className="flex items-center justify-between mb-2">
                                 <h3 className="text-lg font-semibold text-gray-900 truncate">DnD United!</h3>
@@ -96,8 +97,8 @@ export function Component() {
                     </div>
 
                     <div className="flex gap-3 mt-auto">
-                        <button ////hover:bg-violet-600 focus:outline-2 focus:outline-offset-2 focus:outline-violet-500 active:bg-violet-700 ...
-                            className="flex-1 bg-blue-600 focus:outline-4 focus:outline-offset-1 focus:outline-blue-600 text-white py-2 px-4 rounded-3xl font-medium hover:bg-blue-700 transition-colors">
+                        <button
+                            className="${styles.container} ${styles.container:before} flex-1 bg-blue-600  text-white py-2 px-4 rounded-3xl font-medium hover:bg-blue-700 transition-colors">
                             Message
                         </button>
                         <button
@@ -113,7 +114,7 @@ export function Component() {
                         <img
                             src="https://images.unsplash.com/photo-1613771404721-1f92d799e49f?w=60&h=60&fit=crop&crop=center"
                             alt="Pocket Monsters"
-                            className="w-16 h-16 rounded-full object-cover mr-4 flex-shrink-0"/>
+                            className="w-16 h-16 rounded-full border-3 border-solid border-gray-200 drop-shadow-xl/50 object-cover mr-4 flex-shrink-0"/>
                         <div className="flex-1 min-w-0">
                             <div className="flex items-center justify-between mb-2">
                                 <h3 className="text-lg font-semibold text-gray-900 truncate">Pocket Monsters Portable -
@@ -155,7 +156,7 @@ export function Component() {
                         <img
                             src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=60&h=60&fit=crop&crop=center"
                             alt="Tech Scene"
-                            className="w-16 h-16 rounded-full object-cover mr-4 flex-shrink-0"/>
+                            className="w-16 h-16 rounded-full border-3 border-solid border-gray-200  drop-shadow-xl/50 object-cover mr-4 flex-shrink-0"/>
                         <div className="flex-1 min-w-0">
                             <div className="flex items-center justify-between mb-2">
                                 <h3 className="text-lg font-semibold text-gray-900 truncate">Tech Scene 'Querque</h3>
@@ -196,7 +197,7 @@ export function Component() {
                         <img
                             src="https://images.unsplash.com/photo-1546519638-68e109498ffc?w=60&h=60&fit=crop&crop=center"
                             alt="Basketball Bros"
-                            className="w-16 h-16 rounded-full object-cover mr-4 flex-shrink-0"/>
+                            className="w-16 h-16 rounded-full border-3 border-solid border-gray-200 drop-shadow-xl/50 object-cover mr-4 flex-shrink-0"/>
                         <div className="flex-1 min-w-0">
                             <div className="flex items-center justify-between mb-2">
                                 <h3 className="text-lg font-semibold text-gray-900 truncate">Basketball Bros!</h3>
@@ -237,7 +238,7 @@ export function Component() {
                         <img
                             src="https://images.unsplash.com/photo-1544717297-fa95b6ee9643?w=60&h=60&fit=crop&crop=center"
                             alt="Badminton Pros"
-                            className="w-16 h-16 rounded-full object-cover mr-4 flex-shrink-0"/>
+                            className="w-16 h-16 rounded-full border-3 border-solid border-gray-200 drop-shadow-xl/50 object-cover mr-4 flex-shrink-0"/>
                         <div className="flex-1 min-w-0">
                             <div className="flex items-center justify-between mb-2">
                                 <h3 className="text-lg font-semibold text-gray-900 truncate">Badminton Pros!</h3>
