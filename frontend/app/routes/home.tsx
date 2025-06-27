@@ -15,8 +15,7 @@ export function meta({}: Route.MetaArgs) {
 export default function Home() {
   return(
       <>
-<h1>LALALALA</h1>
+        <h1 className = "min-h-100">Testing, testing... This text from app/routes/home.tsx</h1>
       </>
   )
-
 }
