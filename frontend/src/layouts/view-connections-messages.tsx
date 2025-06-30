@@ -1,9 +1,6 @@
-
-import { TabItem, Tabs } from "flowbite-react";
-import { HiAdjustments, HiClipboardList, HiUserCircle } from "react-icons/hi";
-import { MdDashboard } from "react-icons/md";
-import styles from "../../app/app.css"
 import {useState} from 'react'
+import { useNavigate } from 'react-router';
+
 
 interface Profile {
     id: string;
@@ -15,7 +12,7 @@ interface Profile {
     skillLevel: string,
     isIndividual: boolean,
 }
-
+//I'M WORKING ON THE MESSAGING ASPECT!!! SEE "handleMessagesClick"
 const groupProfiles: Profile[] = [
     {
         id: "1",
@@ -112,10 +109,11 @@ const individualProfiles : Profile[] = [
     },
 ]
 
-type TabType = 'individual' | 'groups' | 'recent' | 'frequent';
+type TabType = 'individual' | 'groups' | 'recent' | 'Messages';
 
 export function Connections() {
     const [activeTab, setActiveTab] = useState<TabType>('individual');
+    const navigate = useNavigate();
 
     // Get profiles based on active tab
     const getActiveProfiles = (): Profile[] => {
@@ -124,13 +122,22 @@ export function Connections() {
                 return individualProfiles;
             case 'groups':
                 return groupProfiles;
+            case 'recent':
+                return groupProfiles;
+            case 'Messages':
+                handleMessageClick()
             default:
                 return groupProfiles;
         }
     };
 
+    const handleMessageClick = () => {
+        navigate('../components/Groupchat')
+    }
+
     return (
         <>
+            <section className="mt-10">
             <h1 className={'text-5xl font-bold flex flex-wrap justify-center'}>My Connections</h1>
             <div className="border-b border-gray-200 dark:border-gray-700">
                 <ul className="flex flex-wrap justify-center -mb mt-15 -px text-sm font-medium text-center text-gray-500">
@@ -186,13 +193,13 @@ export function Connections() {
                     </li>
                     <li className="me-2">
                         <button
-                            onClick={() => setActiveTab('frequent')}
+                            onClick={handleMessageClick}
                             className={`inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group ${
-                                activeTab === 'frequent' ? 'text-blue-600 border-blue-600 active dark:text-blue-500 dark:border-blue-500' : ''
+                                activeTab === 'Messages' ? 'text-blue-600 border-blue-600 active dark:text-blue-500 dark:border-blue-500' : ''
                             }`}>
                             <svg
                                 className={`w-4 h-4 me-2 ${
-                                    activeTab === 'frequent'
+                                    activeTab === 'Messages'
                                         ? 'text-blue-600 dark:text-blue-500'
                                         : 'text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-300'
                                 }`}
@@ -201,7 +208,7 @@ export function Connections() {
                                 <path
                                     d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2Zm-3 14H5a1 1 0 0 1 0-2h8a1 1 0 0 1 0 2Zm0-4H5a1 1 0 0 1 0-2h8a1 1 0 1 1 0 2Zm0-5H5a1 1 0 0 1 0-2h2V2h4v2h2a1 1 0 1 1 0 2Z"/>
                             </svg>
-                            Frequent
+                            Messages
                         </button>
                     </li>
                 </ul>
@@ -256,6 +263,7 @@ export function Connections() {
 
                 </div>
             </div>
+          </section>
         </>
     )
 }

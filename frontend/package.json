@@ -10,6 +10,8 @@
     "postinstall": "flowbite-react patch"
   },
   "dependencies": {
+    "@cometchat-pro/chat": "^3.0.13",
+    "@cometchat/chat-uikit-react": "^6.1.0",
     "@react-router/node": "^7.5.3",
     "@react-router/serve": "^7.5.3",
     "commonality": "^0.2.63",
