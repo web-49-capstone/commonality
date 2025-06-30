@@ -3,21 +3,10 @@ import {PiPlugsConnectedFill} from "react-icons/pi";
 import {CgProfile} from "react-icons/cg";
 import React, {useEffect, useState} from "react";
 import {NavLink} from "react-router";
-import {useRef} from "react";
-import {useLocation} from "react-router"
 
 
 export function Navigation(){
-    const loc = useLocation()
 
-    const [currentPage, setCurrentPage] = useState(loc.pathname)
-
-    const desktopMessagesRef = useRef(null)
-    const desktopConnectRef = useRef(null)
-    const desktopProfileRef = useRef(null)
-    const mobileMessagesRef = useRef(null)
-    const mobileConnectRef = useRef(null)
-    const mobileProfileRef = useRef(null)
     const desktopNavClasses = "flex items-center gap-2 text-lg text-gray-700 hover:text-blue-700 hover:border-b-2"
     const mobileNavClasses = "flex flex-col items-center gap-2 text-md hover:text-blue-600 hover:border-b-2"
     const desktopCurrentNavClasses = "flex items-center gap-2 text-lg text-blue-700 border-b-2 border-blue-700"
