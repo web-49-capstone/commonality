@@ -42,6 +42,4 @@ export function Navigation(){
             </nav>
         </>
     )
-
 }
-
