@@ -1,6 +1,4 @@
 import {useState} from 'react'
-import { useNavigate } from 'react-router';
-
 
 interface Profile {
     id: string;
@@ -113,7 +111,6 @@ type TabType = 'individual' | 'groups' | 'recent' | 'Messages';
 
 export function Connections() {
     const [activeTab, setActiveTab] = useState<TabType>('individual');
-    const navigate = useNavigate();
 
     // Get profiles based on active tab
     const getActiveProfiles = (): Profile[] => {
@@ -125,19 +122,16 @@ export function Connections() {
             case 'recent':
                 return groupProfiles;
             case 'Messages':
-                handleMessageClick()
+                return []
             default:
                 return groupProfiles;
         }
     };
 
-    const handleMessageClick = () => {
-        navigate('../components/Groupchat')
-    }
 
     return (
         <>
-            <section className="mt-10">
+            <section className="mt-25">
             <h1 className={'text-5xl font-bold flex flex-wrap justify-center'}>My Connections</h1>
             <div className="border-b border-gray-200 dark:border-gray-700">
                 <ul className="flex flex-wrap justify-center -mb mt-15 -px text-sm font-medium text-center text-gray-500">
@@ -163,13 +157,13 @@ export function Connections() {
                     <li className="me-2">
                         <button
                             onClick={() => setActiveTab('groups')}
-                            className={`inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group ${
+                            className={`inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-300 hover:border-gray-300 ${
                                 activeTab === 'groups' ? 'text-blue-600 active border-blue-600 active' : ''
                            }`}>
                             <svg className={`w-4 h-4 me-2 ${
                                 activeTab === 'groups'
                                     ? 'text-blue-600 dark:text-blue-500'
-                                    : 'text-gray-300 group-hover:text-gray-500'
+                                    : 'text-gray-400 group-hover:text-gray-500'
                             }`} aria-hidden="true"
                                  xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">
                                 <path
@@ -193,7 +187,7 @@ export function Connections() {
                     </li>
                     <li className="me-2">
                         <button
-                            onClick={handleMessageClick}
+                            onClick={() => setActiveTab('Messages')}
                             className={`inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group ${
                                 activeTab === 'Messages' ? 'text-blue-600 border-blue-600 active dark:text-blue-500 dark:border-blue-500' : ''
                             }`}>
