@@ -1,14 +1,16 @@
 import {useState} from 'react'
+import { FaUserGroup } from "react-icons/fa6";
 
 interface Profile {
     id: string;
     name: string,
-    image: string,
+    image: string | any,
     memberCount: number,
     description: string,
     nextMeetup: string,
     skillLevel: string,
     isIndividual: boolean,
+    isOnline: boolean | null
 }
 //I'M WORKING ON THE MESSAGING ASPECT!!! SEE "handleMessagesClick"
 const groupProfiles: Profile[] = [
@@ -21,6 +23,7 @@ const groupProfiles: Profile[] = [
         nextMeetup: "Campaign Strategy - June 22",
         skillLevel: "All Levels",
         isIndividual: false,
+        isOnline: null
     },
     {
         id: "2",
@@ -31,6 +34,7 @@ const groupProfiles: Profile[] = [
         nextMeetup: "Catch 'Em All! - June 15",
         skillLevel: "All Levels",
         isIndividual: false,
+        isOnline: null
     },
     {
         id: "3",
@@ -41,6 +45,7 @@ const groupProfiles: Profile[] = [
         nextMeetup: "Tech & Talk & Tea! - June 28",
         skillLevel: "All Levels",
         isIndividual: false,
+        isOnline: null
     },
     {
         id: "4",
@@ -51,6 +56,7 @@ const groupProfiles: Profile[] = [
         nextMeetup: "Slam Dunk Showoff! - June 25",
         skillLevel: "Intermediate - Advanced",
         isIndividual: false,
+        isOnline: null
     },
     {
         id: "5",
@@ -61,6 +67,7 @@ const groupProfiles: Profile[] = [
         nextMeetup: "See You On The Field! - July 1",
         skillLevel: "Intermediate - Advanced",
         isIndividual: false,
+        isOnline: null
     }
 ]
 
@@ -68,12 +75,13 @@ const individualProfiles : Profile[] = [
     {
         id: "ind1",
         name: "Sarah Mitchell",
-        image: "https://images.unsplash.com/photo-1494790108755-2616b612b550?w=60&h=60&fit=crop&crop=center",
-        memberCount: 0, // Not applicable for individuals
+        image: "https://source.unsplash.com/9UMmYe",
+        memberCount: 0,
         description: "Software Engineer & D&D Enthusiast",
         nextMeetup: "Coffee Chat - June 30",
         skillLevel: "Intermediate",
         isIndividual: true,
+        isOnline: false
     },
     {
         id: "ind2",
@@ -84,6 +92,7 @@ const individualProfiles : Profile[] = [
         nextMeetup: "Training Session - July 2",
         skillLevel: "Advanced",
         isIndividual: true,
+        isOnline: true
     },
     {
         id: "ind3",
@@ -94,6 +103,7 @@ const individualProfiles : Profile[] = [
         nextMeetup: "Networking Event - June 29",
         skillLevel: "Expert",
         isIndividual: true,
+        isOnline: true
     },
     {
         id: "ind4",
@@ -104,8 +114,10 @@ const individualProfiles : Profile[] = [
         nextMeetup: "Practice Match - July 3",
         skillLevel: "Professional",
         isIndividual: true,
+        isOnline: false
     },
 ]
+
 
 type TabType = 'individual' | 'groups' | 'recent' | 'Messages';
 
@@ -132,7 +144,10 @@ export function Connections() {
     return (
         <>
             <section className="mt-25">
-            <h1 className={'text-5xl font-bold flex flex-wrap justify-center'}>My Connections</h1>
+            <div className="flex items-center justify-center gap-4 mt-25">
+                <h1 className={'text-5xl font-bold'}>My Connections</h1>
+                <FaUserGroup className={'h-15 w-15 text-blue-600'}/>
+            </div>
             <div className="border-b border-gray-200 dark:border-gray-700">
                 <ul className="flex flex-wrap justify-center -mb mt-15 -px text-sm font-medium text-center text-gray-500">
                     <li className="me-2">
@@ -141,7 +156,7 @@ export function Connections() {
                             className={`inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group ${
                                 activeTab === 'individual' ? 'text-blue-600 border-blue-600 active' : ''}`}>
                             <svg
-                                className={`w-4 h-4 me-2 ${
+                                className={`w-5 h-5 me-2 ${
                                     activeTab === 'individual'
                                         ? 'text-blue-600'
                                         : 'text-gray-400 group-hover:text-gray-500'
@@ -217,7 +232,7 @@ export function Connections() {
                                 <img
                                     src={profile.image}
                                     alt={profile.name}
-                                    className="w-16 h-16 rounded-full border-3 border-solid border-gray-200 drop-shadow-xl/50 object-cover mr-4 flex-shrink-0"/>
+                                    className="w-19 h-19 rounded-full border-3 border-solid border-gray-200 drop-shadow-xl/50 object-cover mr-4 flex-shrink-0"/>
                                 <div className="flex-1 min-w-0">
                                     <div className="flex items-center justify-between mb-2">
                                         <h3 className="text-lg font-semibold text-gray-900 truncate">{profile.name}</h3>
@@ -234,17 +249,24 @@ export function Connections() {
                                             <span className="text-sm font-medium text-gray-900">{profile.memberCount} members</span>
                                         </div>
                                     )}
+                                    {profile.isIndividual && profile.isOnline && (
+                                        <div className="flex items-center mb-1">
+                                            <div className="w-3 h-3 animate-ping bg-green-500 rounded-full"></div>
+                                            <div className="w-3 h-3 bg-green-500 rounded-full -ml-3 mr-2"></div>
+                                            <span className="text-sm font-medium text-gray-900">{profile.isOnline} is online</span>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
 
                             <div className="mb-4 flex-1">
-                                <p className="text-sm text-gray-600 mb-2">{profile.description}</p>
-                                <p className="text-sm text-gray-500">Next meetup: {profile.nextMeetup}</p>
+                                <p className="text-18 text-gray-600 mb-2">{profile.description}</p>
+                                <p className="text-18 text-gray-500">Next meetup: {profile.nextMeetup}</p>
                             </div>
 
                             <div className="flex gap-3 mt-auto">
                                 <button
-                                    className=/*{`${styles.container} ${styles.container:before}*/ 'flex-1 bg-blue-600 text-white py-2 px-4 rounded-3xl font-medium hover:bg-blue-700 transition-colors'>
+                                    className='flex-1 bg-blue-600 text-white py-2 px-4 rounded-3xl font-medium hover:bg-blue-700 transition-colors'>
                                     {profile.isIndividual ? 'Connect' : 'Message'}
                                 </button>
                                 <button
