@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {InterestSelector} from "~/routes/interests";
+import {InterestSelector} from "~/components/interests";
 import {IconContext} from "react-icons";
 
 import { CgProfile } from "react-icons/cg";
@@ -63,6 +63,8 @@ export function CreateProfile() {
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault()
         console.log(formData)
+        localStorage.setItem("profile", JSON.stringify(formData));
+
     }
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 

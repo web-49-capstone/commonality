@@ -1,6 +1,14 @@
 import type { Route } from "./+types/home";
+import {ProfilePage} from "~/components/profile-page";
+import type {Profile} from "~/types/profile";
 
-
+ const dylan:Profile = {
+    firstName: 'dylan',
+    lastName: "keck",
+    bio: 'new here',
+    interests: ["baseball"],
+    profilePicture : null
+}
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -12,7 +20,7 @@ export function meta({}: Route.MetaArgs) {
 export default function Home() {
   return(
       <>
-        <h1 className = "min-h-100">Testing, testing... This text from app/routes/home.tsx</h1>
+          <ProfilePage profile={dylan} isCurrentUser={true} />
       </>
   )
 
