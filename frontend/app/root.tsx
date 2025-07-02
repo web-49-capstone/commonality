@@ -46,8 +46,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
-}
+  return (
+<>
+  <div className="min-h-screen flex flex-col pb-30 md:pb-0">
+    {/*<Navigation />*/}
+    <main className="flex-1">
+      <Outlet />
+    </main>
+    {/*<Footer />*/}
+  </div>
+</>
+)}
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   let message = "Oops!";

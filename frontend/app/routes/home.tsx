@@ -1,5 +1,6 @@
 import type { Route } from "./+types/home";
 import {Connections} from "../../src/layouts/view-connections-messages";
+import MessagingApp from "../../src/layouts/Messaging";
 
 
 
@@ -13,6 +14,7 @@ export function meta({}: Route.MetaArgs) {
 export default function Home() {
   return(
       <>
+        <MessagingApp/>
         <Connections />
       </>
   )

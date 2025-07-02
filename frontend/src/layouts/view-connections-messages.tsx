@@ -1,5 +1,6 @@
 import {useState} from 'react'
 import { FaUserGroup } from "react-icons/fa6";
+import MessagingApp from "./Messaging";
 
 interface Profile {
     id: string;
