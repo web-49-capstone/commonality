@@ -39,11 +39,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <ThemeModeScript />
       </head>
       <body>
-        <Navigation />
         {children}
         <ScrollRestoration />
         <Scripts />
-        <Footer />
       </body>
     </html>
   );
@@ -52,9 +50,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export default function App() {
   return (
       <>
-        <div className="pb-30 md:pb-6">
-          <Outlet />
+        <div className="min-h-screen flex flex-col pb-30 md:pb-6">
+          <Navigation />
+          <main className="flex-1">
+            <Outlet />
+          </main>
         </div>
+        <Footer />
       </>
   )}
 
