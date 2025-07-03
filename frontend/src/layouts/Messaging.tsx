@@ -5,6 +5,7 @@ import {FaSearch} from "react-icons/fa"
 import {CiCircleInfo} from "react-icons/ci"
 import {BsFillSendFill} from "react-icons/bs"
 import MessageBubble from "./components/MessageBubble"
+import ChatTabs from "./components/ChatTabs"
 
 
 const MessagingApp = () => {
@@ -13,68 +14,70 @@ const MessagingApp = () => {
 
     const contacts = [
         {
-            id: 1,
-            name: 'Marcus Rodriguez',
+            userId: "0197d20f-c2a2-7877-93a6-7248762b4b2d",
+            userName: 'Marcus Rodriguez',
             lastMessage: 'That\'s so fetch!',
-            time: '11:30 PM',
-            avatar: '',
-            online: true,
-            unread: 2
+            messageTime: '11:30 PM',
+            userImgUrl: '',
+            isOnline: true,
+            unreadMessages: 2
         },
         {
-            id: 2,
-            name: 'Lisa Chen',
+            userId: "0197d211-8b00-77ca-ab2b-6f0420f835de",
+            userName: 'Lisa Chen',
             lastMessage: 'I can\'t believe he said that at the last meetup!',
-            time: '1:15 PM',
-            avatar: '',
-            online: true,
-            unread: 829
+            messageTime: '1:15 PM',
+            userImgUrl: '',
+            isOnline: true,
+            unreadMessages: 829
         },
         {
-            id: 3,
-            name: 'David Park',
+            userId: "0197d212-c2c0-715d-bfd0-8b9eaaab7c5e",
+            userName: 'David Park',
             lastMessage: 'See you tomorrow for the meet!',
-            time: '8:45 PM',
-            avatar: '',
-            online: false,
-            unread: 1
+            messageTime: '8:45 PM',
+            userImgUrl: '',
+            isOnline: false,
+            unreadMessages: 1
         },
         {
-            id: 4,
-            name: 'Alex Thompson',
+            userId: "0197d215-eb60-760a-8a93-d092b4d30c74",
+            userName: 'Alex Thompson',
             lastMessage: 'Perfect, let me know',
-            time: 'Yesterday',
-            avatar: '',
-            online: false,
-            unread: 4
+            messageTime: 'Yesterday',
+            userImgUrl: '',
+            isOnline: false,
+            unreadMessages: 4
         },
         {
-            id: 5,
-            name: 'Sarah Mitchell',
+            userId: "0197d25d-6da6-7ffe-80b5-8b93d04f1bfd",
+            userName: 'Sarah Mitchell',
             lastMessage: 'The project looks great!',
-            time: 'Yesterday',
-            avatar: '',
-            online: true,
-            unread: 0
+            messageTime: 'Yesterday',
+            userImgUrl: '',
+            isOnline: true,
+            unreadMessages: 0
         },
     ];
-
+    const loggedInUser = {userId: "0197d1d2-e6ef-7e8a-80db-ce603e81d16f", userName: "Alex Thompson"}
     const messages : boolean = [
-        {id: 1, text: 'Hey! What up?!?!', sent: false, time: '2:25 PM'},
+        {messageId: 1, messageBody: 'Hey! What up?!?!', messageSenderId: "0197d1d1-b061-7345-9763-33a7ca2b7d64", messageReceiverId: "0197d1d2-e6ef-7e8a-80db-ce603e81d16f", messageSentAt: '2:25 PM'},
         {
-            id: 2,
-            text: 'I\'m doing great! Just working on some new projects. How about you?',
-            sent: true,
-            time: '2:26 PM'
+            messageId: 2,
+            messageBody: 'I\'m doing great! Just working on some new projects. How about you?',
+            messageSenderId: "0197d1d2-e6ef-7e8a-80db-ce603e81d16f",
+            messageReceiverId: "0197d1d1-b061-7345-9763-33a7ca2b7d64",
+            messageSentAt: '2:26 PM'
         },
-        {id: 3, text: 'I\'m ok... "Working 9-5!" as the kids say.', sent: false, time: '2:28 PM'},
+        {messageId: 1, messageBody: 'I\'m ok... "Working 9-5!" as the kids say.', messageSenderId: "0197d1d1-b061-7345-9763-33a7ca2b7d64", messageReceiverId: "0197d1d2-e6ef-7e8a-80db-ce603e81d16f", messageSentAt: '2:28 PM'},
         {
-            id: 4,
-            text: 'Awwh! Well you need a destress! We should grab coffee this week and I can tell you all about my day.',
-            sent: true,
-            time: '2:29 PM'
+            messageId: 2,
+            messageBody: 'Awwh! Well you need a destress! We should grab coffee this week and I can tell you all about my day.',
+            messageSenderId: "0197d1d2-e6ef-7e8a-80db-ce603e81d16f",
+            messageReceiverId: "0197d1d1-b061-7345-9763-33a7ca2b7d64",
+            messageSentAt: '2:29 PM'
         },
-        {id: 5, text: 'Perfect! How about Thursday afternoon?', sent: false, time: '2:30 PM'},
+        {messageId: 1, messageBody: 'Perfect! How about Thursday afternoon?', messageSenderId: "0197d1d1-b061-7345-9763-33a7ca2b7d64", messageReceiverId: "0197d1d2-e6ef-7e8a-80db-ce603e81d16f", messageSentAt: '2:30 PM'},
     ];
 
     const messageHandler = () => {
@@ -223,41 +226,9 @@ const MessagingApp = () => {
                 </div>
 
                 {/* Chat List */}
-                <div className="flex-1 overflow-y-auto">
+                <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
                     {contacts.map((contact, index) => (
-                        <div
-                            key={contact.id}
-                            onClick={() => setSelectedChat(index)}
-                            className={`flex items-center p-3 hover:bg-gray-50 h-25 cursor-pointer ${
-                                selectedChat === index ? 'bg-blue-50' : ''
-                            }`}
-                        >
-                            <div className="relative">
-                                <div
-                                    className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white text-xl">
-                                    {contact.avatar}
-                                </div>
-                                {contact.online && (
-                                    <div
-                                        className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
-                                )}
-                            </div>
-                            <div className="ml-3 flex-1 min-w-0">
-                                <div className="flex justify-between items-center">
-                                    <h3 className="font-semibold text-lg text-gray-900 truncate">{contact.name}</h3>
-                                    <span className="text-xs text-gray-500">{contact.time}</span>
-                                </div>
-                                <div className="flex justify-between items-center">
-                                    <p className="text-md text-gray-600 truncate">{contact.lastMessage}</p>
-                                    {contact.unread > 0 && (
-                                        <span
-                                            className="bg-blue-500 text-white text-xs rounded-full px-3 py-1 min-w-5 text-center justify-center">
-                      {contact.unread}
-                    </span>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
+                        <ChatTabs contact={contact} key={contact.userId} setSelectedChat={setSelectedChat} index={index}/>
                     ))}
                 </div>
             </div>
@@ -270,7 +241,7 @@ const MessagingApp = () => {
                         <div className="relative">
                             <div
                                 className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white">
-                                {contacts[selectedChat]?.avatar}
+                                {contacts[selectedChat]?.userImgUrl}
                             </div>
                             {contacts[selectedChat]?.online && (
                                 <div
@@ -278,9 +249,9 @@ const MessagingApp = () => {
                             )}
                         </div>
                         <div className="ml-3">
-                            <h2 className="font-semibold text-gray-900">{contacts[selectedChat]?.name}</h2>
+                            <h2 className="font-semibold text-gray-900">{contacts[selectedChat]?.userName}</h2>
                             <p className="text-sm text-gray-500">
-                                {contacts[selectedChat]?.online ? 'Active now' : 'Active 2h ago'}
+                                {contacts[selectedChat]?.isOnline ? 'Active now' : 'Active 2h ago'}
                             </p>
                         </div>
                     </div>
@@ -294,33 +265,33 @@ const MessagingApp = () => {
                 {/* Messages */}
                 <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
                     {messages.map((message) => (
-                        <MessageBubble key={message.id} message={message} />
+                        <MessageBubble loggedInUser={loggedInUser} key={message.id} message={message} />
                     ))}
                 </div>
 
                 {/* Message Input */}
                 <div className="p-4 border-t border-gray-200 bg-white">
                     <div className="flex items-end gap-3">
-                        <div className="flex-1 relative">
+                      <div className="flex-1">
               <textarea
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
                   onKeyPress={handleKeyPress}
                   placeholder="Type a message..."
-                  className="w-full px-4 py-3 pr-12 bg-gray-100 rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-12 max-h-32"
+                  className="w-full px-4 py-3 bg-gray-100 rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-12 max-h-32"
               />
-                            <button
-                                onClick={messageHandler}
-                                disabled={!newMessage.trim()}
-                                className={`absolute right-2 bottom-2 p-2 rounded-full ${
-                                    newMessage.trim()
-                                        ? 'bg-blue-500 text-white hover:bg-blue-600'
-                                        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                }`}
-                            >
-                                <BsFillSendFill size={16}/>
-                            </button>
-                        </div>
+                      </div>
+                        <button
+                            onClick={messageHandler}
+                            disabled={!newMessage.trim()}
+                            className={`right-2 bottom-2 p-2 rounded-full ${
+                                newMessage.trim()
+                                    ? 'bg-blue-500 text-white hover:bg-blue-600'
+                                    : 'cursor-not-allowed'
+                            }`}
+                        >
+                            <BsFillSendFill size={30}/>
+                        </button>
                     </div>
                 </div>
             </div>
