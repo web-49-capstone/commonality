@@ -1,20 +1,3 @@
 @import "tailwindcss";
 @plugin "flowbite-react/plugin/tailwindcss";
 @source "../.flowbite-react/class-list.json";
-
-.background-image {
-    background: url("https://images.unsplash.com/photo-1544306094-e2dcf9479da3") no-repeat;
-    background-size: cover;
-    background-attachment: fixed;
-}
-
-.container:before {
-  @apply content-[''] absolute shadow-[inset_0_0_2000px_rgba(255,255,255,0.5)] blur-[10px] inset-0;
-  background: inherit;
-}
-
-.container {
-  background: inherit;
-}
-
-

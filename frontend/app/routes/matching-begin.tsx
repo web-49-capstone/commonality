@@ -3,7 +3,7 @@ import {MyInterestsDropdown} from "~/components/my-interests-dropdown";
 export function MatchingBegin() {
     return(
         <>
-            <div className="">
+            <div>
                 <div className="grid grid-cols-1 lg:grid-cols-2 mt-5 lg:mt-10 container mx-auto">
                     <div className="text-center">
                         <img src="../../public/commonality-logo.png" alt="Commonality Logo" className="w-1/4 mx-auto"/>
