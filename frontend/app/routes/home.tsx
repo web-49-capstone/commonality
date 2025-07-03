@@ -3,8 +3,6 @@ import type { Route } from "./+types/home";
 import {ProfilePage} from "~/components/profile-page";
 import type {Profile} from "~/types/profile";
 import {MatchingBegin} from "~/routes/matching-begin";
-import {Connections} from "../../src/layouts/view-connections-messages";
-import MessagingApp from "../../src/layouts/Messaging";
 
 
  const dylan:Profile = {
