@@ -3,11 +3,13 @@ import {ProfilePage} from "~/components/profile-page";
 import type {Profile} from "~/types/profile";
 
  const dylan:Profile = {
-    firstName: 'dylan',
-    lastName: "keck",
-    bio: 'new here',
+    userFirstName: 'dylan',
+    userLastName: "keck",
+    userBio: 'new here',
     interests: ["baseball"],
-    profilePicture : null
+    userImgUrl : null,
+    userState:"New Mexico",
+     userCity: "Albuquerque"
 }
 
 export function meta({}: Route.MetaArgs) {

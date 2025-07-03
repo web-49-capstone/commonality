@@ -7,7 +7,7 @@ export function UserProfilePage() {
     const [profile, setProfile] = useState<any>(null);
 
     useEffect(() => {
-        //  Replace this with a real API fetch
+        //  Replace this with our backend data once set up
         const mock = localStorage.getItem("mockUsers");
         const all = mock ? JSON.parse(mock) : [];
         const found = all.find((user: any) => user.id === userId);

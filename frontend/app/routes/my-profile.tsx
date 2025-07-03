@@ -5,6 +5,7 @@ export function MyProfile() {
     const [profile, setProfile] = useState<Profile | null>(null);
 
     useEffect(() => {
+        // Replace with our backend data later
         const stored = localStorage.getItem("profile");
         if (stored) {
             setProfile(JSON.parse(stored));

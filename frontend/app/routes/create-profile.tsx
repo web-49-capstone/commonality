@@ -1,9 +1,8 @@
 import React, {useState} from "react";
 import {InterestSelector} from "~/components/interests";
 import {IconContext} from "react-icons";
-
+import {States} from "~/types/states";
 import { CgProfile } from "react-icons/cg";
-
 
 const allInterests = [
     "Gaming",
@@ -34,7 +33,7 @@ const allInterests = [
     "Machine Learning",
     "AI",
 ]
-export function CreateProfile() {
+export default function CreateProfile() {
     const [formData, setFormData] = useState({
         userImgUrl: null as File | null,
         userFirstName: "",
@@ -69,6 +68,7 @@ export function CreateProfile() {
 
     }
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+    const [selectedState, setSelectedState] = useState<string>('');
 
 
     return (
@@ -115,6 +115,19 @@ export function CreateProfile() {
                         placeholder="Last Name"
                         className="border-2 border-black py-2 pl-2 w-full"
                     />
+                        <select
+                            value={selectedState}
+                            onChange={(e) => setSelectedState(e.target.value)}
+                            className="w-full p-2 border rounded mb-4"
+                            >
+                        <option value="">Select a state</option>
+                            {States.map((state) => (
+                                <option key={state.code} value={state.code}>
+                                    {state.name}
+                                </option>
+                            ))}
+                    </select>
+
                     </div>
 
                     <div className="flex flex-col gap-4 w-full lg:w-2/3">
