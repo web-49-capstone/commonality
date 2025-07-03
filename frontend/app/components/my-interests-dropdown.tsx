@@ -6,14 +6,13 @@ export function MyInterestsDropdown() {
     const [selectedItem, setSelectedItem] = useState('');
 
     useEffect(() => {
-        // TODO: Replace this with actual fetch call
+        // STILL NEED TO REPLACE THIS WITH A REAL FETCH CALL
         const fakeProfileItems = ['Hiking', 'Cooking', 'Tennis', 'Board Games'];
         setProfileItems(fakeProfileItems);
     }, []);
 
     const handleChange = (event) => {
         setSelectedItem(event.target.value);
-        // TODO: You can also send this value to a backend or context
         console.log('Selected:', event.target.value);
     };
 

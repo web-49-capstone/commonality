@@ -1,4 +1,4 @@
-import {MyInterestsDropdown} from "../../src/layouts/my-interests-dropdown";
+import {MyInterestsDropdown} from "~/components/my-interests-dropdown";
 
 export function MatchingBegin() {
     return(

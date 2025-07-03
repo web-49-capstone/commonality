@@ -1,8 +1,10 @@
-import {MyInterestsDropdown} from "../../src/layouts/my-interests-dropdown";
-import {ProfileMatchingSection} from "~/components/profile-in-matching-area";
-import type {TestUser} from "~/components/profile-in-matching-area";
+import {MyInterestsDropdown} from "~/components/my-interests-dropdown";
+import {ProfileMatchingSection} from "~/components/profile-matching-section";
+
+
 
 export default function MatchingProfiles() {
+
     const testUser = {
         userId: "12312312312321",
         userFirstName: "Petey",
@@ -17,18 +19,19 @@ export default function MatchingProfiles() {
     return(
         <>
             <div className="grid grid-cols-1 lg:grid-cols-3 mt-5 lg:mt-10 container mx-auto">
-                <div className="text-center">
-                    <h2 className="text-3xl lg:text-4xl mt-5 lg:mt-10">Finding profiles interested in:</h2>
+                <div className="text-center order-2 lg:order-1">
+                    <hr className="md:hidden my-5 md:my-10 w-3/4 mx-auto"></hr>
+                    <h2 className="text-3xl lg:text-3xl mt-5 lg:mt-10">Finding profiles interested in:</h2>
                     <p className="text-xl italic text-red-500">--current matching interest--</p>
-                    <hr className="my-5 w-3/4 mx-auto"></hr>
+                    <hr className="hidden md:block my-5 md:my-10 w-3/4 mx-auto"></hr>
                     <p className="text-md font-bold">Want to search another interest?</p>
                     <MyInterestsDropdown />
                     <button className="bg-gray-900 text-gray-200 border-1 border-gray-200 rounded-xl mt-5 py-3 px-6 w-3/4 mx-auto lg:order-2">View Profiles</button>
-                    <hr className="my-10 w-3/4 mx-auto "></hr>
-                    <p className="hidden lg:block text-xl text-gray-900 mb-2 font-bold">Want to start a new group instead?</p>
-                    <button className="bg-gray-200 text-gray-900 border-1 border-gray-900 rounded-xl py-3 px-6 w-3/4 mx-auto lg:order-1">Create a Group</button>
+                    {/*<hr className="my-10 w-3/4 mx-auto "></hr>*/}
+                    {/*<p className="hidden lg:block text-xl text-gray-900 mb-2 font-bold">Want to start a new group instead?</p>*/}
+                    {/*<button className="bg-gray-200 text-gray-900 border-1 border-gray-900 rounded-xl py-3 px-6 w-3/4 mx-auto lg:order-1">Create a Group</button>*/}
                 </div>
-                <div className="lg:col-span-2">
+                <div className="lg:col-span-2 order-1 lg:order-2">
                     <ProfileMatchingSection user={testUser}/>
                 </div>
             </div>
