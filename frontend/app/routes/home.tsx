@@ -1,6 +1,7 @@
 import type { Route } from "./+types/home";
 import {ProfilePage} from "~/components/profile-page";
 import type {Profile} from "~/types/profile";
+import {MatchingBegin} from "~/routes/matching-begin";
 
  const dylan:Profile = {
     userFirstName: 'dylan',
@@ -22,7 +23,7 @@ export function meta({}: Route.MetaArgs) {
 export default function Home() {
   return(
       <>
-          <ProfilePage profile={dylan} isCurrentUser={false} />
+      <MatchingBegin />
       </>
   )
 

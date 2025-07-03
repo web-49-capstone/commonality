@@ -16,12 +16,15 @@ type Pages = {
   "/profile": {
     params: {};
   };
+  "/connect": {
+    params: {};
+  };
 };
 
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/profile";
+    page: "/" | "/connect";
   };
   "routes/home.tsx": {
     id: "routes/home";
@@ -30,5 +33,9 @@ type RouteFiles = {
   "routes/create-profile.tsx": {
     id: "routes/create-profile";
     page: "/profile";
+  };
+  "routes/matching-profiles.tsx": {
+    id: "routes/matching-profiles";
+    page: "/connect";
   };
 };
