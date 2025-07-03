@@ -20,7 +20,7 @@ export function meta({}: Route.MetaArgs) {
 export default function Home() {
   return(
       <>
-          <ProfilePage profile={dylan} isCurrentUser={true} />
+          <ProfilePage profile={dylan} isCurrentUser={false} />
       </>
   )
 

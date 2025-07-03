@@ -1,9 +1,12 @@
 export interface Profile {
-    firstName: string;
-    lastName: string;
-    bio: string;
+    userFirstName: string;
+    userLastName: string;
+    userBio: string;
     interests: string[];
-    availability?: string;
-    profilePicture?: File | null;
+    userAvailability?: string;
+    userImgUrl?: File | null;
+    userCity: string;
+    userState: string;
+
 
 }

@@ -36,12 +36,14 @@ const allInterests = [
 ]
 export function CreateProfile() {
     const [formData, setFormData] = useState({
-        profilePicture: null as File | null,
-        firstName: "",
-        lastName: "",
-        bio: "",
-        availability: "",
+        userImgUrl: null as File | null,
+        userFirstName: "",
+        userLastName: "",
+        userBio: "",
+        userAvailability: "",
         interests: [] as string[],
+        userCity: "",
+        userState: "",
     })
     const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const {name, value} = event.target
@@ -51,7 +53,7 @@ export function CreateProfile() {
         const file = event.target.files?.[0] || null
         setFormData((prev) => ({
             ...prev,
-            profilePicture: file,
+            userImgUrl: file,
         }))
         if (file) {
             const objectUrl = URL.createObjectURL(file);
@@ -100,7 +102,7 @@ export function CreateProfile() {
                     <input
                         type='text'
                         name="firstName"
-                        value={formData.firstName}
+                        value={formData.userFirstName}
                         onChange={handleChange}
                         placeholder="First Name"
                         className="border-2 border-black py-2 pl-2 w-full"
@@ -108,7 +110,7 @@ export function CreateProfile() {
                     <input
                         type='text'
                         name="lastName"
-                        value={formData.lastName}
+                        value={formData.userLastName}
                         onChange={handleChange}
                         placeholder="Last Name"
                         className="border-2 border-black py-2 pl-2 w-full"
@@ -118,7 +120,7 @@ export function CreateProfile() {
                     <div className="flex flex-col gap-4 w-full lg:w-2/3">
                     <textarea
                         name="bio"
-                        value={formData.bio}
+                        value={formData.userBio}
                         onChange={handleChange}
                         placeholder="Bio"
                         className="border-2 border-black px-3 py-2 w-full h-32"
@@ -130,7 +132,7 @@ export function CreateProfile() {
                             </div>
                             <input
                                 name="availability"
-                                value={formData.availability}
+                                value={formData.userAvailability}
                                 onChange={handleChange}
                                 placeholder="Optional"
                                 className="border border-black mt-3 px-2 py-1 w-full"

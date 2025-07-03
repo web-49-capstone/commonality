@@ -21,7 +21,7 @@ export function ProfilePage({profile, isCurrentUser}: ProfilePageProps) {
                 {/* Left Column */}
                 <div className="flex flex-col items-center gap-4 lg:w-1/3">
                     <div className="w-32 h-32 rounded-full overflow-hidden bg-gray-200">
-                        {formData.profilePicture ? (
+                        {formData.userImgUrl ? (
                             <img
                                 alt="Profile"
                                 className="w-full h-full object-cover"
@@ -31,7 +31,7 @@ export function ProfilePage({profile, isCurrentUser}: ProfilePageProps) {
                         )}
                     </div>
                     <h2 className="text-xl font-semibold text-center">
-                        {formData.firstName} {formData.lastName}
+                        {formData.userFirstName} {formData.userLastName}
                     </h2>
                     {isCurrentUser && (
                         <button
@@ -50,12 +50,12 @@ export function ProfilePage({profile, isCurrentUser}: ProfilePageProps) {
                         <h3 className="font-semibold text-lg mb-1">About Me</h3>
                         {editMode ? (
                             <textarea
-                                value={formData.bio}
-                                onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
+                                value={formData.userBio}
+                                onChange={(e) => setFormData({ ...formData, userBio: e.target.value })}
                                 className="w-full border px-3 py-1 text-sm"
                             />
                         ) : (
-                            <p className="text-sm text-gray-700">{formData.bio}</p>
+                            <p className="text-sm text-gray-700">{formData.userBio}</p>
                         )}
                     </div>
 
@@ -64,13 +64,13 @@ export function ProfilePage({profile, isCurrentUser}: ProfilePageProps) {
                         <h3 className="font-semibold text-lg mb-1">Availability</h3>
                         {editMode ? (
                             <input
-                                value={formData.availability}
-                                onChange={(e) => setFormData({ ...formData, availability: e.target.value })}
+                                value={formData.userAvailability}
+                                onChange={(e) => setFormData({ ...formData, userAvailability: e.target.value })}
                                 className="w-full border px-3 py-1 text-sm"
                             />
                         ) : (
                             <p className="text-sm text-gray-600">
-                                {formData.availability || "Not provided"}
+                                {formData.userAvailability || "Not provided"}
                             </p>
                         )}
                     </div>
