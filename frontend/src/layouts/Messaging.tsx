@@ -1,27 +1,80 @@
-import {useState} from 'react'
-import { FaPlus } from "react-icons/fa";
-import { FaSearch } from "react-icons/fa";
-import { CiCircleInfo } from "react-icons/ci";
-import { BsFillSendFill } from "react-icons/bs";
+import {useState, useRef, useEffect} from 'react'
+import 'flowbite'
+import {FaPlus} from "react-icons/fa"
+import {FaSearch} from "react-icons/fa"
+import {CiCircleInfo} from "react-icons/ci"
+import {BsFillSendFill} from "react-icons/bs"
+import {FaUserGroup} from "react-icons/fa6";
+
 
 const MessagingApp = () => {
     const [selectedChat, setSelectedChat] = useState(0);
     const [newMessage, setNewMessage] = useState('');
 
     const contacts = [
-        { id: 1, name: 'Marcus Rodriguez', lastMessage: 'That\'s so fetch!', time: '11:30 PM', avatar: '', online: true, unread: 2 },
-        { id: 2, name: 'Lisa Chen', lastMessage: 'I can\'t believe he said that at the last meetup!', time: '1:15 PM', avatar: '', online: true, unread: 829 },
-        { id: 3, name: 'David Park', lastMessage: 'See you tomorrow for the meet!', time: '8:45 PM', avatar: '', online: false, unread: 1 },
-        { id: 4, name: 'Alex Thompson', lastMessage: 'Perfect, let me know', time: 'Yesterday', avatar: '', online: false, unread: 4 },
-        { id: 5, name: 'Sarah Mitchell', lastMessage: 'The project looks great!', time: 'Yesterday', avatar: '', online: true, unread: 0 },
+        {
+            id: 1,
+            name: 'Marcus Rodriguez',
+            lastMessage: 'That\'s so fetch!',
+            time: '11:30 PM',
+            avatar: '',
+            online: true,
+            unread: 2
+        },
+        {
+            id: 2,
+            name: 'Lisa Chen',
+            lastMessage: 'I can\'t believe he said that at the last meetup!',
+            time: '1:15 PM',
+            avatar: '',
+            online: true,
+            unread: 829
+        },
+        {
+            id: 3,
+            name: 'David Park',
+            lastMessage: 'See you tomorrow for the meet!',
+            time: '8:45 PM',
+            avatar: '',
+            online: false,
+            unread: 1
+        },
+        {
+            id: 4,
+            name: 'Alex Thompson',
+            lastMessage: 'Perfect, let me know',
+            time: 'Yesterday',
+            avatar: '',
+            online: false,
+            unread: 4
+        },
+        {
+            id: 5,
+            name: 'Sarah Mitchell',
+            lastMessage: 'The project looks great!',
+            time: 'Yesterday',
+            avatar: '',
+            online: true,
+            unread: 0
+        },
     ];
 
     const messages = [
-        { id: 1, text: 'Hey! What up?!?!', sent: false, time: '2:25 PM' },
-        { id: 2, text: 'I\'m doing great! Just working on some new projects. How about you?', sent: true, time: '2:26 PM' },
-        { id: 3, text: 'I\'m ok... "Working 9-5!" as the kids say.', sent: false, time: '2:28 PM' },
-        { id: 4, text: 'Awwh! Well you need a destress! We should grab coffee this week and I can tell you all about my day.', sent: true, time: '2:29 PM' },
-        { id: 5, text: 'Perfect! How about Thursday afternoon?', sent: false, time: '2:30 PM' },
+        {id: 1, text: 'Hey! What up?!?!', sent: false, time: '2:25 PM'},
+        {
+            id: 2,
+            text: 'I\'m doing great! Just working on some new projects. How about you?',
+            sent: true,
+            time: '2:26 PM'
+        },
+        {id: 3, text: 'I\'m ok... "Working 9-5!" as the kids say.', sent: false, time: '2:28 PM'},
+        {
+            id: 4,
+            text: 'Awwh! Well you need a destress! We should grab coffee this week and I can tell you all about my day.',
+            sent: true,
+            time: '2:29 PM'
+        },
+        {id: 5, text: 'Perfect! How about Thursday afternoon?', sent: false, time: '2:30 PM'},
     ];
 
     const messageHandler = () => {
@@ -37,6 +90,7 @@ const MessagingApp = () => {
         }
     }
 
+
     return (
         <div className="flex h-screen bg-white">
             {/* Sidebar */}
@@ -50,7 +104,7 @@ const MessagingApp = () => {
                                 <FaPlus size={20} className="text-gray-600"/>
                             </button>
                             <button type="button" data-dropdown-toggle="language-dropdown-menu"
-                                    className="inline-flex items-center font-medium justify-center px-4 py-2 text-sm bg-gray-300 text-gray-900 rounded-lg cursor-pointer hover:bg-gray-100">
+                                    className="inline-flex items-center font-medium justify-center px-4 py-2 text-sm bg-gray-300  onClick-bg-gray 400 text-gray-900 rounded-lg cursor-pointer hover:bg-gray-200">
                                 <svg className="w-5 h-5 rounded-full me-3" aria-hidden="true"
                                      xmlns="http://www.w3.org/2000/svg" href="http://www.w3.org/1999/xlink"
                                      viewBox="0 0 3900 3900">
@@ -80,7 +134,7 @@ const MessagingApp = () => {
                                         <use href="#e" x="2470"/>
                                     </g>
                                 </svg>
-                                Users/Groups
+                                Individual
                             </button>
                             {/*Dropdown*/}
                             <div
@@ -111,7 +165,7 @@ const MessagingApp = () => {
                                                               transform="scale(3.9385)"/>
                                                     </g>
                                                 </svg>
-                                                English (US)
+                                                individual
                                             </div>
                                         </a>
                                     </li>
@@ -127,7 +181,7 @@ const MessagingApp = () => {
                                                     <path d="M0 0h512v170.7H0z"/>
                                                     <path fill="#d00" d="M0 170.7h512v170.6H0z"/>
                                                 </svg>
-                                                Deutsch
+                                                groups
                                             </div>
                                         </a>
                                     </li>
@@ -145,38 +199,7 @@ const MessagingApp = () => {
                                                         <path fill="#ce2b37" d="M341.3 0H512v512H341.3z"/>
                                                     </g>
                                                 </svg>
-                                                Italiano
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#"
-                                           className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
-                                           role="menuitem">
-                                            <div className="inline-flex items-center">
-                                                <svg className="h-3.5 w-3.5 rounded-full me-2" aria-hidden="true"
-                                                     xmlns="http://www.w3.org/2000/svg"
-                                                     href="http://www.w3.org/1999/xlink" id="flag-icon-css-cn"
-                                                     viewBox="0 0 512 512">
-                                                    <defs>
-                                                        <path id="a" fill="#ffde00" d="M1-.3L-.7.8 0-1 .6.8-1-.3z"/>
-                                                    </defs>
-                                                    <path fill="#de2910" d="M0 0h512v512H0z"/>
-                                                    <use width="30" height="20"
-                                                         transform="matrix(76.8 0 0 76.8 128 128)" href="#a"/>
-                                                    <use width="30" height="20"
-                                                         transform="rotate(-121 142.6 -47) scale(25.5827)"
-                                                         href="#a"/>
-                                                    <use width="30" height="20"
-                                                         transform="rotate(-98.1 198 -82) scale(25.6)" href="#a"/>
-                                                    <use width="30" height="20"
-                                                         transform="rotate(-74 272.4 -114) scale(25.6137)"
-                                                         href="#a"/>
-                                                    <use width="30" height="20"
-                                                         transform="matrix(16 -19.968 19.968 16 256 230.4)"
-                                                         href="#a"/>
-                                                </svg>
-                                                中文 (繁體)
+                                                Individuals + Groups
                                             </div>
                                         </a>
                                     </li>
