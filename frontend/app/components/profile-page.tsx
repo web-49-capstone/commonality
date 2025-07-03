@@ -45,7 +45,6 @@ export function ProfilePage({profile, isCurrentUser}: ProfilePageProps) {
 
                 {/* Right Column */}
                 <div className="flex flex-col gap-6 lg:w-2/3">
-                    {/* Bio */}
                     <div className="border rounded-xl p-4">
                         <h3 className="font-semibold text-lg mb-1">About Me</h3>
                         {editMode ? (
@@ -59,7 +58,6 @@ export function ProfilePage({profile, isCurrentUser}: ProfilePageProps) {
                         )}
                     </div>
 
-                    {/* Availability */}
                     <div className="border rounded-xl p-4">
                         <h3 className="font-semibold text-lg mb-1">Availability</h3>
                         {editMode ? (
