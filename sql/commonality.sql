@@ -10,8 +10,9 @@ DROP TABLE IF EXISTS "user";
 CREATE TABLE IF NOT EXISTS "user"(
     user_id           uuid PRIMARY KEY,
     user_name         varchar(100)  NOT NULL,
-    user_email        varchar       NOT NULL,
+    user_email        varchar(128)       NOT NULL UNIQUE ,
     user_hash         char(97)      NOT NULL,
+    user_created timestamptz,
     user_bio          varchar(255)  NOT NULL,
     user_availability varchar(127),
     user_img_url      varchar(255)  NOT NULL,
@@ -25,6 +26,7 @@ CREATE TABLE IF NOT EXISTS match(
     match_maker_id    uuid,
     match_receiver_id uuid,
     match_accepted    bool,
+    match_created timestamptz,
     FOREIGN KEY (match_maker_id) REFERENCES "user" (user_id),
     FOREIGN KEY (match_receiver_id) REFERENCES "user" (user_id)
 
@@ -73,7 +75,7 @@ CREATE INDEX ON message(message_sender_id);
 --                           group_name varchar,
 --                           group_admin_user_id uuid,
 --                           group_description text,
---                           group_size varchar(10)
+--                           group_size NUMBER(10)
 -- );
 -- CREATE TABLE group_interests (
 --                                    tied_group_id uuid,
