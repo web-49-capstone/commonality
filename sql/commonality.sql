@@ -9,17 +9,17 @@ DROP TABLE IF EXISTS "user";
 
 CREATE TABLE IF NOT EXISTS "user"(
     user_id           uuid PRIMARY KEY,
-    user_name         varchar(100),
+    user_availability varchar(127),
+    user_bio          varchar(255),
+    user_city         varchar(50),
+    user_created      timestamptz,
     user_email        varchar(128)       NOT NULL UNIQUE ,
     user_hash         char(97)      NOT NULL,
-    user_created      timestamptz,
-    user_bio          varchar(255),
-    user_availability varchar(127),
     user_img_url      varchar(255),
-    user_city         varchar(50),
-    user_state        varchar(2),
     user_lat          numeric(6, 3),
-    user_lng          numeric(6, 3)
+    user_lng          numeric(6, 3),
+    user_name         varchar(100),
+    user_state        varchar(2)
 );
 
 CREATE TABLE IF NOT EXISTS match(
