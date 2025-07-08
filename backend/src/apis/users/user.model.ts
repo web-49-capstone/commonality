@@ -59,7 +59,7 @@ export async function insertUser (user: PrivateUser): Promise<string> {
     return 'User created successfully'
 }
 
-export async function selectPrivateUserByUserActivationToken (userActivationToken: string): Promise<PrivateUser | null> {
+export async function selectPrivateUserByUserActivationToken (userActivationToken: string | null): Promise<PrivateUser | null> {
 
     const rowList = await sql`SELECT user_id, user_bio, user_activation_token, user_email, user_hash, user_img_url, user_availability, user_name, user_lng, user_lat, user_state, user_city, user_created FROM "user" WHERE user_activation_token = ${userActivationToken}`
     const result = PrivateUserSchema.array().max(1).parse(rowList)
@@ -72,7 +72,11 @@ export async function updateUser (user: PrivateUser): Promise<string> {
     return 'User updated successfully'
 }
 
-
+export async function selectPrivateUserByUserEmail (userEmail: string): Promise<PrivateUser | null> {
+    const rowList = await sql`SELECT user_id, user_bio, user_activation_token, user_email, user_hash, user_img_url, user_name, user_city, user_state, user_lng, user_lat, user_availability, user_created FROM "user" WHERE user_email = ${userEmail}`
+    const result = PrivateUserSchema.array().max(1).parse(rowList)
+    return result[0] ?? null
+}
 
 
 

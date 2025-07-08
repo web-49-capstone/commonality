@@ -7,6 +7,7 @@ import formData from 'form-data'
 import type {PrivateUser} from "../users/user.model.ts";
 import {v7 as uuidv7} from "uuid"
 import {insertUser} from "../users/user.model.ts";
+import type {Status} from "../../utils/interfaces/Status.ts";
 
 
 export async function signupUserController( request: Request, response: Response) {
