@@ -59,6 +59,21 @@ export async function insertUser (user: PrivateUser): Promise<string> {
     return 'User created successfully'
 }
 
+export async function selectPrivateUserByUserActivationToken (userActivationToken: string): Promise<PrivateUser | null> {
+
+    const rowList = await sql`SELECT user_id, user_bio, user_activation_token, user_email, user_hash, user_img_url, user_availability, user_name, user_lng, user_lat, user_state, user_city, user_created FROM "user" WHERE user_activation_token = ${userActivationToken}`
+    const result = PrivateUserSchema.array().max(1).parse(rowList)
+    return result[0] ?? null
+}
+
+export async function updateUser (user: PrivateUser): Promise<string> {
+    const {userId, userBio, userActivationToken, userAvailability, userCity, userCreated, userEmail, userHash, userImgUrl, userLat, userLng, userName, userState} = user
+    await sql`UPDATE "user" SET user_bio = ${userBio}, user_activation_token = ${userActivationToken}, user_availability =  ${userAvailability}, user_city = ${userCity}, user_created = ${userCreated}, user_email =  ${userEmail}, user_hash = ${userHash}, user_img_url =  ${userImgUrl}, user_lat = ${userLat}, user_lng = ${userLng}, user_name = ${userName}, user_state = ${userState} WHERE user_id = ${userId}`
+    return 'User updated successfully'
+}
+
+
+
 
 
 // export async function updateUser (user: PrivateUser): Promise<string> {

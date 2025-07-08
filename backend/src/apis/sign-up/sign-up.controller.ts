@@ -6,6 +6,7 @@ import Mailgun from "mailgun.js";
 import formData from 'form-data'
 import type {PrivateUser} from "../users/user.model.ts";
 import {v7 as uuidv7} from "uuid"
+import {insertUser} from "../users/user.model.ts";
 
 
 export async function signupUserController( request: Request, response: Response) {
@@ -24,7 +25,7 @@ export async function signupUserController( request: Request, response: Response
 
         const userImgUrl = 'https://res.cloudinary.com/cnm-ingenuity-deep-dive-bootcamp/image/upload/v1726159504/t32ematygvtcyz4ws9p5.png'
 
-        const basePath: string = `${request.protocol}://${request.hostname}:8080${request.originalUrl}activation/${userActivationToken}`
+        const basePath: string = `${request.protocol}://${request.hostname}:8080${request.originalUrl}/activation/${userActivationToken}`
 
         const message = `<h2>Welcome to Commonality!</h2><p>Please click the link below to activate your account.</p><a href="${basePath}">${basePath}</a>`
 
@@ -32,32 +33,49 @@ export async function signupUserController( request: Request, response: Response
         const mailgunClient = mailgun.client({ username: 'api', key: process.env.MAILGUN_API_KEY as string})
 
         const mailgunMessage = {
-            from: `Mailgun Sandbox <postmaster@${process.env.MAILGUN_DOMAIN as string}`,
+            from: `Mailgun Sandbox <postmaster@${process.env.MAILGUN_DOMAIN as string}>`,
             to: userEmail,
             subject: 'Commonality Account Activation',
             html: message
         }
         const user: PrivateUser = {
             userId: uuidv7(),
-            userAvailability,
-            userActivationToken,
+            userAvailability: null,
+            userActivationToken: userActivationToken,
             userBio: null,
-            userCity,
-            userCreated,
+            userCity: null,
+            userCreated: null,
             userEmail,
             userHash,
-            userImgUrl,
-            userLat,
-            userLng,
+            userImgUrl: null,
+            userLat: null,
+            userLng: null,
             userName: null,
-            userState,
+            userState:null,
 
 
         }
 
         await insertUser(user)
 
+        await mailgunClient.messages.create(process.env.MAILGUN_DOMAIN as string, mailgunMessage)
 
+        const status: Status = {
+            status: 200,
+            message: 'User created successfully, please check your email for activation link',
+            data: null
+        }
+
+        response.status(200).json(status)
+    } catch (error: any) {
+        console.error(error)
+        const status:Status = {
+            status: 500,
+            message: error.message,
+            data: null
+        }
+
+        response.status(200).json(status)
     }
 
 }

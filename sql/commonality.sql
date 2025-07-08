@@ -9,6 +9,7 @@ DROP TABLE IF EXISTS "user";
 
 CREATE TABLE IF NOT EXISTS "user"(
     user_id           uuid PRIMARY KEY,
+    user_activation_token char(32),
     user_availability varchar(127),
     user_bio          varchar(255),
     user_city         varchar(50),
