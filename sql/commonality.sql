@@ -57,6 +57,7 @@ CREATE TABLE IF NOT EXISTS message(
     message_receiver_id uuid        NOT NULL,
     message_sender_id   uuid        NOT NULL,
     message_body        text        NOT NULL,
+    message_opened      bool        NOT NULL,
     message_sent_at     timestamptz NOT NULL,
     FOREIGN KEY(message_receiver_id) REFERENCES "user"(user_id),
     FOREIGN KEY(message_sender_id) REFERENCES "user"(user_id)
