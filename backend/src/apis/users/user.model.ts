@@ -78,8 +78,6 @@ export async function selectPrivateUserByUserEmail (userEmail: string): Promise<
     return result[0] ?? null
 }
 
-
-
 // export async function updateUser (user: PrivateUser): Promise<string> {
 //     PrivateUserSchema.parse(user)
 //     const { userId, userAvailability, userBio, userCity, userCreated, userEmail, userHash, userImgUrl, userLat, userLng, userName, userState } = user
