@@ -66,7 +66,7 @@ export async function selectPrivateUserByUserActivationToken (userActivationToke
     return result[0] ?? null
 }
 
-export async function updateUser (user: PrivateUser): Promise<string> {
+export async function updateUser (user: PrivateUser ): Promise<string> {
     const {userId, userBio, userActivationToken, userAvailability, userCity, userCreated, userEmail, userHash, userImgUrl, userLat, userLng, userName, userState} = user
     await sql`UPDATE "user" SET user_bio = ${userBio}, user_activation_token = ${userActivationToken}, user_availability =  ${userAvailability}, user_city = ${userCity}, user_created = ${userCreated}, user_email =  ${userEmail}, user_hash = ${userHash}, user_img_url =  ${userImgUrl}, user_lat = ${userLat}, user_lng = ${userLng}, user_name = ${userName}, user_state = ${userState} WHERE user_id = ${userId}`
     return 'User updated successfully'
@@ -78,6 +78,25 @@ export async function selectPrivateUserByUserEmail (userEmail: string): Promise<
     return result[0] ?? null
 }
 
+export async function selectPublicUserByUserId (userId: string): Promise<PublicUser | null> {
+    const rowList = await sql`SELECT user_id, user_availability, user_bio, user_city, user_created, user_img_url, user_name, user_state FROM "user" WHERE user_id = ${userId}`
+    const result = PublicUserSchema.array().max(1).parse(rowList)
+    return result[0] ?? null
+
+}
+export async function updatePublicUser (user: PublicUser ): Promise<string> {
+    const {userId, userBio, userAvailability, userCity, userCreated, userImgUrl, userName, userState} = user
+    await sql`UPDATE "user"
+              SET user_bio          = ${userBio},
+                  user_availability = ${userAvailability},
+                  user_city         = ${userCity},
+                  user_created      = ${userCreated},
+                  user_img_url      = ${userImgUrl},
+                  user_name         = ${userName},
+                  user_state        = ${userState}
+              WHERE user_id = ${userId}`
+    return 'User updated successfully'
+}
 
 
 // export async function updateUser (user: PrivateUser): Promise<string> {
