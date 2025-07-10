@@ -36,7 +36,19 @@ export async function selectInterestByInterestId (interestId: string): Promise<I
     return result[0] ?? null
 }
 
-export async function selectInterestsByUserId (userInterestUserId: string): Promise<UserInterest[]> {
+export async function selectInterestsByUserId (userInterestUserId: string): Promise<Interest[]> {
     const rowList = await sql`SELECT interest_id, interest_name FROM interest JOIN user_interest ON interest_id = user_interest.user_interest_interest_id WHERE user_interest.user_interest_user_id = ${userInterestUserId} `
-    return UserInterestSchema.array().parse(rowList)
+    return InterestSchema.array().parse(rowList)
 }
+export async function insertUserInterestInterestId (userInterest: UserInterest): Promise<string> {
+
+    const { userInterestInterestId, userInterestUserId } = userInterest
+    await sql`INSERT INTO user_interest(user_interest_interest_id, user_interest_user_id) VALUES (${userInterestInterestId}, ${userInterestUserId})`
+    return 'Added a new interest to user interests'
+}
+
+// export async function deleteUserInterestByInterestId (userInterest: UserInterest): Promise<string> {
+//     const { userInterestInterestId, userInterestUserId } = userInterest
+//     await sql`DELETE FROM user_interest WHERE user_interest_interest_id = ${userInterestInterestId} AND user_interest_user_id = ${userInterestUserId}`
+//     return 'Deleted interest from user interests'
+// }
