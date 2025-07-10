@@ -41,6 +41,9 @@ CREATE TABLE IF NOT EXISTS interest(
     interest_name varchar(50)
 );
 
+
+
+
 CREATE TABLE IF NOT EXISTS user_interest(
     user_interest_interest_id uuid,
     user_interest_user_id     uuid,

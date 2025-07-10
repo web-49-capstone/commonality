@@ -12,6 +12,8 @@ import "./app.css";
 import {ThemeModeScript} from "flowbite-react";
 import {Navigation} from "~/layouts/navigation";
 import { Footer } from "~/layouts/footer";
+import { RouterProvider } from "react-router-dom";
+import router from "./routes";
 
 
 
@@ -39,6 +41,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <ThemeModeScript />
       </head>
       <body>
+        <Navigation />
         {children}
         <ScrollRestoration />
         <Scripts />
@@ -48,17 +51,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return (
-      <>
-        <div className="min-h-screen flex flex-col pb-30 md:pb-0">
-          <Navigation/>
-          <main className="flex-1">
-            <Outlet/>
-          </main>
-          <Footer/>
-        </div>
-      </>
-  )}
+  return <RouterProvider router={router} />;
+}
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   let message = "Oops!";

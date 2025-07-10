@@ -1,8 +1,9 @@
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import type { Route } from "./+types/home";
-import {ProfilePage} from "~/components/profile-page";
-import type {Profile} from "~/types/profile";
-import {MatchingBegin} from "~/routes/matching-begin";
+import { ProfilePage } from "../components/profile-page";
+import type { Profile } from "../types/profile";
+import { MatchingBegin } from "./matching-begin";
+import { useNavigate } from "react-router-dom";
 
 
  const dylan:Profile = {
@@ -15,18 +16,17 @@ import {MatchingBegin} from "~/routes/matching-begin";
      userCity: "Albuquerque"
 }
 
-export function meta({}: Route.MetaArgs) {
-  return [
-    { title: "New React Router App" },
-    { name: "description", content: "Welcome to React Router!" },
-  ];
-}
-
 export default function Home() {
-  return(
-      <>
-        <MatchingBegin />
-      </>
-  )
+  const navigate = useNavigate();
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (!user) {
+      navigate("/login-signup");
+    }
+  }, [navigate]);
+  return (
+    <>
+      <MatchingBegin />
+    </>
+  );
 }
-

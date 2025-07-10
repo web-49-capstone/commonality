@@ -8,9 +8,9 @@ const basePath = '/apis'
 const router = Router()
 
 router.route('/')
-    .get(indexController)
+  .get(indexController)
 
 export const indexRoute = {
-    router,
-    basePath
+  router,
+  basePath
 }

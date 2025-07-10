@@ -1,123 +1,26 @@
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import {FaUserGroup} from "react-icons/fa6";
 
 interface Profile {
-    id: string;
-    name: string,
-    image: string | any,
-    memberCount: number,
-    description: string,
-    nextMeetup: string,
-    skillLevel: string,
-    isIndividual: boolean,
-    isOnline: boolean | null
+    userId: string;
+    userName: string;
+    userImgUrl: string | null;
+    userBio: string;
+    userAvailability: string | null;
+    userCity: string;
+    userState: string;
+    userCreated: string | null;
+    memberCount: number;
+    nextMeetup: string;
+    skillLevel: string;
+    isIndividual: boolean;
+    isOnline: boolean | null;
 }
 
 //I'M WORKING ON THE MESSAGING ASPECT!!! SEE "handleMessagesClick"
-const groupProfiles: Profile[] = [
-    {
-        id: "1",
-        name: "DnD United!",
-        image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=60&h=60&fit=crop&crop=center",
-        memberCount: 42,
-        description: "Welcome To All Skill Levels!",
-        nextMeetup: "Campaign Strategy - June 22",
-        skillLevel: "All Levels",
-        isIndividual: false,
-        isOnline: null
-    },
-    {
-        id: "2",
-        name: "Pocket Monsters Portable - 505",
-        image: "https://images.unsplash.com/photo-1613771404721-1f92d799e49f?w=60&h=60&fit=crop&crop=center",
-        memberCount: 35,
-        description: "Welcome To All Skill Levels!",
-        nextMeetup: "Catch 'Em All! - June 15",
-        skillLevel: "All Levels",
-        isIndividual: false,
-        isOnline: null
-    },
-    {
-        id: "3",
-        name: "Tech Scene 'Querque",
-        image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=60&h=60&fit=crop&crop=center",
-        memberCount: 80,
-        description: "Welcome To All Skill Levels!",
-        nextMeetup: "Tech & Talk & Tea! - June 28",
-        skillLevel: "All Levels",
-        isIndividual: false,
-        isOnline: null
-    },
-    {
-        id: "4",
-        name: "Basketball Bros!",
-        image: "https://images.unsplash.com/photo-1546519638-68e109498ffc?w=60&h=60&fit=crop&crop=center",
-        memberCount: 35,
-        description: "Intermediate - Advanced Only",
-        nextMeetup: "Slam Dunk Showoff! - June 25",
-        skillLevel: "Intermediate - Advanced",
-        isIndividual: false,
-        isOnline: null
-    },
-    {
-        id: "5",
-        name: "Badminton Pros!",
-        image: "https://images.unsplash.com/photo-1544717297-fa95b6ee9643?w=60&h=60&fit=crop&crop=center",
-        memberCount: 12,
-        description: "Intermediate - Advanced Only",
-        nextMeetup: "See You On The Field! - July 1",
-        skillLevel: "Intermediate - Advanced",
-        isIndividual: false,
-        isOnline: null
-    }
-]
+const groupProfiles: Profile[] = []
 
-const individualProfiles: Profile[] = [
-    {
-        id: "ind1",
-        name: "Sarah Mitchell",
-        image: "https://source.unsplash.com/9UMmYe",
-        memberCount: 0,
-        description: "Software Engineer & D&D Enthusiast",
-        nextMeetup: "Coffee Chat - June 30",
-        skillLevel: "Intermediate",
-        isIndividual: true,
-        isOnline: false
-    },
-    {
-        id: "ind2",
-        name: "Marcus Rodriguez",
-        image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop&crop=center",
-        memberCount: 0,
-        description: "Basketball Coach & Mentor",
-        nextMeetup: "Training Session - July 2",
-        skillLevel: "Advanced",
-        isIndividual: true,
-        isOnline: true
-    },
-    {
-        id: "ind3",
-        name: "Lisa Chen",
-        image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=60&h=60&fit=crop&crop=center",
-        memberCount: 0,
-        description: "Tech Startup Founder",
-        nextMeetup: "Networking Event - June 29",
-        skillLevel: "Expert",
-        isIndividual: true,
-        isOnline: true
-    },
-    {
-        id: "ind4",
-        name: "David Park",
-        image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=60&h=60&fit=crop&crop=center",
-        memberCount: 0,
-        description: "Professional Badminton Player",
-        nextMeetup: "Practice Match - July 3",
-        skillLevel: "Professional",
-        isIndividual: true,
-        isOnline: false
-    },
-]
+const individualProfiles: Profile[] = []
 
 
 type TabType = 'individual' | 'groups' | 'recent' | 'Messages';
@@ -125,20 +28,56 @@ type TabType = 'individual' | 'groups' | 'recent' | 'Messages';
 
 export function Connections() {
     const [activeTab, setActiveTab] = useState<TabType>('individual');
+    const [profiles, setProfiles] = useState<Profile[]>([]);
+
+    useEffect(() => {
+        const fetchProfiles = async () => {
+            try {
+                const response = await fetch('/apis/users'); // Assuming this endpoint returns all public users
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                // Assuming data.data contains an array of PublicUser objects
+                // We need to map PublicUser to our local Profile interface
+                const fetchedProfiles: Profile[] = data.data.map((user: any) => ({
+                    userId: user.userId,
+                    userName: user.userName,
+                    userImgUrl: user.userImgUrl,
+                    userBio: user.userBio,
+                    userAvailability: user.userAvailability,
+                    userCity: user.userCity,
+                    userState: user.userState,
+                    userCreated: user.userCreated,
+                    // Placeholder values for fields not directly in PublicUser
+                    memberCount: 0,
+                    nextMeetup: 'N/A',
+                    skillLevel: 'N/A',
+                    isIndividual: true, // Assuming all fetched are individual users
+                    isOnline: null,
+                }));
+                setProfiles(fetchedProfiles);
+            } catch (error) {
+                console.error("Error fetching profiles:", error);
+            }
+        };
+        fetchProfiles();
+    }, []);
 
     // Get profiles based on active tab
     const getActiveProfiles = (): Profile[] => {
         switch (activeTab) {
             case 'individual':
-                return individualProfiles;
+                return profiles.filter(profile => profile.isIndividual);
             case 'groups':
-                return groupProfiles;
+                return profiles.filter(profile => !profile.isIndividual);
             case 'recent':
-                return groupProfiles;
+                // Implement logic for recently added profiles if needed
+                return profiles;
             case 'Messages':
-                return []
+                return [];
             default:
-                return groupProfiles;
+                return profiles;
         }
     };
 
@@ -230,15 +169,15 @@ export function Connections() {
                         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 max-w-7xl mx-auto">
 
                         {getActiveProfiles().map((profile) => (
-                            <div key={profile.id} className="bg-white rounded-lg shadow-md p-6 flex flex-col">
+                            <div key={profile.userId} className="bg-white rounded-lg shadow-md p-6 flex flex-col">
                                 <div className="flex items-start mb-4">
                                     <img
-                                        src={profile.image}
-                                        alt={profile.name}
+                                        src={profile.userImgUrl || 'https://via.placeholder.com/150'}
+                                        alt={profile.userName}
                                         className="w-19 h-19 rounded-full border-3 border-solid border-gray-200 drop-shadow-xl/50 object-cover mr-4 flex-shrink-0"/>
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center justify-between mb-2">
-                                            <h3 className="text-lg font-semibold text-gray-900 truncate">{profile.name}</h3>
+                                            <h3 className="text-lg font-semibold text-gray-900 truncate">{profile.userName}</h3>
                                             <button className="text-gray-400 hover:text-gray-600">
                                                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                                                     <path
@@ -258,15 +197,15 @@ export function Connections() {
                                                 <div className="w-3 h-3 animate-ping bg-green-500 rounded-full"></div>
                                                 <div className="w-3 h-3 bg-green-500 rounded-full -ml-3 mr-2"></div>
                                                 <span
-                                                    className="text-sm font-medium text-gray-900">{profile.isOnline} is online</span>
+                                                    className="text-sm font-medium text-gray-900">{profile.isOnline ? 'Online' : 'Offline'}</span>
                                             </div>
                                         )}
                                     </div>
                                 </div>
 
                                 <div className="mb-4 flex-1">
-                                    <p className="text-18 text-gray-600 mb-2">{profile.description}</p>
-                                    <p className="text-18 text-gray-500">Next meetup: {profile.nextMeetup}</p>
+                                    <p className="text-18 text-gray-600 mb-2">{profile.userBio}</p>
+                                    <p className="text-18 text-gray-500">Availability: {profile.userAvailability}</p>
                                 </div>
 
                                 <div className="flex gap-3 mt-auto">

@@ -43,6 +43,9 @@ export default function CreateProfile() {
         interests: [] as string[],
         userCity: "",
         userState: "",
+        userEmail: "",
+        userPassword: "",
+        userPasswordConfirm: "",
     })
     const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const {name, value} = event.target
@@ -61,122 +64,125 @@ export default function CreateProfile() {
             setPreviewUrl(null);
         }
     }
-    const handleSubmit = (event: React.FormEvent) => {
+    const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault()
-        console.log(formData)
-        localStorage.setItem("profile", JSON.stringify(formData));
 
+        const payload = {
+            ...formData,
+            userImgUrl: previewUrl // Use base64 string for image
+        }
+
+        try {
+            const response = await fetch('/apis/sign-up', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            })
+
+            const data = await response.json()
+            console.log(data)
+            // Handle success or error response from backend
+        } catch (error) {
+            console.error('Error creating profile:', error)
+        }
     }
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const [selectedState, setSelectedState] = useState<string>('');
 
 
     return (
-        <>
-            <h1 className="text-4xl font-bold text-center py-5">Welcome to Commonality!</h1>
-            <h2 className="text-3xl text-center pb-10">Lets get started by creating your profile.</h2>
-            <section className="flex flex-col items-center gap-6 mx-6">
-                <form onSubmit={handleSubmit} className=" w-full max-w-4xl flex flex-col lg:flex-row justify-between items-start gap-10 ">
-                    <div className="flex flex-col items-center gap-4 w-full lg:w-1/3">
+        <div className="max-w-2xl mx-auto px-2 md:px-0 py-4 md:py-8">
+            <div className="flex flex-col items-center mb-4">
+                <div className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-gray-200 flex items-center justify-center mb-2">
+                    <CgProfile className="text-4xl md:text-6xl text-gray-500" />
+                </div>
+                <h2 className="text-xl md:text-2xl font-bold mb-2">Create Your Profile</h2>
+            </div>
+            <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow p-4 md:p-6 flex flex-col gap-3 md:gap-4">
+                <input
+                    type="text"
+                    name="userFirstName"
+                    value={formData.userFirstName}
+                    onChange={handleChange}
+                    placeholder="First Name"
+                    className="w-full p-2 rounded border"
+                />
+                <input
+                    type="text"
+                    name="userLastName"
+                    value={formData.userLastName}
+                    onChange={handleChange}
+                    placeholder="Last Name"
+                    className="w-full p-2 rounded border"
+                />
+                <textarea
+                    name="userBio"
+                    value={formData.userBio}
+                    onChange={handleChange}
+                    placeholder="Tell us about yourself"
+                    className="w-full p-2 rounded border"
+                />
+                <input
+                    type="text"
+                    name="userAvailability"
+                    value={formData.userAvailability}
+                    onChange={handleChange}
+                    placeholder="Availability (e.g. Weekends, Evenings)"
+                    className="w-full p-2 rounded border"
+                />
+                <InterestSelector
+                    selected={formData.interests}
+                    onChange={interests => setFormData({ ...formData, interests })}
+                />
+                <div className="flex flex-col md:flex-row gap-2 md:gap-4 w-full">
                     <input
-                        type='file'
-                        accept="image/*"
-                        onChange={handleFileChange}
-                        className="hidden"
-                        id="profile-upload"
-                    />
-                        <label htmlFor="profile-upload" className="cursor-pointer flex flex-col items-center">
-                            <IconContext.Provider value={{size: "6em"}}>
-                            <div className="w-24 h-24 bg-gray-200 rounded-full overflow-hidden flex items-center justify-center">
-                                {previewUrl ? (
-                                    <img src={previewUrl} alt="Profile Preview" className="object-cover w-full h-full" />
-                                ) : (
-                                    <CgProfile />
-
-
-                                )}
-                            </div>
-                            </IconContext.Provider>
-                            <p className="text-sm text-gray-500 mt-2">Select a profile picture</p>
-                        </label>
-                    <input
-                        type='text'
-                        name="firstName"
-                        value={formData.userFirstName}
+                        type="text"
+                        name="userCity"
+                        value={formData.userCity}
                         onChange={handleChange}
-                        placeholder="First Name"
-                        className="border-2 border-black py-2 pl-2 w-full"
+                        placeholder="City"
+                        className="w-full p-2 rounded border"
                     />
-                    <input
-                        type='text'
-                        name="lastName"
-                        value={formData.userLastName}
+                    <select
+                        name="userState"
+                        value={formData.userState}
                         onChange={handleChange}
-                        placeholder="Last Name"
-                        className="border-2 border-black py-2 pl-2 w-full"
-                    />
-                        <select
-                            value={selectedState}
-                            onChange={(e) => setSelectedState(e.target.value)}
-                            className="w-full p-2 border rounded mb-4"
-                            >
-                        <option value="">Select a state</option>
-                            {States.map((state) => (
-                                <option key={state.code} value={state.code}>
-                                    {state.name}
-                                </option>
-                            ))}
+                        className="w-full p-2 rounded border"
+                    >
+                        <option value="">State</option>
+                        {States.map(state => (
+                            <option key={state.abbreviation} value={state.abbreviation}>{state.name}</option>
+                        ))}
                     </select>
-
-                    </div>
-
-                    <div className="flex flex-col gap-4 w-full lg:w-2/3">
-                    <textarea
-                        name="bio"
-                        value={formData.userBio}
-                        onChange={handleChange}
-                        placeholder="Bio"
-                        className="border-2 border-black px-3 py-2 w-full h-32"
-                    />
-                        <div className="border border-black rounded-lg p-4">
-                            <label className="font-semibold">Availability</label>
-                            <div className="flex items-center gap-3 mt-2">
-                                <span className="text-sm text-gray-600">Show availability on profile</span>
-                            </div>
-                            <input
-                                name="availability"
-                                value={formData.userAvailability}
-                                onChange={handleChange}
-                                placeholder="Optional"
-                                className="border border-black mt-3 px-2 py-1 w-full"
-                            />
-                        </div>
-                        <div>
-                            <div className="flex gap-2 mb-2">
-                                <InterestSelector
-                                    availableInterests={allInterests}
-                                    selectedInterests={formData.interests}
-                                    setSelectedInterests={(newInterests) =>
-                                        setFormData({ ...formData, interests: newInterests })
-                                    }
-                                    label="Add Your Interests"
-                                />
-                            </div>
-
-                            <p className="text-sm text-gray-500 mb-1">Suggested interests :</p>
-                            <div className="flex flex-wrap gap-2 mb-2">
-
-                            </div>
-                        </div>
-                        <div className="flex justify-end mt-4">
-                            <button type="submit" className="bg-black text-white px-6 py-2 rounded">
-                                Create Account
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </section>
-
-        </>
+                </div>
+                <input
+                    type="email"
+                    name="userEmail"
+                    value={formData.userEmail}
+                    onChange={handleChange}
+                    placeholder="Email"
+                    className="w-full p-2 rounded border"
+                />
+                <input
+                    type="password"
+                    name="userPassword"
+                    value={formData.userPassword}
+                    onChange={handleChange}
+                    placeholder="Password"
+                    className="w-full p-2 rounded border"
+                />
+                <input
+                    type="password"
+                    name="userPasswordConfirm"
+                    value={formData.userPasswordConfirm}
+                    onChange={handleChange}
+                    placeholder="Confirm Password"
+                    className="w-full p-2 rounded border"
+                />
+                <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 p-2 rounded text-white mt-2">Create Profile</button>
+            </form>
+        </div>
     )
 }
