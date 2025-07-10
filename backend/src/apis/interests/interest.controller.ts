@@ -1,4 +1,5 @@
 import {
+    deleteUserInterest,
     insertInterest, insertUserInterestInterestId,
     type Interest,
     InterestSchema,
@@ -107,7 +108,7 @@ export async function postUserInterestController (request: Request, response: Re
     }
 }
 
-export async function deleteUserInterestByInterestIdController (request: Request, response: Response): Promise<void> {
+export async function deleteUserInterestController (request: Request, response: Response): Promise<void> {
     try {
         const validationResult = UserInterestSchema.pick({userInterestInterestId: true}).safeParse(request.params)
         if (!validationResult.success) {
@@ -122,10 +123,8 @@ export async function deleteUserInterestByInterestIdController (request: Request
         }
         const { userInterestInterestId } = validationResult.data
         const userInterest: UserInterest = { userInterestInterestId, userInterestUserId }
-        await sql.begin(async (sql) => {
-            await sql`DELETE FROM user_interest WHERE user_interest_interest_id = ${userInterestInterestId} AND user_interest_user_id = ${userInterestUserId}`
-        })
-        const status: Status = { status: 200, message: 'interest deleted', data: null }
+         const result = await deleteUserInterest(userInterest)
+        const status: Status = { status: 200, message: result, data: null }
         response.json(status)
     } catch (error) {
         console.error(error)

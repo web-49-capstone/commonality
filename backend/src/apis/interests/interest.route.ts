@@ -1,6 +1,6 @@
 import {Router} from "express";
 import {
-    deleteUserInterestByInterestIdController,
+     deleteUserInterestController,
     getAllInterestsController,
     getInterestByInterestIdController, getInterestByUserIdController,
     postInterestController, postUserInterestController
@@ -20,8 +20,8 @@ router.route('/interestId/:interestId')
 router.route('/userInterestUserId/:userInterestUserId')
     .get(getInterestByUserIdController)
 
-router.route('/deleteUserInterestByInterestId/:userInterestInterestId')
-    .delete(isLoggedInController, deleteUserInterestByInterestIdController)
+router.route('/deleteUserInterest/:userInterestInterestId')
+    .delete(isLoggedInController, deleteUserInterestController)
 router.route('/userInterestUserid')
     .post(isLoggedInController, postUserInterestController)
 

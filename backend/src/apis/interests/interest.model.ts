@@ -47,8 +47,8 @@ export async function insertUserInterestInterestId (userInterest: UserInterest):
     return 'Added a new interest to user interests'
 }
 
-// export async function deleteUserInterestByInterestId (userInterest: UserInterest): Promise<string> {
-//     const { userInterestInterestId, userInterestUserId } = userInterest
-//     await sql`DELETE FROM user_interest WHERE user_interest_interest_id = ${userInterestInterestId} AND user_interest_user_id = ${userInterestUserId}`
-//     return 'Deleted interest from user interests'
-// }
+export async function deleteUserInterest (userInterest: UserInterest): Promise<string> {
+    const { userInterestInterestId, userInterestUserId } = userInterest
+    await sql`DELETE FROM user_interest WHERE user_interest_interest_id = ${userInterestInterestId} AND user_interest_user_id = ${userInterestUserId}`
+    return 'Deleted interest from user interests'
+}
