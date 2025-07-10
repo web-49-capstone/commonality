@@ -4,4 +4,5 @@ export default [
     index("routes/home.tsx"),
     route("profile", "routes/create-profile.tsx"),
     route("connect", "routes/matching-profiles.tsx"),
+    route("matches", "routes/matches.tsx"),
 ] satisfies RouteConfig;

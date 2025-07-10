@@ -19,12 +19,15 @@ type Pages = {
   "/connect": {
     params: {};
   };
+  "/matches": {
+    params: {};
+  };
 };
 
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/profile" | "/connect";
+    page: "/" | "/profile" | "/connect" | "/matches";
   };
   "routes/home.tsx": {
     id: "routes/home";
@@ -37,5 +40,9 @@ type RouteFiles = {
   "routes/matching-profiles.tsx": {
     id: "routes/matching-profiles";
     page: "/connect";
+  };
+  "routes/matches.tsx": {
+    id: "routes/matches";
+    page: "/matches";
   };
 };
