@@ -1,5 +1,6 @@
 import { z } from 'zod/v4'
 import {sql} from "../../utils/database.utils.ts";
+import {type Interest, InterestSchema} from "../interests/interest.model.ts";
 
 export const PrivateUserSchema = z.object ({
     userId: z.uuid('Please provide a valid uuid for userId'),
@@ -98,6 +99,10 @@ export async function updatePublicUser (user: PublicUser ): Promise<string> {
     return 'User updated successfully'
 }
 
+export async function selectUsersByInterestId (interestId: string): Promise<PublicUser[]> {
+    const rowList = await sql`SELECT user_id, user_availability, user_bio, user_city, user_created, user_img_url, user_name, user_state FROM "user" JOIN user_interest ON user_id = user_interest.user_interest_user_id WHERE user_interest.user_interest_interest_id = ${interestId},`
+    return PublicUserSchema.array().parse(rowList)
+}
 
 // export async function updateUser (user: PrivateUser): Promise<string> {
 //     PrivateUserSchema.parse(user)
