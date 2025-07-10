@@ -3,11 +3,12 @@ import {
     type Interest,
     InterestSchema,
     selectAllInterests,
-    selectInterestByInterestId
+    selectInterestByInterestId, selectInterestsByUserId, UserInterestSchema
 } from "./interest.model.ts";
 import {serverErrorResponse, zodErrorResponse} from "../../utils/response.utils.ts";
 import type {Request, Response} from "express";
 import type {Status as HttpStatus} from "../../utils/interfaces/Status.ts"
+import {sql} from "../../utils/database.utils.ts";
 
 export async function getAllInterestsController (request: Request, response: Response): Promise<void> {
     try {
@@ -25,16 +26,15 @@ export async function getInterestByInterestIdController (request: Request, respo
         const validationResult = InterestSchema
             .pick({interestId: true})
             .safeParse(request.params)
-
         if (!validationResult.success) {
             zodErrorResponse(response, validationResult.error)
             return
         }
-
         const { interestId } = validationResult.data
         const data = await selectInterestByInterestId(interestId)
         const httpStatus: HttpStatus = { status: 200, message: null, data }
         response.json(httpStatus)
+
     } catch (error) {
         console.error(error)
         serverErrorResponse(response, null)
@@ -56,5 +56,26 @@ export async function postInterestController(request: Request, response: Respons
     } catch (error) {
         console.error(error)
         response.json ({ status: 500, message: 'error adding an interest, try again', data: null})
+    }
+}
+
+export async function getInterestByUserIdController (request: Request, response: Response): Promise<void> {
+    try {
+        const validationResult = UserInterestSchema
+            .pick({userInterestUserId: true})
+            .safeParse(request.params)
+
+        if (!validationResult.success) {
+            zodErrorResponse(response, validationResult.error)
+            return
+        }
+
+        const { userInterestUserId } = validationResult.data
+        const data = await selectInterestsByUserId(userInterestUserId)
+        const httpStatus: HttpStatus = { status: 200, message: null, data }
+        response.json(httpStatus)
+    } catch (error) {
+        console.error(error)
+        serverErrorResponse(response, null)
     }
 }
