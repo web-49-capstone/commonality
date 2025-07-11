@@ -25,12 +25,24 @@ export async function getMatchesByMatchReceiverId (request: Request, response: R
         const validationResult = MatchSchema
             .pick({matchId: true})
             .safeParse(request.params)
-    } if (!validationResult.success) {
+    }
+    if (!validationResult.success) {
         zodErrorResponse(response, validationResult.error)
         return
     }
 
-    const
-}
+    const matchData = validationResult.data
+    const result = await insertMatch(matchData)
+
+    const httpStatus: HttpStatus = {status: 200, message: result, data: null}
+    response.json(httpStatus)
+} catch (error) {
+    console.error(error)
+    serverErrorResponse(resonse, null)
+  }
+
+  export async function getMatchesByMatchMakerId (request: Request, response: Response): Promise<void> {
+    try
+  }
 
 
