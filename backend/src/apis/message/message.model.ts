@@ -27,7 +27,7 @@ export async function selectMessagesByUserId(userId: string): Promise<Message[]>
     const rowList = await sql`SELECT message_id, message_receiver_id, message_sender_id, message_body, message_opened, message_sent_at FROM message WHERE message_receiver_id  = ${userId} OR message_sender_id = ${userId} ORDER BY message_sent_at DESC`
     return MessageSchema.array().parse(rowList)
 }
-export async function selectMessagesByOpened(userId: string): Promise<Message[]> {
+export async function selectUnreadMessagesByUserId(userId: string): Promise<Message[]> {
     const rowList = await sql`SELECT message_id, message_receiver_id, message_sender_id, message_body, message_opened, message_sent_at FROM message WHERE message_receiver_id  = ${userId} AND message_opened = false ORDER BY message_sent_at DESC`
     return MessageSchema.array().parse(rowList)
 }
