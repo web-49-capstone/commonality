@@ -9,6 +9,7 @@ import {signUpRoute} from "./apis/sign-up/sign-up.route.ts";
 import {signInRoute} from "./apis/sign-in/sign-in.route.ts";
 import {userRoute} from "./apis/users/user.route.ts";
 import {interestRoute} from "./apis/interests/interest.route.ts";
+import {matchingRoute} from "./apis/matching/matching.route.ts";
 
 export class App {
     app: Application
@@ -44,6 +45,7 @@ export class App {
         this.app.use(signInRoute.basePath, signInRoute.router)
         this.app.use(userRoute.basePath, userRoute.router)
         this.app.use(interestRoute.basePath, interestRoute.router)
+        this.app.use(matchingRoute.basePath, matchingRoute.router)
 
     }
 

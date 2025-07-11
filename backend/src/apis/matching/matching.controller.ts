@@ -1,48 +1,85 @@
 import {
     MatchSchema,
     type Match,
-    selectMatchByMatchMakerId,
     selectMatchByMatchReceiverId,
-    insertMatch, selectAllMatches
+    selectAcceptedMatchesByUserId,
+    insertMatch,
 } from "./matching.model.ts"
 import {serverErrorResponse, zodErrorResponse} from "../../utils/response.utils.ts";
 import type {Request, Response} from "express"
-import type {Status as HttpStatus} from "../../utils/interfaces/Status.ts"
+import {z} from "zod/v4"
+import type {Status, Status as HttpStatus} from "../../utils/interfaces/Status.ts"
 
-export async function getMatchesByMatchMakerIdController (request: Request, response: Response): Promise<void> {
+export async function getMatchesByMatchReceiverIdController (request: Request, response: Response): Promise<void> {
     try {
-        const data = await selectAllMatches()
-        const httpStatus = {status: 200, message: null, data}
-        response.json (httpStatus)
+        const validationResult = MatchSchema.pick({matchReceiverId: true}).safeParse(request.params)
+        if (!validationResult.success) {
+            zodErrorResponse(response, validationResult.error)
+            return
+        }
+        const {matchReceiverId} = validationResult.data
+        const user = request.session?.user
+        const userIdFromSession = user?.userId
+        if (!userIdFromSession || matchReceiverId !== userIdFromSession) {
+            response.json({status: 400, message: 'you are not allowed to preform this task', data: null})
+            return
+        }
+        const data = await selectMatchByMatchReceiverId(matchReceiverId)
+        const status: Status = {status: 200, message: null, data}
+        response.json (status)
     } catch (error) {
         console.error(error)
         serverErrorResponse(response, [])
     }
 }
 
-export async function getMatchesByMatchReceiverId (request: Request, response: Response): Promise<void> {
+export async function postMatchController (request: Request, response: Response): Promise<void> {
     try {
         const validationResult = MatchSchema
-            .pick({matchId: true})
-            .safeParse(request.params)
+            .safeParse(request.body)
+
+        if (!validationResult.success) {
+            zodErrorResponse(response, validationResult.error)
+            return
+        }
+
+        const {matchReceiverId, matchAccepted, matchCreated} = validationResult.data
+        const user = request.session?.user
+        const matchMakerId = user?.userId
+        if (!matchMakerId) {
+            response.json({status: 400, message: 'you are not allowed to preform this task', data: null})
+            return
+        }
+        const match: Match = {matchMakerId, matchReceiverId, matchAccepted, matchCreated}
+        const result = await insertMatch(match)
+
+        const status: Status = {status: 200, message: result, data: null}
+        response.json(status)
+    } catch (error) {
+        console.error(error)
+        serverErrorResponse(response, null)
     }
-    if (!validationResult.success) {
-        zodErrorResponse(response, validationResult.error)
+}
+  export async function getAcceptedMatchesByUserIdController (request: Request, response: Response): Promise<void> {
+    try {
+          const validationResult = MatchSchema.pick({matchReceiverId:true}).safeParse(request.params)
+          if (!validationResult.success) {
+              zodErrorResponse(response, validationResult.error)
+              return
+          }
+          const {matchReceiverId} = validationResult.data
+          const user = request.session?.user
+          const userIdFromSession = user?.userId
+        if (!userIdFromSession || matchReceiverId !== userIdFromSession) {
+        response.json({status: 400, message: 'you are not allowed to preform this task', data: null})
         return
-    }
+        }
 
-    const matchData = validationResult.data
-    const result = await insertMatch(matchData)
-
-    const httpStatus: HttpStatus = {status: 200, message: result, data: null}
-    response.json(httpStatus)
-} catch (error) {
-    console.error(error)
-    serverErrorResponse(resonse, null)
-  }
-
-  export async function getMatchesByMatchMakerId (request: Request, response: Response): Promise<void> {
-    try
-  }
-
-
+          const data = await selectAcceptedMatchesByUserId(matchReceiverId)
+          const status: Status = {status: 200, message: null, data}
+          response.json (status)
+      } catch (error) {
+          console.error(error)
+          serverErrorResponse(response, [])
+      }
+}
