@@ -1,6 +1,6 @@
 import {
     type PublicUser,
-    PublicUserSchema,
+    PublicUserSchema, selectPublicUserByInterestId,
     selectPublicUserByUserId,
     updatePublicUser,
     updateUser
@@ -8,6 +8,7 @@ import {
 import {type Request, type Response} from 'express'
 import {serverErrorResponse, zodErrorResponse} from "../../utils/response.utils.ts";
 import type {Status} from "../../utils/interfaces/Status.ts";
+import {UserInterestSchema} from "../interests/interest.model.ts";
 
 
 export async function putUserController (request: Request, response: Response): Promise<void> {
@@ -63,6 +64,23 @@ export async function getUserByUserIdController (request: Request, response: Res
         const data = await selectPublicUserByUserId(userId)
         const status: Status = {status: 200, data, message: null}
         response.json(status)
+    } catch (error: any) {
+        console.error(error)
+        serverErrorResponse(response, null)
+    }
+}
+
+export async function getPublicUserByInterestIdController (request: Request, response: Response): Promise<void> {
+    try {
+        const validationResult = UserInterestSchema.pick({userInterestInterestId: true}).safeParse(request.params)
+        if (!validationResult.success) {
+            zodErrorResponse(response, validationResult.error)
+            return
+        }
+        const {userInterestInterestId} = validationResult.data
+        const data = await selectPublicUserByInterestId(userInterestInterestId)
+        const staus: Status = {status: 200, data, message: null}
+        response.json(staus)
     } catch (error: any) {
         console.error(error)
         serverErrorResponse(response, null)

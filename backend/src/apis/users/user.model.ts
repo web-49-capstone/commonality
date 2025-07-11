@@ -99,7 +99,7 @@ export async function updatePublicUser (user: PublicUser ): Promise<string> {
     return 'User updated successfully'
 }
 
-export async function selectUsersByInterestId (interestId: string): Promise<PublicUser[]> {
+export async function selectPublicUserByInterestId (interestId: string): Promise<PublicUser[]> {
     const rowList = await sql`SELECT user_id, user_availability, user_bio, user_city, user_created, user_img_url, user_name, user_state FROM "user" JOIN user_interest ON user_id = user_interest.user_interest_user_id WHERE user_interest.user_interest_interest_id = ${interestId},`
     return PublicUserSchema.array().parse(rowList)
 }
