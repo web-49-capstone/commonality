@@ -12,7 +12,9 @@ export const MessageSchema = z.object({
     messageOpened: z.boolean("messageOpened must be a boolean"),
     messageSentAt: z.coerce.date("please provide a valid date string for messageSentAt"),
 })
-
+export const MessageUserIdSchema = z.object({
+    userId: z.uuidv7("please provide a valid uuid7 for messageId"),
+})
 export type Message = z.infer<typeof MessageSchema>
 
 export async function insertMessage(message: Message): Promise<string> {
