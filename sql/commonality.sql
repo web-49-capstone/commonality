@@ -29,7 +29,8 @@ CREATE TABLE IF NOT EXISTS match(
     match_accepted    bool,
     match_created timestamptz,
     FOREIGN KEY (match_maker_id) REFERENCES "user" (user_id),
-    FOREIGN KEY (match_receiver_id) REFERENCES "user" (user_id)
+    FOREIGN KEY (match_receiver_id) REFERENCES "user" (user_id),
+    PRIMARY KEY (match_maker_id, match_receiver_id)
 
 );
 CREATE INDEX ON match (match_maker_id);

@@ -21,9 +21,9 @@ export async function insertMatch (match: Match): Promise<string> {
 //     return MatchSchema.array().parse(result)
 // }
 
-export async function selectAcceptedMatchesByUserId (userId: string): Promise<Match[]|null>
+export async function selectAcceptedMatchesByUserId (matchReceiverId: string): Promise<Match[]|null>
 {
-    const rowList = await sql`SELECT match_maker_id, match_receiver_id, match_accepted, match_created FROM match WHERE match_accepted = true AND match_receiver_id = ${userId}`
+    const rowList = await sql`SELECT match_maker_id, match_receiver_id, match_accepted, match_created FROM match WHERE match_accepted = true AND match_receiver_id = ${matchReceiverId}`
     return MatchSchema.array().parse(rowList)
 }
 

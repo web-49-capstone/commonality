@@ -86,7 +86,7 @@ export async function postMatchController (request: Request, response: Response)
 
 export async function putMatchController (request: Request, response: Response): Promise<void> {
     try {
-        const validationResult = MatchSchema.pick({matchReceiverId:true, matchMakerId: true}).safeParse(request.params)
+        const validationResult = MatchSchema.pick({matchMakerId: true, matchReceiverId:true}).safeParse(request.params)
         const bodyValidationResult = MatchSchema.safeParse(request.body)
         if (!validationResult.success) {
             zodErrorResponse(response, validationResult.error)

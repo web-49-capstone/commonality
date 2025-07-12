@@ -11,13 +11,17 @@ const router = Router()
 
 router.route('/')
     .post(isLoggedInController, postMatchController)
-    .put(isLoggedInController, putMatchController)
 
-router.route('/acceptedMatches/:userId')
+
+router.route('/acceptedMatches/:matchReceiverId')
     .get(isLoggedInController, getAcceptedMatchesByUserIdController)
+
 
 router.route('/:userId')
     .get(isLoggedInController, getMatchesByMatchReceiverIdController)
+
+router.route('/updateMatch/:matchMakerId/:matchReceiverId')
+    .put(isLoggedInController, putMatchController)
 
 
 export const matchingRoute = {basePath, router}
