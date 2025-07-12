@@ -18,7 +18,7 @@ router.route('/')
 router.route('/:userId')
 .get(isLoggedInController, getMessageByUserIdController)
 
-router.route('/:userId/unread')
+router.route('/:messageReceiverId/unread')
     .get(isLoggedInController, getUnreadMessagesByUserIdController)
 
 router.route('/:userId/lastMessage')

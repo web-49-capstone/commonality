@@ -92,6 +92,7 @@ export async function getLastMessagesWithPartnerInfoController(request: Request,
         const status: Status = { status: 200, message: null, data }
         response.json(status)
     } catch (error) {
+    console.error(error)
         serverErrorResponse(response, [])
     }
 }
