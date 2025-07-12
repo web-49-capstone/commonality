@@ -84,6 +84,7 @@ export async function getLastMessagesWithPartnerInfoController(request: Request,
         const { userId } = validationResult.data
         const user = request.session?.user
         const userIdFromSession = user?.userId
+        console.log("Fetching last messages for userId:", userId)
         if (!userIdFromSession || userIdFromSession !== userId) {
             response.json({status: 400, data: null, message: "You are not allowed to perform this task" })
             return

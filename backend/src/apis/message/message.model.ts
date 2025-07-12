@@ -33,15 +33,15 @@ export async function selectUnreadMessagesByUserId(userId: string): Promise<Mess
 }
 
 export const PartnerMessageSchema = z.object({
-    message_id: z.uuidv7("please provide a valid uuid7 for messageId"),
-    message_sender_id: z.uuidv7('please provide a valid uuid7 for messageSenderId'),
-    message_receiver_id: z.uuidv7('please provide a valid uuid7 for messageReceiverId'),
-    message_body: z.string('messageBody must be a string'),
-    message_opened: z.boolean('messageOpened must be a boolean'),
-    message_sent_at: z.coerce.date('please provide valid date'),
-    partner_id: z.uuidv7('please provide a valid uuid7 for partnerId'),
-    partner_name: z.string('partnerName must be a string'),
-    partner_img:z.string('Please provide valid imgUrl')
+    messageId: z.uuidv7("please provide a valid uuid7 for messageId"),
+    messageSenderId: z.uuidv7('please provide a valid uuid7 for messageSenderId'),
+    messageReceiverId: z.uuidv7('please provide a valid uuid7 for messageReceiverId'),
+    messageBody: z.string('messageBody must be a string'),
+    messageOpened: z.boolean('messageOpened must be a boolean'),
+    messageSentAt: z.coerce.date('please provide valid date'),
+    partnerId: z.uuidv7('please provide a valid uuid7 for partnerId'),
+    partnerName: z.string('partnerName must be a string'),
+    partnerImg:z.string('Please provide valid imgUrl')
         .max(255, 'Please provide a valid userImgUrl (max 255 characters)')
         .trim()
         .nullable(),
@@ -51,36 +51,37 @@ export type PartnerMessage = z.infer<typeof PartnerMessageSchema>;
 
 export async function selectLastMessagesWithPartnerInfo(userId: string): Promise<PartnerMessage[]> {
     const rows = await sql`
-    SELECT DISTINCT ON (
-      CASE 
-        WHEN message_sender_id = ${userId} THEN message_receiver_id
-        ELSE message_sender_id
-      END
-    )
-    message_id,
-    message_sender_id,
-    message_receiver_id,
-    message_body,
-    message_opened,
-    message_sent_at,
-    u.user_id AS partner_id,
-    u.user_name AS partner_name,
-    u.user_img_url AS partner_img
-    FROM message
-    JOIN "user" u ON u.user_id = (
-      CASE 
-        WHEN message_sender_id = ${userId} THEN message_receiver_id
-        ELSE message_sender_id
-      END
-    )
-    WHERE message_sender_id = ${userId} OR message_receiver_id = ${userId}
-    ORDER BY 
-      CASE 
-        WHEN message_sender_id = ${userId} THEN message_receiver_id
-        ELSE message_sender_id
-      END,
-      message_sent_at DESC;
-  `;
+        WITH partner_messages AS (
+            SELECT
+                message_id,
+                message_sender_id,
+                message_receiver_id,
+                message_body,
+                message_opened,
+                message_sent_at,
+                CASE
+                    WHEN message_sender_id = ${userId} THEN message_receiver_id
+                    ELSE message_sender_id
+                    END AS partner_id
+            FROM message
+            WHERE message_sender_id = ${userId} OR message_receiver_id = ${userId}
+        )
+        SELECT DISTINCT ON (partner_id)
+            message_id,
+            message_sender_id,
+            message_receiver_id,
+            message_body,
+            message_opened,
+            message_sent_at,
+            u.user_id::text AS partner_id,
+            u.user_name::text AS partner_name,
+            u.user_img_url::text AS partner_img
+        FROM partner_messages
+                 JOIN "user" u ON u.user_id = partner_messages.partner_id
+        ORDER BY partner_id, message_sent_at DESC;
+    `;
 
+    console.log("Returned message rows:", rows);
     return PartnerMessageSchema.array().parse(rows);
 }
+
