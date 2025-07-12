@@ -17,7 +17,7 @@ router.route('/acceptedMatches/:matchReceiverId')
     .get(isLoggedInController, getAcceptedMatchesByUserIdController)
 
 
-router.route('/:userId')
+router.route('/:matchReceiverId')
     .get(isLoggedInController, getMatchesByMatchReceiverIdController)
 
 router.route('/updateMatch/:matchMakerId/:matchReceiverId')

@@ -33,8 +33,8 @@ export async function selectAcceptedMatchesByUserId (matchReceiverId: string): P
 //     return result[0] ?? null
 // }
 
-export async function selectMatchByMatchReceiverId (userId: string ): Promise<Match[]|null> {
-const rowList = await sql`SELECT match_maker_id, match_receiver_id, match_accepted, match_created FROM match WHERE match_receiver_id = ${userId}`
+export async function selectMatchByMatchReceiverId (matchReceiverId: string ): Promise<Match[]|null> {
+const rowList = await sql`SELECT match_maker_id, match_receiver_id, match_accepted, match_created FROM match WHERE match_receiver_id = ${matchReceiverId} AND match_accepted = false`
 return MatchSchema.array().parse(rowList)
 }
 export async function updateMatch (matchMakerId: string, matchReceiverId: string) : Promise<string> {
