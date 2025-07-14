@@ -40,8 +40,7 @@ export const PrivateUserSchema = z.object ({
     userName: z.string('Please provide valid name')
         .min(1, 'Please provide a valid userName (min 1 characters)')
         .max(100, 'Please provide a valid userName (max 100 characters)')
-        .trim()
-        .nullable(),
+        .trim(),
     userState: z.string('Please provide valid state')
         .length(2, 'Please provide a valid userState (max 2 characters)')
         .trim()
