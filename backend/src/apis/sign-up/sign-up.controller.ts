@@ -48,7 +48,7 @@ export async function signupUserController( request: Request, response: Response
             userCreated: null,
             userEmail,
             userHash,
-            userImgUrl: null,
+            userImgUrl,
             userLat: null,
             userLng: null,
             userName,
