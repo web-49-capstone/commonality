@@ -37,13 +37,13 @@ export async function postMatchController (request: Request, response: Response)
 }
   export async function getAcceptedMatchesByUserIdController (request: Request, response: Response): Promise<void> {
     try {
-          const validationResult = MatchSchema.pick({matchReceiverId:true, matchAccepted:true}).safeParse(request.params)
+          const validationResult = MatchSchema.pick({matchReceiverId:true}).safeParse(request.params)
           if (!validationResult.success) {
               zodErrorResponse(response, validationResult.error)
               return
           }
           const {matchReceiverId} = validationResult.data
-        const {matchAccepted} = validationResult.data
+        // const {matchAccepted} = validationResult.data
           const user = request.session?.user
           const userIdFromSession = user?.userId
         if (!userIdFromSession || matchReceiverId !== userIdFromSession) {
@@ -51,13 +51,61 @@ export async function postMatchController (request: Request, response: Response)
         return
         }
 
-          const data = await selectAcceptedMatchesByUserId(matchReceiverId, matchAccepted)
+          const data = await selectAcceptedMatchesByUserId(matchReceiverId, true)
           const status: Status = {status: 200, message: null, data}
           response.json (status)
       } catch (error) {
           console.error(error)
           serverErrorResponse(response, [])
       }
+}
+export async function getDeclinedMatchesByUserIdController (request: Request, response: Response): Promise<void> {
+    try {
+        const validationResult = MatchSchema.pick({matchReceiverId:true}).safeParse(request.params)
+        if (!validationResult.success) {
+            zodErrorResponse(response, validationResult.error)
+            return
+        }
+        const {matchReceiverId} = validationResult.data
+        // const {matchAccepted} = validationResult.data
+        const user = request.session?.user
+        const userIdFromSession = user?.userId
+        if (!userIdFromSession || matchReceiverId !== userIdFromSession) {
+            response.json({status: 400, message: 'you are not allowed to preform this task', data: null})
+            return
+        }
+
+        const data = await selectAcceptedMatchesByUserId(matchReceiverId, false)
+        const status: Status = {status: 200, message: null, data}
+        response.json (status)
+    } catch (error) {
+        console.error(error)
+        serverErrorResponse(response, [])
+    }
+}
+export async function getPendingMatchesByUserIdController (request: Request, response: Response): Promise<void> {
+    try {
+        const validationResult = MatchSchema.pick({matchReceiverId:true}).safeParse(request.params)
+        if (!validationResult.success) {
+            zodErrorResponse(response, validationResult.error)
+            return
+        }
+        const {matchReceiverId} = validationResult.data
+        // const {matchAccepted} = validationResult.data
+        const user = request.session?.user
+        const userIdFromSession = user?.userId
+        if (!userIdFromSession || matchReceiverId !== userIdFromSession) {
+            response.json({status: 400, message: 'you are not allowed to preform this task', data: null})
+            return
+        }
+
+        const data = await selectAcceptedMatchesByUserId(matchReceiverId, null)
+        const status: Status = {status: 200, message: null, data}
+        response.json (status)
+    } catch (error) {
+        console.error(error)
+        serverErrorResponse(response, [])
+    }
 }
 
 export async function putMatchController (request: Request, response: Response): Promise<void> {

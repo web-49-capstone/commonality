@@ -1,10 +1,15 @@
 import {
     deleteUserInterest,
-    insertInterest, insertUserInterestInterestId,
+    insertInterest,
+    insertUserInterestInterestId,
     type Interest,
     InterestSchema,
     selectAllInterests,
-    selectInterestByInterestId, selectInterestsByUserId, type UserInterest, UserInterestSchema
+    selectInterestByInterestId,
+    selectInterestsByInterestName,
+    selectInterestsByUserId,
+    type UserInterest,
+    UserInterestSchema
 } from "./interest.model.ts";
 import {serverErrorResponse, zodErrorResponse} from "../../utils/response.utils.ts";
 import type {Request, Response} from "express";
@@ -14,6 +19,22 @@ import {sql} from "../../utils/database.utils.ts";
 export async function getAllInterestsController (request: Request, response: Response): Promise<void> {
     try {
         const data = await selectAllInterests()
+        const httpStatus = { status: 200, message: null, data }
+        response.json(httpStatus)
+    } catch (error) {
+        console.error(error)
+        serverErrorResponse(response, [])
+    }
+}
+export async function getInterestsByInterestNameController (request: Request, response: Response): Promise<void> {
+    try {
+        const validationResult = InterestSchema.pick({interestName: true}).safeParse(request.params)
+        if (!validationResult.success) {
+            zodErrorResponse(response, validationResult.error)
+            return
+        }
+        const { interestName } = validationResult.data
+        const data = await selectInterestsByInterestName(interestName)
         const httpStatus = { status: 200, message: null, data }
         response.json(httpStatus)
     } catch (error) {

@@ -24,10 +24,10 @@ CREATE TABLE IF NOT EXISTS "user"(
 );
 
 CREATE TABLE IF NOT EXISTS match(
-    match_maker_id    uuid,
-    match_receiver_id uuid,
+    match_maker_id    uuid NOT NULL ,
+    match_receiver_id uuid NOT NULL ,
     match_accepted    bool,
-    match_created timestamptz,
+    match_created timestamptz NOT NULL,
     FOREIGN KEY (match_maker_id) REFERENCES "user" (user_id),
     FOREIGN KEY (match_receiver_id) REFERENCES "user" (user_id),
     PRIMARY KEY (match_maker_id, match_receiver_id)

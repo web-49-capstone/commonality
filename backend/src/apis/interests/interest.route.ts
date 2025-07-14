@@ -1,8 +1,8 @@
 import {Router} from "express";
 import {
-     deleteUserInterestController,
+    deleteUserInterestController,
     getAllInterestsController,
-    getInterestByInterestIdController, getInterestByUserIdController,
+    getInterestByInterestIdController, getInterestByUserIdController, getInterestsByInterestNameController,
     postInterestController, postUserInterestController
 } from "./interest.controller.ts";
 import {isLoggedInController} from "../../utils/controllers/is-logged-in.controller.ts";
@@ -20,9 +20,14 @@ router.route('/interestId/:interestId')
 router.route('/userInterestUserId/:userInterestUserId')
     .get(getInterestByUserIdController)
 
+router.route('/interestByInterestName/:interestName')
+.get(getInterestsByInterestNameController)
+
 router.route('/deleteUserInterest/:userInterestInterestId')
     .delete(isLoggedInController, deleteUserInterestController)
 router.route('/userInterestUserid')
     .post(isLoggedInController, postUserInterestController)
+
+
 
 export const interestRoute = {basePath, router}
