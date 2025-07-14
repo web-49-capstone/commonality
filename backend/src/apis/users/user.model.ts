@@ -19,8 +19,8 @@ export const PrivateUserSchema = z.object ({
         .max(50, 'Please provide a valid userCity (max 50 characters)')
         .trim()
         .nullable(),
-    userCreated: z.date('Please provide a valid userCreated date')
-        .safeParse(new Date()),
+    userCreated: z.coerce.date('Please provide a valid userCreated date')
+        .nullable(),
     userEmail: z.email('Please provide valid email address')
         .max(128, 'Please provide a valid userEmail (max 128 characters)'),
     userHash: z.string('Please provide valid hash')
@@ -54,7 +54,7 @@ export type PublicUser = z.infer<typeof PublicUserSchema>
 export async function insertUser (user: PrivateUser): Promise<string> {
     PrivateUserSchema.parse(user)
     const { userId, userActivationToken, userAvailability, userBio, userCity, userCreated, userEmail, userHash, userImgUrl, userLat, userLng, userName, userState } = user
-    await sql`INSERT INTO "user"(user_id, user_activation_token, user_availability, user_bio, user_city, user_created, user_email, user_hash, user_img_url, user_lat, user_lng, user_name, user_state) VALUES (${userId}, ${userActivationToken}, ${userAvailability}, ${userBio}, ${userCity}, ${userCreated}, ${userEmail}, ${userHash}, ${userImgUrl}, ${userLat}, ${userLng}, ${userName}, ${userState})`
+    await sql`INSERT INTO "user"(user_id, user_activation_token, user_availability, user_bio, user_city, user_created, user_email, user_hash, user_img_url, user_lat, user_lng, user_name, user_state) VALUES (${userId}, ${userActivationToken}, ${userAvailability}, ${userBio}, ${userCity}, now(), ${userEmail}, ${userHash}, ${userImgUrl}, ${userLat}, ${userLng}, ${userName}, ${userState})`
     return 'User created successfully'
 }
 
