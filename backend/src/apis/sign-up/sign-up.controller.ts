@@ -8,6 +8,8 @@ import type {PrivateUser} from "../users/user.model.ts";
 import {v7 as uuidv7} from "uuid"
 import {insertUser} from "../users/user.model.ts";
 import type {Status} from "../../utils/interfaces/Status.ts";
+import {date} from "zod";
+import {z} from "zod/v4";
 
 
 export async function signupUserController( request: Request, response: Response) {
@@ -18,12 +20,10 @@ export async function signupUserController( request: Request, response: Response
             return
         }
 
-        const { userEmail, userPassword, userName} = validationResult.data
+        const { userEmail, userPassword, userName } = validationResult.data
 
         const userHash = await setHash(userPassword)
-
         const userActivationToken = setActivationToken()
-
         const userImgUrl = 'https://res.cloudinary.com/cnm-ingenuity-deep-dive-bootcamp/image/upload/v1726159504/t32ematygvtcyz4ws9p5.png'
 
         const basePath: string = `${request.protocol}://${request.hostname}:8080${request.originalUrl}/activation/${userActivationToken}`
@@ -45,7 +45,7 @@ export async function signupUserController( request: Request, response: Response
             userActivationToken: userActivationToken,
             userBio: null,
             userCity: null,
-            userCreated: Date(),
+            userCreated: null,
             userEmail,
             userHash,
             userImgUrl,

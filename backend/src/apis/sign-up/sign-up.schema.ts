@@ -3,7 +3,7 @@ import {z} from "zod/v4";
 
 
 export const SignUpUserSchema = PrivateUserSchema
-.omit({userId: true, userActivationToken: true, userAvailability: true, userBio: true, userCity: true, userHash: true, userImgUrl: true, userLat: true, userLng: true, userState: true })
+.omit({userId: true, userActivationToken: true, userAvailability: true, userBio: true, userCity: true, userCreated: true, userHash: true, userImgUrl: true, userLat: true, userLng: true, userState: true })
 .extend({
     userPasswordConfirm: z.string('User password confirmation must match password.')
         .min(8, 'Password must be at least 8 characters.')

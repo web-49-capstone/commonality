@@ -19,8 +19,8 @@ export const PrivateUserSchema = z.object ({
         .max(50, 'Please provide a valid userCity (max 50 characters)')
         .trim()
         .nullable(),
-    userCreated: z.date('Please provide a valid userCreated date')
-        .safeParse(new Date()),
+    userCreated: z.coerce.date('Please provide a valid userCreated date')
+        .nullable(),
     userEmail: z.email('Please provide valid email address')
         .max(128, 'Please provide a valid userEmail (max 128 characters)'),
     userHash: z.string('Please provide valid hash')
