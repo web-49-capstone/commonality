@@ -18,7 +18,7 @@ export async function signupUserController( request: Request, response: Response
             return
         }
 
-        const { userEmail, userPassword} = validationResult.data
+        const { userEmail, userPassword, userName} = validationResult.data
 
         const userHash = await setHash(userPassword)
 
@@ -51,7 +51,7 @@ export async function signupUserController( request: Request, response: Response
             userImgUrl: null,
             userLat: null,
             userLng: null,
-            userName: null,
+            userName,
             userState:null,
 
 
