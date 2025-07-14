@@ -12,7 +12,7 @@ export type Match = z.infer<typeof MatchSchema>
 
 export async function insertMatch (match: Match): Promise<string> {
     const { matchMakerId, matchReceiverId, matchAccepted, matchCreated } = match
-    await sql`INSERT INTO match(match_maker_id, match_receiver_id, match_accepted, match_created) VALUES (${matchMakerId}, ${matchReceiverId}, ${matchAccepted}, ${matchCreated})`
+    await sql`INSERT INTO match(match_maker_id, match_receiver_id, match_accepted, match_created) VALUES (${matchMakerId}, ${matchReceiverId}, ${matchAccepted}, now())`
     return 'Match added'
 }
 
