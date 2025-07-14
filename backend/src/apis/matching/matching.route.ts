@@ -12,7 +12,7 @@ router.route('/')
     .post(isLoggedInController, postMatchController)
 
 
-router.route('/accepted/:matchReceiverId')
+router.route('/accepted/:userId')
     .get(isLoggedInController, getAcceptedMatchesByUserIdController)
 router.route('/declined/:matchReceiverId')
     .get(isLoggedInController, getDeclinedMatchesByUserIdController)

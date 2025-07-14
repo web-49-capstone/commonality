@@ -2,7 +2,7 @@ import {
     MatchSchema,
     type Match,
     selectAcceptedMatchesByUserId,
-    insertMatch, updateMatch,
+    insertMatch, updateMatch, MatchUserIdSchema,
 } from "./matching.model.ts"
 import {serverErrorResponse, zodErrorResponse} from "../../utils/response.utils.ts";
 import type {Request, Response} from "express"
@@ -37,21 +37,21 @@ export async function postMatchController (request: Request, response: Response)
 }
   export async function getAcceptedMatchesByUserIdController (request: Request, response: Response): Promise<void> {
     try {
-          const validationResult = MatchSchema.pick({matchReceiverId:true}).safeParse(request.params)
+          const validationResult = MatchUserIdSchema.safeParse(request.params)
           if (!validationResult.success) {
               zodErrorResponse(response, validationResult.error)
               return
           }
-          const {matchReceiverId} = validationResult.data
+          const {userId}= validationResult.data
         // const {matchAccepted} = validationResult.data
           const user = request.session?.user
           const userIdFromSession = user?.userId
-        if (!userIdFromSession || matchReceiverId !== userIdFromSession) {
+        if (userId !== userIdFromSession) {
         response.json({status: 400, message: 'you are not allowed to preform this task', data: null})
         return
         }
 
-          const data = await selectAcceptedMatchesByUserId(matchReceiverId, true)
+          const data = await selectAcceptedMatchesByUserId(userIdFromSession, true)
           const status: Status = {status: 200, message: null, data}
           response.json (status)
       } catch (error) {
