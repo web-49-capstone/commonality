@@ -20,15 +20,14 @@ export const PrivateUserSchema = z.object ({
         .trim()
         .nullable(),
     userCreated: z.date('Please provide a valid userCreated date')
-        .nullable(),
+        .safeParse(new Date()),
     userEmail: z.email('Please provide valid email address')
         .max(128, 'Please provide a valid userEmail (max 128 characters)'),
     userHash: z.string('Please provide valid hash')
         .length(97, 'Please provide a valid userHash (97 characters)'),
     userImgUrl: z.string('Please provide valid imgUrl')
         .max(255, 'Please provide a valid userImgUrl (max 255 characters)')
-        .trim()
-        .nullable(),
+        .trim(),
     userLat: z.number('Please provide valid latitude')
         .min(-90, 'Please provide a valid userLat (min -90)')
         .max(90, 'Please provide a valid userLat (max 90)')
