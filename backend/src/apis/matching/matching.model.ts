@@ -21,24 +21,14 @@ export async function insertMatch (match: Match): Promise<string> {
 //     return MatchSchema.array().parse(result)
 // }
 
-export async function selectAcceptedMatchesByUserId (matchReceiverId: string): Promise<Match[]|null>
+export async function selectAcceptedMatchesByUserId (matchReceiverId: string, matchAccepted: boolean | null): Promise<Match[]|null>
 {
-    const rowList = await sql`SELECT match_maker_id, match_receiver_id, match_accepted, match_created FROM match WHERE match_accepted = true AND match_receiver_id = ${matchReceiverId}`
+    const rowList = await sql`SELECT match_maker_id, match_receiver_id, match_accepted, match_created FROM match WHERE match_accepted = ${matchAccepted} AND match_receiver_id = ${matchReceiverId}`
     return MatchSchema.array().parse(rowList)
 }
 
-// export async function selectMatchByMatchMakerId (userId: string ): Promise<Match|null> {
-//     const rowList = await sql`SELECT match_maker_id, match_receiver_id, match_accepted, match_created FROM match WHERE match_maker_id = ${matchMakerId}`
-//     const result = MatchSchema.array().max(1).parse(rowList)
-//     return result[0] ?? null
-// }
-
-export async function selectMatchByMatchReceiverId (matchReceiverId: string ): Promise<Match[]|null> {
-const rowList = await sql`SELECT match_maker_id, match_receiver_id, match_accepted, match_created FROM match WHERE match_receiver_id = ${matchReceiverId} AND match_accepted = false`
-return MatchSchema.array().parse(rowList)
-}
 export async function updateMatch (matchMakerId: string, matchReceiverId: string) : Promise<string> {
-  await sql `UPDATE match SET match_accepted = true WHERE match_maker_id = ${matchMakerId} AND match_receiver_id = ${matchReceiverId}`
+    await sql `UPDATE match SET match_accepted = true WHERE match_maker_id = ${matchMakerId} AND match_receiver_id = ${matchReceiverId}`
     return 'Match updated successfully'
 }
 

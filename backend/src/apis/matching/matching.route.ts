@@ -1,7 +1,6 @@
 import {Router} from 'express'
 import {
     getAcceptedMatchesByUserIdController,
-    getMatchesByMatchReceiverIdController,
     postMatchController, putMatchController
 } from './matching.controller'
 import {isLoggedInController} from "../../utils/controllers/is-logged-in.controller.ts";
@@ -13,12 +12,8 @@ router.route('/')
     .post(isLoggedInController, postMatchController)
 
 
-router.route('/acceptedMatches/:matchReceiverId')
+router.route('/acceptedMatches/:matchReceiverId/:matchAccepted')
     .get(isLoggedInController, getAcceptedMatchesByUserIdController)
-
-
-router.route('/:matchReceiverId')
-    .get(isLoggedInController, getMatchesByMatchReceiverIdController)
 
 router.route('/updateMatch/:matchMakerId/:matchReceiverId')
     .put(isLoggedInController, putMatchController)
