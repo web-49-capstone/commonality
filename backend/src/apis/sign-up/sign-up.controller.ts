@@ -8,7 +8,6 @@ import type {PrivateUser} from "../users/user.model.ts";
 import {v7 as uuidv7} from "uuid"
 import {insertUser} from "../users/user.model.ts";
 import type {Status} from "../../utils/interfaces/Status.ts";
-import {z} from "zod/v4";
 
 
 export async function signupUserController( request: Request, response: Response) {
@@ -57,6 +56,7 @@ export async function signupUserController( request: Request, response: Response
 
 
         }
+
         await insertUser(user)
 
         await mailgunClient.messages.create(process.env.MAILGUN_DOMAIN as string, mailgunMessage)
@@ -68,7 +68,6 @@ export async function signupUserController( request: Request, response: Response
         }
 
         response.status(200).json(status)
-
     } catch (error: any) {
         console.error(error)
         const status:Status = {
