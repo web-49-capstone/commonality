@@ -37,7 +37,7 @@ export async function postMatchController (request: Request, response: Response)
 }
   export async function getAcceptedMatchesByUserIdController (request: Request, response: Response): Promise<void> {
     try {
-          const validationResult = MatchUserIdSchema.safeParse(request.params)
+          const validationResult = MatchUserIdSchema.pick({userId: true}).safeParse(request.params)
           if (!validationResult.success) {
               zodErrorResponse(response, validationResult.error)
               return
@@ -61,21 +61,21 @@ export async function postMatchController (request: Request, response: Response)
 }
 export async function getDeclinedMatchesByUserIdController (request: Request, response: Response): Promise<void> {
     try {
-        const validationResult = MatchSchema.pick({matchReceiverId:true}).safeParse(request.params)
+        const validationResult = MatchUserIdSchema.pick({userId:true}).safeParse(request.params)
         if (!validationResult.success) {
             zodErrorResponse(response, validationResult.error)
             return
         }
-        const {matchReceiverId} = validationResult.data
+        const {userId} = validationResult.data
         // const {matchAccepted} = validationResult.data
         const user = request.session?.user
         const userIdFromSession = user?.userId
-        if (!userIdFromSession || matchReceiverId !== userIdFromSession) {
+        if (!userIdFromSession || userId !== userIdFromSession) {
             response.json({status: 400, message: 'you are not allowed to preform this task', data: null})
             return
         }
 
-        const data = await selectAcceptedMatchesByUserId(matchReceiverId, false)
+        const data = await selectAcceptedMatchesByUserId(userId, false)
         const status: Status = {status: 200, message: null, data}
         response.json (status)
     } catch (error) {
@@ -85,21 +85,21 @@ export async function getDeclinedMatchesByUserIdController (request: Request, re
 }
 export async function getPendingMatchesByUserIdController (request: Request, response: Response): Promise<void> {
     try {
-        const validationResult = MatchSchema.pick({matchReceiverId:true}).safeParse(request.params)
+        const validationResult = MatchUserIdSchema.pick({userId:true}).safeParse(request.params)
         if (!validationResult.success) {
             zodErrorResponse(response, validationResult.error)
             return
         }
-        const {matchReceiverId} = validationResult.data
+        const {userId} = validationResult.data
         // const {matchAccepted} = validationResult.data
         const user = request.session?.user
         const userIdFromSession = user?.userId
-        if (!userIdFromSession || matchReceiverId !== userIdFromSession) {
+        if (userId !== userIdFromSession) {
             response.json({status: 400, message: 'you are not allowed to preform this task', data: null})
             return
         }
 
-        const data = await selectAcceptedMatchesByUserId(matchReceiverId, null)
+        const data = await selectAcceptedMatchesByUserId(userIdFromSession, null)
         const status: Status = {status: 200, message: null, data}
         response.json (status)
     } catch (error) {
@@ -121,6 +121,7 @@ export async function putMatchController (request: Request, response: Response):
             return
         }
         const {matchReceiverId, matchMakerId} = validationResult.data
+        const {matchAccepted} = bodyValidationResult.data
         const user = request.session?.user
         const userIdFromSession = user?.userId
 
@@ -128,7 +129,7 @@ export async function putMatchController (request: Request, response: Response):
             response.json({status: 400, message: 'you are not allowed to preform this task', data: null})
             return
         }
-        const result = await updateMatch(matchMakerId, matchReceiverId)
+        const result = await updateMatch(matchMakerId, matchReceiverId, matchAccepted)
         const status: Status = {status: 200, message: result, data: null}
         response.json(status)
     } catch (error) {

@@ -14,9 +14,9 @@ router.route('/')
 
 router.route('/accepted/:userId')
     .get(isLoggedInController, getAcceptedMatchesByUserIdController)
-router.route('/declined/:matchReceiverId')
+router.route('/declined/:userId')
     .get(isLoggedInController, getDeclinedMatchesByUserIdController)
-router.route('/pending/:matchReceiverId')
+router.route('/pending/:userId')
     .get(isLoggedInController, getPendingMatchesByUserIdController)
 
 router.route('/updateMatch/:matchMakerId/:matchReceiverId')
