@@ -2,11 +2,12 @@ import {
     MatchSchema,
     type Match,
     selectAcceptedMatchesByUserId,
-    insertMatch, updateMatch, MatchUserIdSchema,
+    insertMatch, updateMatch,
 } from "./matching.model.ts"
 import {serverErrorResponse, zodErrorResponse} from "../../utils/response.utils.ts";
 import type {Request, Response} from "express"
 import type {Status} from "../../utils/interfaces/Status.ts"
+import {PublicUserSchema} from "../users/user.model.ts";
 
 export async function postMatchController (request: Request, response: Response): Promise<void> {
     try {
@@ -37,7 +38,7 @@ export async function postMatchController (request: Request, response: Response)
 }
   export async function getAcceptedMatchesByUserIdController (request: Request, response: Response): Promise<void> {
     try {
-          const validationResult = MatchUserIdSchema.pick({userId: true}).safeParse(request.params)
+          const validationResult = PublicUserSchema.pick({userId: true}).safeParse(request.params)
           if (!validationResult.success) {
               zodErrorResponse(response, validationResult.error)
               return
@@ -61,7 +62,7 @@ export async function postMatchController (request: Request, response: Response)
 }
 export async function getDeclinedMatchesByUserIdController (request: Request, response: Response): Promise<void> {
     try {
-        const validationResult = MatchUserIdSchema.pick({userId:true}).safeParse(request.params)
+        const validationResult = PublicUserSchema.pick({userId:true}).safeParse(request.params)
         if (!validationResult.success) {
             zodErrorResponse(response, validationResult.error)
             return
@@ -85,7 +86,7 @@ export async function getDeclinedMatchesByUserIdController (request: Request, re
 }
 export async function getPendingMatchesByUserIdController (request: Request, response: Response): Promise<void> {
     try {
-        const validationResult = MatchUserIdSchema.pick({userId:true}).safeParse(request.params)
+        const validationResult = PublicUserSchema.pick({userId:true}).safeParse(request.params)
         if (!validationResult.success) {
             zodErrorResponse(response, validationResult.error)
             return
