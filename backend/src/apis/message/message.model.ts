@@ -23,10 +23,27 @@ export async function insertMessage(message: Message): Promise<string> {
     return 'Added a new message'
 }
 
-export async function selectMessagesByUserId(userId: string): Promise<Message[]> {
-    const rowList = await sql`SELECT message_id, message_receiver_id, message_sender_id, message_body, message_opened, message_sent_at FROM message WHERE message_receiver_id  = ${userId} OR message_sender_id = ${userId} ORDER BY message_sent_at DESC`
+export async function updateMessageWhenOpened(userIdFromSession: string, userId: string): Promise<string> {
+    await sql`UPDATE message SET message_opened = true WHERE message_sender_id = ${userId} AND message_receiver_id = ${userIdFromSession} AND message_opened = false`
+    return 'Updated message'
+}
+
+export async function deleteMessage(messageId: string): Promise<string> {
+    await sql`DELETE FROM message WHERE message_id = ${messageId}`
+    return 'Deleted message'
+}
+
+// export async function selectMessagesByUserId(userId: string): Promise<Message[]> {
+//     const rowList = await sql`SELECT message_id, message_receiver_id, message_sender_id, message_body, message_opened, message_sent_at FROM message WHERE message_receiver_id = ${userId} OR message_sender_id = ${userId} ORDER BY message_sent_at DESC`
+//     return MessageSchema.array().parse(rowList)
+// }
+
+export async function selectMessagesBySenderAndReceiver(userId1: string, userId2: string): Promise<Message[]> {
+    const rowList = await sql`SELECT message_id, message_receiver_id, message_sender_id, message_body, message_opened, message_sent_at FROM message WHERE (message_receiver_id = ${userId1} AND message_sender_id = ${userId2}) OR (message_receiver_id = ${userId2} AND message_sender_id = ${userId1}) ORDER BY message_sent_at DESC`
     return MessageSchema.array().parse(rowList)
 }
+
+
 export async function selectUnreadMessagesByUserId(userId: string): Promise<Message[]> {
     const rowList = await sql`SELECT message_id, message_receiver_id, message_sender_id, message_body, message_opened, message_sent_at FROM message WHERE message_receiver_id  = ${userId} AND message_opened = false ORDER BY message_sent_at DESC`
     return MessageSchema.array().parse(rowList)
