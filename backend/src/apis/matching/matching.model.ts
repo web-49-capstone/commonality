@@ -23,13 +23,13 @@ export async function insertMatch (match: Match): Promise<string> {
 
 export async function selectAcceptedMatchesByUserId (userId: string, matchAccepted: boolean | null): Promise<PublicUser[]|null>
 {
-    const rowList = await sql`SELECT user_id, user_availability, user_bio, user_city, user_created, user_img_url, user_name, user_state FROM "user" INNER JOIN match ON (user_id = match_maker_id OR user_id = match_receiver_id)  WHERE
+    const rowList = await sql`SELECT user_id, user_availability, user_bio, user_city, user_created, user_img_url, user_name, user_state FROM "user" INNER JOIN match ON (user_id = match_maker_id OR user_id = match_receiver_id) WHERE
     (
         ${matchAccepted === null
                 ? sql`match_accepted IS NULL`
                 : sql`match_accepted = ${matchAccepted}`
         }
-    ) AND (match_receiver_id = ${userId} OR match_maker_id = ${userId})`
+    ) AND (match_receiver_id = ${userId} OR match_maker_id = ${userId}) AND user_id != ${userId}`
     return PublicUserSchema.array().parse(rowList)
 }
 
