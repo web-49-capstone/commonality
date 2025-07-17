@@ -13,7 +13,10 @@ type Pages = {
   "/": {
     params: {};
   };
-  "/profile": {
+  "/login-signup": {
+    params: {};
+  };
+  "/create-profile": {
     params: {};
   };
   "/connect": {
@@ -24,15 +27,23 @@ type Pages = {
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/profile" | "/connect";
+    page: "/" | "/login-signup" | "/create-profile" | "/connect";
+  };
+  "routes/login-signup.tsx": {
+    id: "routes/login-signup";
+    page: "/login-signup";
+  };
+  "routes/create-profile.tsx": {
+    id: "routes/create-profile";
+    page: "/create-profile";
+  };
+  "layouts/navigation.tsx": {
+    id: "layouts/navigation";
+    page: "/" | "/connect";
   };
   "routes/home.tsx": {
     id: "routes/home";
     page: "/";
-  };
-  "routes/create-profile.tsx": {
-    id: "routes/create-profile";
-    page: "/profile";
   };
   "routes/matching-profiles.tsx": {
     id: "routes/matching-profiles";

@@ -6,7 +6,7 @@ import {BiShow} from "react-icons/bi";
 import {IconContext} from "react-icons";
 
 
-export function LoginSignup() {
+export default function LoginSignup() {
     const [isLogin, setIsLogin] = useState(true);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);

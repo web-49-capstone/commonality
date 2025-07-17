@@ -2,18 +2,19 @@ import {MdOutlineMessage} from "react-icons/md";
 import {PiPlugsConnectedFill} from "react-icons/pi";
 import {CgProfile} from "react-icons/cg";
 import React, {useEffect, useState} from "react";
-import {NavLink} from "react-router";
+import {NavLink, Outlet} from "react-router";
 
 
 export function Navigation(){
 
-    const desktopNavClasses = "flex items-center gap-2 text-lg text-gray-700 hover:text-blue-700 hover:border-b-2"
-    const mobileNavClasses = "flex flex-col items-center gap-2 text-md hover:text-blue-600 hover:border-b-2"
-    const desktopCurrentNavClasses = "flex items-center gap-2 text-lg text-blue-700 border-b-2 border-blue-700"
-    const mobileCurrentNavClasses = "flex flex-col items-center gap-2 text-md text-blue-600 border-b-2"
+    const desktopNavClasses = "flex items-center gap-2 text-lg text-gray-700 hover:text-blue-700 hover:border-b-2 transition-colors"
+    const mobileNavClasses = "flex flex-col items-center gap-2 text-md hover:text-blue-600 hover:border-b-2 transition-colors"
+    const desktopCurrentNavClasses = "flex items-center gap-2 text-lg text-blue-700 border-b-2 border-blue-700 transition-colors"
+    const mobileCurrentNavClasses = "flex flex-col items-center gap-2 text-md text-blue-600 border-b-2 transition-colors"
 
     return (
         <>
+            <div>
             <nav>
                 {/*DESKTOP HEADER*/}
                 <div className="md:block bg-white border-b shadow-lg pb-2">
@@ -40,6 +41,8 @@ export function Navigation(){
                     </div>
                 </div>
             </nav>
+            <Outlet />
+            </div>
         </>
     )
 }

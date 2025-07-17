@@ -2,7 +2,7 @@ import {useParams} from "react-router";
 import {useEffect, useState} from "react";
 import {ProfilePage} from "~/components/profile-page";
 
-export function UserProfilePage() {
+export default function UserProfilePage() {
     const { userId } = useParams();
     const [profile, setProfile] = useState<any>(null);
 

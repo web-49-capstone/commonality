@@ -51,11 +51,9 @@ export default function App() {
   return (
       <>
         <div className="min-h-screen flex flex-col pb-30 md:pb-0">
-          <Navigation/>
           <main className="flex-1">
             <Outlet/>
           </main>
-          <Footer/>
         </div>
       </>
   )}

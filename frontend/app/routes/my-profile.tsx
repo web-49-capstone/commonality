@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import {ProfilePage} from "~/components/profile-page";
 import type {Profile} from "~/types/profile";
-export function MyProfile() {
+export default function MyProfile() {
     const [profile, setProfile] = useState<Profile | null>(null);
 
     useEffect(() => {

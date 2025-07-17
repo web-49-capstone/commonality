@@ -1,6 +1,6 @@
 import {MyInterestsDropdown} from "~/components/my-interests-dropdown";
 
-export function MatchingBegin() {
+export default function MatchingBegin() {
     return(
         <>
             <div>
