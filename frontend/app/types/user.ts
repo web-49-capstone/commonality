@@ -4,7 +4,7 @@ export interface User {
     userBio: string;
     userCreated: string;
     userAvailability?: string;
-    userImgUrl?: File | null;
+    userImgUrl?: string;
     userCity: string;
     userState: string;
 }

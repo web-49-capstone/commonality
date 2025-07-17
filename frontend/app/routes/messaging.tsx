@@ -6,79 +6,69 @@ import {CiCircleInfo} from "react-icons/ci"
 import {BsFillSendFill} from "react-icons/bs"
 import MessageBubble from "../components/MessageBubble"
 import ChatTabs from "../components/ChatTabs"
+import type {User} from "~/types/user";
+import type { Message } from '~/types/message'
 
 
 const MessagingApp = () => {
     const [isSelected, setIsSelected] = useState(0);
     const [newMessage, setNewMessage] = useState('');
-
-    const contacts = [
+    const user =
         {
             userId: "0197d20f-c2a2-7877-93a6-7248762b4b2d",
             userName: 'Marcus Rodriguez',
-            lastMessage: 'That\'s so fetch!',
-            messageTime: '11:30 PM',
             userImgUrl: '',
-            isOnline: true,
-            unreadMessages: 2
-        },
-        {
-            userId: "0197d211-8b00-77ca-ab2b-6f0420f835de",
-            userName: 'Lisa Chen',
-            lastMessage: 'I can\'t believe he said that at the last meetup!',
-            messageTime: '1:15 PM',
-            userImgUrl: '',
-            isOnline: true,
-            unreadMessages: 829
-        },
-        {
-            userId: "0197d212-c2c0-715d-bfd0-8b9eaaab7c5e",
-            userName: 'David Park',
-            lastMessage: 'See you tomorrow for the meet!',
-            messageTime: '8:45 PM',
-            userImgUrl: '',
-            isOnline: false,
-            unreadMessages: 1
-        },
-        {
-            userId: "0197d215-eb60-760a-8a93-d092b4d30c74",
-            userName: 'Alex Thompson',
-            lastMessage: 'Perfect, let me know',
-            messageTime: 'Yesterday',
-            userImgUrl: '',
-            isOnline: false,
-            unreadMessages: 4
-        },
-        {
-            userId: "0197d25d-6da6-7ffe-80b5-8b93d04f1bfd",
-            userName: 'Sarah Mitchell',
-            lastMessage: 'The project looks great!',
-            messageTime: 'Yesterday',
-            userImgUrl: '',
-            isOnline: true,
-            unreadMessages: 0
-        },
-    ];
+            userBio: "ajakjfd",
+            userAvailability: "sjkjf",
+            userCity: "fajkajf",
+            userCreated: "kdjajf",
+            userState: "nm",
+        }
+    const users: User[] = [{
+        userId: "0197d20f-c2a2-7877-93a6-7248762b4b2d",
+        userName: 'Marcus Rodriguez',
+        userImgUrl: '',
+        userBio: "ajakjfd",
+        userAvailability: "sjkjf",
+        userCity: "fajkajf",
+        userCreated: "kdjajf",
+        userState: "nm",
+    } ]
     const loggedInUser = {userId: "0197d1d2-e6ef-7e8a-80db-ce603e81d16f", userName: "Alex Thompson"}
-    const messages = [
-        {messageId: 1, messageBody: 'Hey! What up?!?!', messageSenderId: "0197d1d1-b061-7345-9763-33a7ca2b7d64", messageReceiverId: "0197d1d2-e6ef-7e8a-80db-ce603e81d16f", messageSentAt: '2:25 PM'},
+    const message  =
         {
-            messageId: 2,
-            messageBody: 'I\'m doing great! Just working on some new projects. How about you?',
-            messageSenderId: "0197d1d2-e6ef-7e8a-80db-ce603e81d16f",
-            messageReceiverId: "0197d1d1-b061-7345-9763-33a7ca2b7d64",
-            messageSentAt: '2:26 PM'
-        },
-        {messageId: 1, messageBody: 'I\'m ok... "Working 9-5!" as the kids say.', messageSenderId: "0197d1d1-b061-7345-9763-33a7ca2b7d64", messageReceiverId: "0197d1d2-e6ef-7e8a-80db-ce603e81d16f", messageSentAt: '2:28 PM'},
-        {
-            messageId: 2,
-            messageBody: 'Awwh! Well you need a destress! We should grab coffee this week and I can tell you all about my day.',
-            messageSenderId: "0197d1d2-e6ef-7e8a-80db-ce603e81d16f",
-            messageReceiverId: "0197d1d1-b061-7345-9763-33a7ca2b7d64",
-            messageSentAt: '2:29 PM'
-        },
-        {messageId: 1, messageBody: 'Perfect! How about Thursday afternoon?', messageSenderId: "0197d1d1-b061-7345-9763-33a7ca2b7d64", messageReceiverId: "0197d1d2-e6ef-7e8a-80db-ce603e81d16f", messageSentAt: '2:30 PM'},
-    ];
+            messageId: "jajkjfakfdkasj",
+            messageBody: 'Hey! What up?!?!',
+            messageSenderId: "0197d1d1-b061-7345-9763-33a7ca2b7d64",
+            messageReceiverId: "0197d1d2-e6ef-7e8a-80db-ce603e81d16f",
+            messageSentAt: '2:25 PM',
+            messageOpened: true,
+        }
+    const messages: Message[]  = [
+        {messageId: "jajkjfakfdkasj",
+            messageBody: 'Hey! What up?!?!',
+            messageSenderId: "0197d1d1-b061-7345-9763-33a7ca2b7d64",
+            messageReceiverId: "0197d1d2-e6ef-7e8a-80db-ce603e81d16f",
+            messageSentAt: '2:25 PM',
+            messageOpened: true
+        }]
+    //     {
+    //         messageId: 2,
+    //         messageBody: 'I\'m doing great! Just working on some new projects. How about you?',
+    //         messageSenderId: "0197d1d2-e6ef-7e8a-80db-ce603e81d16f",
+    //         messageReceiverId: "0197d1d1-b061-7345-9763-33a7ca2b7d64",
+    //         messageSentAt: '2:26 PM'
+    //     },
+    //     {messageId: 1, messageBody: 'I\'m ok... "Working 9-5!" as the kids say.', messageSenderId: "0197d1d1-b061-7345-9763-33a7ca2b7d64", messageReceiverId: "0197d1d2-e6ef-7e8a-80db-ce603e81d16f", messageSentAt: '2:28 PM'},
+    //     {
+    //         messageId: 2,
+    //         messageBody: 'Awwh! Well you need a destress! We should grab coffee this week and I can tell you all about my day.',
+    //         messageSenderId: "0197d1d2-e6ef-7e8a-80db-ce603e81d16f",
+    //         messageReceiverId: "0197d1d1-b061-7345-9763-33a7ca2b7d64",
+    //         messageSentAt: '2:29 PM'
+    //     },
+    //     {messageId: 1, messageBody: 'Perfect! How about Thursday afternoon?', messageSenderId: "0197d1d1-b061-7345-9763-33a7ca2b7d64", messageReceiverId: "0197d1d2-e6ef-7e8a-80db-ce603e81d16f", messageSentAt: '2:30 PM'},
+    // ];
 
     const messageHandler = () => {
         if (newMessage.trim()) {
@@ -227,8 +217,8 @@ const MessagingApp = () => {
 
                 {/* Chat List */}
                 <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
-                    {contacts.map((contact, index) => (
-                        <ChatTabs contact={contact} key={contact.userId} index={index}/>
+                    {users.map((user: User) => (
+                        <ChatTabs user={user} message={message} />
                     ))}
                 </div>
             </div>
@@ -241,18 +231,11 @@ const MessagingApp = () => {
                         <div className="relative">
                             <div
                                 className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white">
-                                {contacts[selectedChat]?.userImgUrl}
+                                {user.userName}
                             </div>
-                            {contacts[selectedChat]?.isOnline && (
-                                <div
-                                    className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
-                            )}
                         </div>
                         <div className="ml-3">
-                            <h2 className="font-semibold text-gray-900">{contacts[selectedChat]?.userName}</h2>
-                            <p className="text-sm text-gray-500">
-                                {contacts[selectedChat]?.isOnline ? 'Active now' : 'Active 2h ago'}
-                            </p>
+                            <h2 className="font-semibold text-gray-900">{user.userName}</h2>
                         </div>
                     </div>
                     <div className="flex gap-3">
@@ -265,7 +248,7 @@ const MessagingApp = () => {
                 {/* Messages */}
                 <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
                     {messages.map((message) => (
-                        <MessageBubble loggedInUser={loggedInUser} key={message.messageId} message={message} />
+                        <MessageBubble  key={message.messageId} message={message} />
                     ))}
                 </div>
 
