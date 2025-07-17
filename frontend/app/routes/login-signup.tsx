@@ -4,6 +4,10 @@ import {RiLockPasswordLine} from "react-icons/ri";
 import {BiHide} from "react-icons/bi";
 import {BiShow} from "react-icons/bi";
 import {IconContext} from "react-icons";
+import { ImProfile } from "react-icons/im";
+import { GiConfirmed } from "react-icons/gi";
+
+
 
 
 export default function LoginSignup() {
@@ -13,6 +17,7 @@ export default function LoginSignup() {
     const [errorMessage, setErrorMessage] = useState("");
 
     const [formData, setFormData] = useState({
+        userName: "",
         email: "",
         password: "",
         confirmPassword: "",
@@ -63,8 +68,26 @@ export default function LoginSignup() {
                     <h2 className="text-2xl font-bold">
                         {isLogin ? "Login" : "Sign Up"}
                     </h2>
+                        {isLogin ? "" :
+                            <div className='relative'>
+                                <ImProfile className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white"/>
+
+                            <input
+                        type="text"
+                        name="userName"
+                        onChange={handleInputChange}
+                        value={formData.userName}
+                        placeholder="Full Name"
+                        className="w-full p-2 pl-10 rounded bg-zinc-500 text-white"
+                        required
+
+                        />
+                            </div>
+
+                        }
                     <div className='relative'>
-                        <MdOutlineEmail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white"/>
+
+                    <MdOutlineEmail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white"/>
                         <input
                             type="email"
                             name="email"
@@ -99,6 +122,7 @@ export default function LoginSignup() {
 
                     {isLogin ? <a className=" flex justify-start text-sm hover:text-red-600">Forgot Password?</a> : <>
                         <div className='relative'>
+                            <GiConfirmed className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white"/>
                             <input
                                 type={showConfirmPassword ? "text" : "password"}
                                 name="confirmPassword"
