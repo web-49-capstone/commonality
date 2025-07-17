@@ -4,8 +4,8 @@ import {FaPlus} from "react-icons/fa"
 import {FaSearch} from "react-icons/fa"
 import {CiCircleInfo} from "react-icons/ci"
 import {BsFillSendFill} from "react-icons/bs"
-import MessageBubble from "./components/MessageBubble"
-import ChatTabs from "./components/ChatTabs"
+import MessageBubble from "../../src/layouts/components/MessageBubble"
+import ChatTabs from "../../src/layouts/components/ChatTabs"
 
 
 const MessagingApp = () => {
@@ -95,7 +95,7 @@ const MessagingApp = () => {
 
 
     return (
-        <div className="flex h-screen bg-white">
+        <div className="flex bg-white">
             {/* Sidebar */}
             <div className="w-80 bg-white border-r border-gray-200 flex flex-col">
                 {/* Header */}

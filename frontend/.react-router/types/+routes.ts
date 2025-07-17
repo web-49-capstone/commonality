@@ -31,12 +31,15 @@ type Pages = {
   "/messages": {
     params: {};
   };
+  "/chat": {
+    params: {};
+  };
 };
 
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/login-signup" | "/create-profile" | "/connect" | "/profile" | "/user" | "/messages";
+    page: "/" | "/login-signup" | "/create-profile" | "/connect" | "/profile" | "/user" | "/messages" | "/chat";
   };
   "routes/login-signup.tsx": {
     id: "routes/login-signup";
@@ -48,7 +51,7 @@ type RouteFiles = {
   };
   "layouts/navigation.tsx": {
     id: "layouts/navigation";
-    page: "/" | "/connect" | "/profile" | "/user" | "/messages";
+    page: "/" | "/connect" | "/profile" | "/user" | "/messages" | "/chat";
   };
   "routes/home.tsx": {
     id: "routes/home";
@@ -69,5 +72,9 @@ type RouteFiles = {
   "routes/view-connections-messages.tsx": {
     id: "routes/view-connections-messages";
     page: "/messages";
+  };
+  "routes/Messaging.tsx": {
+    id: "routes/Messaging";
+    page: "/chat";
   };
 };

@@ -9,7 +9,8 @@ export default [
         route("connect", "routes/matching-profiles.tsx"),
         route("profile", "routes/my-profile.tsx"),
         route("user", "routes/user-profile-page.tsx"),
-        route("messages", "routes/view-connections-messages.tsx")
+        route("messages", "routes/view-connections-messages.tsx"),
+        route("chat", "routes/Messaging.tsx")
     ]),
 
 ] satisfies RouteConfig;

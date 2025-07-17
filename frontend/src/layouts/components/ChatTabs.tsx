@@ -21,7 +21,7 @@ const ChatTabs = ({contact, setSelectedChat, selectedChat, index} : ContactProps
         <div className="flex-1 overflow-y-auto">
                 <div
                     onClick={() => setSelectedChat(index)}
-                    className={`flex items-center p-3 hover:bg-gray-200 h-25 cursor-pointer ${
+                    className={`flex items-center p-3  hover:bg-gray-200 h-25 cursor-pointer ${
                         selectedChat === index ? 'bg-blue-50' : ''
                     }`}
                 >
