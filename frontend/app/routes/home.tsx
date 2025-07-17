@@ -1,7 +1,7 @@
 import {useState} from "react";
 import type { Route } from "./+types/home";
 import {ProfilePage} from "~/components/profile-page";
-import type {Profile} from "~/types/profile";
+import type {Profile} from "~/types/user";
 import MatchingBegin from "~/routes/matching-begin";
 
 

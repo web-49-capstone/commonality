@@ -1,12 +1,10 @@
-export interface Profile {
-    userFirstName: string;
-    userLastName: string;
+export interface User {
+    userId: string;
+    userName: string;
     userBio: string;
-    interests: string[];
+    userCreated: string;
     userAvailability?: string;
     userImgUrl?: File | null;
     userCity: string;
     userState: string;
-
-
 }

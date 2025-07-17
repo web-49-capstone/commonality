@@ -24,7 +24,7 @@ export default function Navigation(){
                         <h2 className="self-center whitespace-nowrap tracking-tight text-3xl font-semibold text-gray-800">Commonality</h2>
                     </div>
                     <div className="md:flex hidden justify-center items-center gap-10 min-h-8">
-                        <NavLink to="/messages" className={({isActive, isPending}) => isActive ? desktopCurrentNavClasses : desktopNavClasses}><MdOutlineMessage />Messages</NavLink> |
+                        <NavLink to="/chat" className={({isActive, isPending}) => isActive ? desktopCurrentNavClasses : desktopNavClasses}><MdOutlineMessage />Messages</NavLink> |
                         <NavLink to="/connect" className={({isActive, isPending}) => isActive ? desktopCurrentNavClasses : desktopNavClasses}><PiPlugsConnectedFill />Make Connections</NavLink> |
                         <NavLink to="/profile"><span className={desktopNavClasses}><CgProfile />Profile</span></NavLink>
                     </div>

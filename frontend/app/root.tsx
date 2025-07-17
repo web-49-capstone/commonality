@@ -10,7 +10,6 @@ import {
 import type { Route } from "./+types/root";
 import "./app.css";
 import {ThemeModeScript} from "flowbite-react";
-import {Navigation} from "~/layouts/navigation";
 import { Footer } from "~/layouts/footer";
 
 

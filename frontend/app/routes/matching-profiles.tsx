@@ -1,5 +1,6 @@
 import {MyInterestsDropdown} from "~/components/my-interests-dropdown";
 import {ProfileMatchingSection} from "~/components/profile-matching-section";
+import {Link} from "react-router";
 
 
 
@@ -26,7 +27,7 @@ export default function MatchingProfiles() {
                     <hr className="hidden md:block my-5 md:my-10 w-3/4 mx-auto"></hr>
                     <p className="text-md font-bold">Want to search another interest?</p>
                     <MyInterestsDropdown />
-                    <button className="bg-gray-900 text-gray-200 border-1 border-gray-200 rounded-xl mt-5 py-3 px-6 w-3/4 mx-auto lg:order-2">View Profiles</button>
+                    <button className="bg-gray-900 text-gray-200 border-1 border-gray-200 rounded-xl mt-5 py-3 px-6 w-3/4 mx-auto lg:order-2 hover:cursor-pointer"><Link to="/connect">View Profiles</Link></button>
                     {/*<hr className="my-10 w-3/4 mx-auto "></hr>*/}
                     {/*<p className="hidden lg:block text-xl text-gray-900 mb-2 font-bold">Want to start a new group instead?</p>*/}
                     {/*<button className="bg-gray-200 text-gray-900 border-1 border-gray-900 rounded-xl py-3 px-6 w-3/4 mx-auto lg:order-1">Create a Group</button>*/}

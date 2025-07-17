@@ -4,12 +4,12 @@ import {FaPlus} from "react-icons/fa"
 import {FaSearch} from "react-icons/fa"
 import {CiCircleInfo} from "react-icons/ci"
 import {BsFillSendFill} from "react-icons/bs"
-import MessageBubble from "../../src/layouts/components/MessageBubble"
-import ChatTabs from "../../src/layouts/components/ChatTabs"
+import MessageBubble from "../components/MessageBubble"
+import ChatTabs from "../components/ChatTabs"
 
 
 const MessagingApp = () => {
-    const [selectedChat, setSelectedChat] = useState(0);
+    const [isSelected, setIsSelected] = useState(0);
     const [newMessage, setNewMessage] = useState('');
 
     const contacts = [
@@ -60,7 +60,7 @@ const MessagingApp = () => {
         },
     ];
     const loggedInUser = {userId: "0197d1d2-e6ef-7e8a-80db-ce603e81d16f", userName: "Alex Thompson"}
-    const messages : boolean = [
+    const messages = [
         {messageId: 1, messageBody: 'Hey! What up?!?!', messageSenderId: "0197d1d1-b061-7345-9763-33a7ca2b7d64", messageReceiverId: "0197d1d2-e6ef-7e8a-80db-ce603e81d16f", messageSentAt: '2:25 PM'},
         {
             messageId: 2,
@@ -103,43 +103,43 @@ const MessagingApp = () => {
                     <div className="flex items-center justify-between mb-4">
                         <h1 className="text-2xl font-bold text-gray-900">Chats</h1>
                         <div className="flex gap-2">
-                            <button className="p-2 hover:bg-gray-100 rounded-full">
-                                <FaPlus size={20} className="text-gray-600"/>
-                            </button>
-                            <button type="button" data-dropdown-toggle="language-dropdown-menu"
-                                    className="inline-flex items-center font-medium justify-center px-4 py-2 text-sm bg-gray-300  onClick-bg-gray 400 text-gray-900 rounded-lg cursor-pointer hover:bg-gray-200">
-                                <svg className="w-5 h-5 rounded-full me-3" aria-hidden="true"
-                                     xmlns="http://www.w3.org/2000/svg" href="http://www.w3.org/1999/xlink"
-                                     viewBox="0 0 3900 3900">
-                                    <path fill="#b22234" d="M0 0h7410v3900H0z"/>
-                                    <path d="M0 450h7410m0 600H0m0 600h7410m0 600H0m0 600h7410m0 600H0" stroke="#fff"
-                                          stroke-width="300"/>
-                                    <path fill="#3c3b6e" d="M0 0h2964v2100H0z"/>
-                                    <g fill="#fff">
-                                        <g id="d">
-                                            <g id="c">
-                                                <g id="e">
-                                                    <g id="b">
-                                                        <path id="a"
-                                                              d="M247 90l70.534 217.082-184.66-134.164h228.253L176.466 307.082z"/>
-                                                        <use href="#a" y="420"/>
-                                                        <use href="#a" y="840"/>
-                                                        <use href="#a" y="1260"/>
-                                                    </g>
-                                                    <use href="#a" y="1680"/>
-                                                </g>
-                                                <use href="#b" x="247" y="210"/>
-                                            </g>
-                                            <use href="#c" x="494"/>
-                                        </g>
-                                        <use href="#d" x="988"/>
-                                        <use href="#c" x="1976"/>
-                                        <use href="#e" x="2470"/>
-                                    </g>
-                                </svg>
-                                Individual
-                            </button>
-                            {/*Dropdown*/}
+                            {/*<button className="p-2 hover:bg-gray-100 rounded-full">*/}
+                            {/*    <FaPlus size={20} className="text-gray-600"/>*/}
+                            {/*</button>*/}
+                            {/*<button type="button" data-dropdown-toggle="language-dropdown-menu"*/}
+                            {/*        className="inline-flex items-center font-medium justify-center px-4 py-2 text-sm bg-gray-300  onClick-bg-gray 400 text-gray-900 rounded-lg cursor-pointer hover:bg-gray-200">*/}
+                            {/*    <svg className="w-5 h-5 rounded-full me-3" aria-hidden="true"*/}
+                            {/*         xmlns="http://www.w3.org/2000/svg" href="http://www.w3.org/1999/xlink"*/}
+                            {/*         viewBox="0 0 3900 3900">*/}
+                            {/*        <path fill="#b22234" d="M0 0h7410v3900H0z"/>*/}
+                            {/*        <path d="M0 450h7410m0 600H0m0 600h7410m0 600H0m0 600h7410m0 600H0" stroke="#fff"*/}
+                            {/*              stroke-width="300"/>*/}
+                            {/*        <path fill="#3c3b6e" d="M0 0h2964v2100H0z"/>*/}
+                            {/*        <g fill="#fff">*/}
+                            {/*            <g id="d">*/}
+                            {/*                <g id="c">*/}
+                            {/*                    <g id="e">*/}
+                            {/*                        <g id="b">*/}
+                            {/*                            <path id="a"*/}
+                            {/*                                  d="M247 90l70.534 217.082-184.66-134.164h228.253L176.466 307.082z"/>*/}
+                            {/*                            <use href="#a" y="420"/>*/}
+                            {/*                            <use href="#a" y="840"/>*/}
+                            {/*                            <use href="#a" y="1260"/>*/}
+                            {/*                        </g>*/}
+                            {/*                        <use href="#a" y="1680"/>*/}
+                            {/*                    </g>*/}
+                            {/*                    <use href="#b" x="247" y="210"/>*/}
+                            {/*                </g>*/}
+                            {/*                <use href="#c" x="494"/>*/}
+                            {/*            </g>*/}
+                            {/*            <use href="#d" x="988"/>*/}
+                            {/*            <use href="#c" x="1976"/>*/}
+                            {/*            <use href="#e" x="2470"/>*/}
+                            {/*        </g>*/}
+                            {/*    </svg>*/}
+                            {/*    Individual*/}
+                            {/*</button>*/}
+                            {/*/!*Dropdown*!/*/}
                             <div
                                 className="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow-sm dark:bg-gray-700"
                                 id="language-dropdown-menu">
@@ -228,7 +228,7 @@ const MessagingApp = () => {
                 {/* Chat List */}
                 <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
                     {contacts.map((contact, index) => (
-                        <ChatTabs contact={contact} key={contact.userId} setSelectedChat={setSelectedChat} index={index}/>
+                        <ChatTabs contact={contact} key={contact.userId} index={index}/>
                     ))}
                 </div>
             </div>
@@ -243,7 +243,7 @@ const MessagingApp = () => {
                                 className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white">
                                 {contacts[selectedChat]?.userImgUrl}
                             </div>
-                            {contacts[selectedChat]?.online && (
+                            {contacts[selectedChat]?.isOnline && (
                                 <div
                                     className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
                             )}
@@ -265,7 +265,7 @@ const MessagingApp = () => {
                 {/* Messages */}
                 <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
                     {messages.map((message) => (
-                        <MessageBubble loggedInUser={loggedInUser} key={message.id} message={message} />
+                        <MessageBubble loggedInUser={loggedInUser} key={message.messageId} message={message} />
                     ))}
                 </div>
 

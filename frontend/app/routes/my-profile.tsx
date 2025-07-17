@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import {ProfilePage} from "~/components/profile-page";
-import type {Profile} from "~/types/profile";
+import type {User} from "~/types/user";
 export default function MyProfile() {
-    const [profile, setProfile] = useState<Profile | null>(null);
+    const [profile, setProfile] = useState<User | null>(null);
 
     useEffect(() => {
         // Replace with our backend data later

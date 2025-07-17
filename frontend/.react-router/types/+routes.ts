@@ -66,8 +66,8 @@ type RouteFiles = {
     id: "routes/user-profile-page";
     page: "/user";
   };
-  "routes/Messaging.tsx": {
-    id: "routes/Messaging";
+  "routes/messaging.tsx": {
+    id: "routes/messaging";
     page: "/chat";
   };
 };
