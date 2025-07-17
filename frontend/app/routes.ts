@@ -6,7 +6,10 @@ export default [
 
     layout("layouts/navigation.tsx", [
         index("routes/home.tsx"),
-        route("connect", "routes/matching-profiles.tsx")
+        route("connect", "routes/matching-profiles.tsx"),
+        route("profile", "routes/my-profile.tsx"),
+        route("user", "routes/user-profile-page.tsx"),
+        route("messages", "routes/view-connections-messages.tsx")
     ]),
 
 ] satisfies RouteConfig;

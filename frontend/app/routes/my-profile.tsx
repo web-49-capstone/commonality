@@ -12,7 +12,7 @@ export default function MyProfile() {
         }
     }, []);
 
-    if (!profile) return <p>Loading profile...</p>;
+    if (!profile) return <p className="text-center mt-10">Profile not found.</p>;
 
     return <ProfilePage profile={profile} isCurrentUser={true} />;
 }

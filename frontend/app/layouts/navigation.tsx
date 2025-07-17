@@ -3,9 +3,10 @@ import {PiPlugsConnectedFill} from "react-icons/pi";
 import {CgProfile} from "react-icons/cg";
 import React, {useEffect, useState} from "react";
 import {NavLink, Outlet} from "react-router";
+import {Footer} from "~/layouts/footer";
 
 
-export function Navigation(){
+export default function Navigation(){
 
     const desktopNavClasses = "flex items-center gap-2 text-lg text-gray-700 hover:text-blue-700 hover:border-b-2 transition-colors"
     const mobileNavClasses = "flex flex-col items-center gap-2 text-md hover:text-blue-600 hover:border-b-2 transition-colors"
