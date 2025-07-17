@@ -11,6 +11,7 @@ import {userRoute} from "./apis/users/user.route.ts";
 import {interestRoute} from "./apis/interests/interest.route.ts";
 import {matchingRoute} from "./apis/matching/matching.route.ts";
 import {messageRoute} from "./apis/message/message.route.ts";
+import helmet from "helmet";
 
 export class App {
     app: Application
@@ -32,6 +33,7 @@ export class App {
 
         this.app.use(morgan('dev'))
         this.app.use(express.json())
+        this.app.use(helmet())
         this.app.use(session( {
             store: this.redisStore,
             saveUninitialized: false,
