@@ -2,7 +2,7 @@ import {MdOutlineMessage} from "react-icons/md";
 import {PiPlugsConnectedFill} from "react-icons/pi";
 import {CgProfile} from "react-icons/cg";
 import React, {useEffect, useState} from "react";
-import {NavLink, Outlet} from "react-router";
+import {Link, NavLink, Outlet} from "react-router";
 import {Footer} from "~/layouts/footer";
 
 
@@ -20,7 +20,9 @@ export default function Navigation(){
                 {/*DESKTOP HEADER*/}
                 <div className="md:block bg-white border-b shadow-lg pb-2">
                     <div className="flex justify-center pt-1 md:py-3">
-                        <img src="/commonality-logo.png" className="mr-3 h-10" alt="Flowbite React Logo" />
+                        <Link to="/">
+                        <img  src="/commonality-logo.png" className="mr-3 h-10" alt="Flowbite React Logo" />
+                            </Link>
                         <h2 className="self-center whitespace-nowrap tracking-tight text-3xl font-semibold text-gray-800">Commonality</h2>
                     </div>
                     <div className="md:flex hidden justify-center items-center gap-10 min-h-8">

@@ -3,7 +3,7 @@ import {InterestSelector} from "~/components/interests";
 import {IconContext} from "react-icons";
 import {States} from "~/types/states";
 import { CgProfile } from "react-icons/cg";
-
+const userName = "djdkjfsk fsjkfsjfds"
 const allInterests = [
     "Gaming",
     "Hiking",
@@ -99,22 +99,9 @@ export default function CreateProfile() {
                             </IconContext.Provider>
                             <p className="text-sm text-gray-500 mt-2">Select a profile picture</p>
                         </label>
-                    <input
-                        type='text'
-                        name="firstName"
-                        value={formData.userFirstName}
-                        onChange={handleChange}
-                        placeholder="First Name"
-                        className="border-2 border-black py-2 pl-2 w-full"
-                    />
-                    <input
-                        type='text'
-                        name="lastName"
-                        value={formData.userLastName}
-                        onChange={handleChange}
-                        placeholder="Last Name"
-                        className="border-2 border-black py-2 pl-2 w-full"
-                    />
+                        <h2 className="text-2xl">{userName}</h2>
+
+
                         <select
                             value={selectedState}
                             onChange={(e) => setSelectedState(e.target.value)}
@@ -132,7 +119,7 @@ export default function CreateProfile() {
 
                     <div className="flex flex-col gap-4 w-full lg:w-2/3">
                     <textarea
-                        name="bio"
+                        name="userBio"
                         value={formData.userBio}
                         onChange={handleChange}
                         placeholder="Bio"
@@ -144,7 +131,7 @@ export default function CreateProfile() {
                                 <span className="text-sm text-gray-600">Show availability on profile</span>
                             </div>
                             <input
-                                name="availability"
+                                name="userAvailability"
                                 value={formData.userAvailability}
                                 onChange={handleChange}
                                 placeholder="Optional"

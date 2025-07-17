@@ -29,9 +29,9 @@ export function ProfileMatchingSection({user}: Props) {
     return(
         <>
             <div className="w-11/12 lg:w-3/4 mx-auto">
-                <img src={user.userImageString} alt="Profile Image" className="rounded-2xl w-full mt-5"/>
-                <h2 className="text-4xl mt-3">{user.userFirstName} {user.userLastName[0]}</h2>
-                <p className="text-lg mb-3">{user.userCityState}</p>
+                <img src={user.userImageString} alt="Profile Image" className="rounded-full w-1/2 mt-5 mx-auto"/>
+                <h2 className="text-4xl mt-3 mx-auto">{user.userFirstName} {user.userLastName[0]}</h2>
+                <p className="text-lg mb-3 mx-auto">{user.userCityState}</p>
                 <p className="text-lg"><strong>Shared Interests: </strong>
                     <span className="flex flex-wrap gap-2 mb-2">
                                 {user.userInterestPlaceholder.map((interest, index) => (
