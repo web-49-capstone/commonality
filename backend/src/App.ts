@@ -33,8 +33,7 @@ export class App {
 
         this.app.use(morgan('dev'))
         this.app.use(express.json())
-        this.app.use(
-            helmet());
+        this.app.use(helmet())
         this.app.use(session( {
             store: this.redisStore,
             saveUninitialized: false,
