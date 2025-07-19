@@ -9,7 +9,7 @@ import {
 
 import type { Route } from "./+types/root";
 import "./app.css";
-import {ThemeModeScript} from "flowbite-react";
+// import {ThemeModeScript} from "flowbite-react";
 import { Footer } from "~/layouts/footer";
 
 
@@ -35,7 +35,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
-        <ThemeModeScript />
+        {/*<ThemeModeScript />*/}
       </head>
       <body>
         {children}
