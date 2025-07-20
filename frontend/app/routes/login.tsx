@@ -1,16 +1,42 @@
-import {useState} from "react";
-import {Form, useNavigate} from "react-router";
+import {useEffect, useState} from "react";
+import {Form, useNavigate, useSearchParams} from "react-router";
 import {MdOutlineEmail} from "react-icons/md";
 import {RiLockPasswordLine} from "react-icons/ri";
 import {IconContext} from "react-icons";
 import {BiHide, BiShow} from "react-icons/bi";
+import { AiOutlineClose } from "react-icons/ai";
+
 
 export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const initialMessage = searchParams.get("message");
+
+    const [showToast, setShowToast] = useState(!!initialMessage);
+    const [message, setMessage] = useState(initialMessage);
+
+    useEffect(() => {
+        if (message) {
+            const timer = setTimeout(() => setShowToast(false), 5000);
+            return () => clearTimeout(timer);
+        }
+    }, [message]);
     return (
         <>
             <div className="container mx-auto text-center">
+                {showToast && message && (
+                    <div className="flex items-center justify-between bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-6 shadow-md">
+                        <span className="block sm:inline">{message}</span>
+                        <button
+                            className="ml-4"
+                            onClick={() => setShowToast(false)}
+                            aria-label="Close"
+                        >
+                            <AiOutlineClose className="h-5 w-5 text-green-700" />
+                        </button>
+                    </div>
+                )}
             <h1 className="text-4xl">Welcome to Commonality</h1>
             <p>Shared Interests. Real Connections</p>
             <div className="  text-white flex flex-col items-center justify-center p-4">

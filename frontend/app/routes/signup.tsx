@@ -4,15 +4,36 @@ import {RiLockPasswordLine} from "react-icons/ri";
 import {IconContext} from "react-icons";
 import {BiHide, BiShow} from "react-icons/bi";
 import {GiConfirmed} from "react-icons/gi";
-import {Form, useNavigate} from "react-router";
+import {Form, redirect, useActionData, useNavigate} from "react-router";
 import {useState} from "react";
+import type {Route} from "../+types/root";
+import * as process from "node:process";
 
 
+
+export async function action({request}: Route.ActionArgs) {
+    const formData = await request.formData()
+    const user = Object.fromEntries(formData)
+const response = await fetch(`${process.env.REST_API_URL}/sign-up`, {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(user)
+})
+const data = await response.json();
+console.log(data);
+if (data.status === 200) {
+    return redirect("/login?message=Please check your email to verify your account")
+}
+}
 export default function Signup() {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const navigate = useNavigate();
+    const actionData = useActionData();
+
 
 
     return (
