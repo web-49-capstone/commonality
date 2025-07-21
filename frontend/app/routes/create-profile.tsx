@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {InterestSelector} from "~/components/interests";
 import {IconContext} from "react-icons";
-import {States} from "~/types/states";
+import {States} from "~/utils/types/states";
 import { CgProfile } from "react-icons/cg";
 const userName = "djdkjfsk fsjkfsjfds"
 const allInterests = [

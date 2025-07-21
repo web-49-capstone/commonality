@@ -6,8 +6,8 @@ import {CiCircleInfo} from "react-icons/ci"
 import {BsFillSendFill} from "react-icons/bs"
 import MessageBubble from "../components/MessageBubble"
 import ChatTabs from "../components/ChatTabs"
-import type {User} from "~/types/user";
-import type { Message } from '~/types/message'
+import type {User} from "~/utils/types/user";
+import type { Message } from '~/utils/types/message'
 
 
 const MessagingApp = () => {

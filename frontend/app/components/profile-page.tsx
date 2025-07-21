@@ -1,4 +1,4 @@
-import type {Profile} from "~/types/user";
+import type {Profile} from "~/utils/types/user";
 import {useState} from "react";
 import {InterestSelector} from "./interests";
 

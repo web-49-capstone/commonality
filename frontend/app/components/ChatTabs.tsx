@@ -1,5 +1,5 @@
-import type {User} from "~/types/user";
-import type {Message} from "~/types/message"
+import type {User} from "~/utils/types/user";
+import type {Message} from "~/utils/types/message"
 
 interface ChatTabProps {
     user: User
