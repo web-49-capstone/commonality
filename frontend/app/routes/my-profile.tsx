@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import {ProfilePage} from "~/components/profile-page";
-import type {User} from "~/types/user";
+import type {User} from "~/utils/types/user";
 export default function MyProfile() {
     const [profile, setProfile] = useState<User | null>(null);
 

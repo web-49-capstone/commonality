@@ -1,4 +1,4 @@
-import type {Message} from "~/types/message";
+import type {Message} from "~/utils/types/message";
 
 interface MessageProps {
 message: Message

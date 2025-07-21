@@ -1,0 +1,186 @@
+import {useEffect, useState} from "react";
+import {Form, redirect, useActionData, useNavigate, useSearchParams} from "react-router";
+import {MdOutlineEmail} from "react-icons/md";
+import {RiLockPasswordLine} from "react-icons/ri";
+import {IconContext} from "react-icons";
+import {BiHide, BiShow} from "react-icons/bi";
+import { AiOutlineClose } from "react-icons/ai";
+import type {Route} from "../+types/root";
+import {commitSession, getSession} from "~/utils/session.server";
+import {postSignIn, type SignIn, SignInSchema} from "~/utils/models/sign-in.model";
+import {jwtDecode} from "jwt-decode";
+import {UserSchema} from "~/utils/models/user-schema";
+import {zodResolver} from "@hookform/resolvers/zod";
+import {useSubmit} from "react-router";
+import {getValidatedFormData, useRemixForm} from "remix-hook-form";
+
+export function meta({}: Route.MetaArgs) {
+    return [
+        { title: "rethread" },
+        { name: "description", content: "please sign in or sign up" },
+    ];
+}
+
+
+const formSchema = SignInSchema
+const resolver = zodResolver(formSchema)
+
+export async function action({request}: Route.ActionArgs) {
+try {
+
+        const { errors, data, receivedValues: defaultValues } =
+            await getValidatedFormData<SignIn>(request, resolver);
+        if (errors) {
+            // The keys "errors" and "defaultValues" are picked up automatically by useRemixForm
+            return { errors, defaultValues };
+        }
+
+    const session = await getSession(
+        request.headers.get("Cookie")
+    )
+
+    // const formData = await request.formData();
+
+    // const signInObject = Object.fromEntries(formData)
+
+    const validatedData = SignInSchema.parse(data);
+
+    const {result, headers} = await postSignIn(validatedData);
+
+    const authorization = headers.get('authorization');
+
+    const expressSessionCookie = headers.get('Set-Cookie');
+    console.log(result, authorization);
+if(result.status !== 200 || !authorization) {
+    return {success: false, error: result.message, status: 400};
+}
+
+const parsedJwtToken = jwtDecode(authorization) as any
+    const validationResult = UserSchema.safeParse(parsedJwtToken.auth);
+
+if(!validationResult.success) {
+    session.flash('error', 'profile is malformed')
+    return {success: false, error: 'internal server error try again later', status: 400}
+}
+session.set('authorization', authorization);
+session.set('user', validationResult.data)
+    const responseHeaders = new Headers()
+    responseHeaders.append('Set-Cookie', await commitSession(session))
+    if(expressSessionCookie) {
+        responseHeaders.append('Set-Cookie', expressSessionCookie);
+    }
+    return redirect('/', {headers: responseHeaders});
+} catch (error) {
+    console.error('Sign-in action error:', error);
+    return {success: false, error: error instanceof Error ? error.message : 'Unknown error', status: 500};
+}
+}
+
+export default function Login() {
+    const actionData = useActionData<{success: boolean; validationErrors?: any; error?: string}>()
+
+
+
+    const submit = useSubmit();
+    const {
+    register,
+        formState: {errors, isSubmitting, touchedFields},
+        reset,
+        handleSubmit,
+    } = useRemixForm<SignIn>({
+        resolver,
+        mode: "onBlur"
+    })
+console.log(errors)
+    const [showPassword, setShowPassword] = useState(false);
+    const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const initialMessage = searchParams.get("message");
+
+    const [showToast, setShowToast] = useState(!!initialMessage);
+    const [message, setMessage] = useState(initialMessage);
+
+    useEffect(() => {
+        if (message) {
+            const timer = setTimeout(() => setShowToast(false), 5000);
+            return () => clearTimeout(timer);
+        }
+    }, [message]);
+    const buttonDisabled = isSubmitting || Object.keys(errors).length > 0 || Object.keys(touchedFields).length !== 2;
+    return (
+        <>
+            <div className="container mx-auto text-center">
+                {showToast && message && (
+                    <div className="flex items-center justify-between bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-6 shadow-md">
+                        <span className="block sm:inline">{message}</span>
+                        <button
+                            className="ml-4"
+                            onClick={() => setShowToast(false)}
+                            aria-label="Close"
+                        >
+                            <AiOutlineClose className="h-5 w-5 text-green-700" />
+                        </button>
+                    </div>
+                )}
+            <h1 className="text-4xl">Welcome to Commonality</h1>
+            <p>Shared Interests. Real Connections</p>
+            <div className="  text-white flex flex-col items-center justify-center p-4">
+                <div className="flex space-x-4 mb-6">
+                    <button className="text-xl px-4 py-2 rounded bg-blue-600">
+                        Login
+                    </button>
+                    <button className="text-xl px-4 py-2 rounded bg-zinc-300 hover:bg-zinc-600 hover:cursor-pointer" onClick={() => navigate('/signup')}>
+                        Sign Up
+                    </button>
+                </div>
+
+                    <Form method="post" onSubmit={handleSubmit} id="login-form" className="bg-zinc-300 p-6 rounded-xl space-y-4 w-full max-w-sm" noValidate>
+                        {actionData?.error && (
+                            <div className="text-red-500 text-sm mb-4">
+                                {actionData.error}
+                            </div>
+                        )}
+                        <div className='relative'>
+
+                            <MdOutlineEmail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white"/>
+                            <input
+                                type="email"
+                                {...register("userEmail")}
+                                placeholder="Email"
+                                className="w-full p-2 pl-10 rounded bg-zinc-500 text-white"
+                                required
+                            />
+                            {errors?.userEmail ? <p className="text-red-500">{errors?.userEmail.message}</p> : null}
+                        </div>
+                        <div className='relative'>
+                            <RiLockPasswordLine
+                                className="absolute left-3 top-1/5 transform -translate-y-1/2 text-white"/>
+
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                {...register("userPassword")}
+                                placeholder="Password"
+                                className="w-full p-2 pl-10 rounded bg-zinc-500 text-white"
+                                required
+                            />
+                            {errors?.userPassword ? <p className="text-red-500">{errors?.userPassword.message}</p> : null}
+                            <IconContext.Provider value={{size: '1.5em'}}>
+                                <button type='button'
+                                        onClick={() => setShowPassword((prev) => !prev)}
+                                        className='text-sm text-white absolute right-2 top-1/5 transform -translate-y-1/2'>{showPassword ?
+                                    <BiHide/> : <BiShow/>
+                                }</button>
+                            </IconContext.Provider>
+                            <button className=" flex justify-start text-sm hover:text-red-600 my-2">Forgot Password?</button>
+                            <button
+                                type="submit"
+                                className="w-full bg-blue-600 hover:bg-blue-700 p-2 rounded text-white disabled:bg-gray-500" disabled={buttonDisabled}
+                            >Login
+                            </button>
+                        </div>
+                    </Form>
+            </div>
+            </div>
+        </>
+    )
+}
