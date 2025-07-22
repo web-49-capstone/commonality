@@ -60,14 +60,20 @@ export async function action({ request }: Route.ActionArgs) {
         ...session.data.user,
         ...userInfo,
     }
-console.log("this is before the fetch")
+
+    const responseHeaders = new Headers()
+    responseHeaders.append('Content-Type', 'application/json')
+    responseHeaders.append('Authorization', session.data?.authorization || '')
+    const cookie = request.headers.get('Cookie')
+    if(cookie) {
+        responseHeaders.append('Cookie', cookie)
+    }
+
+        console.log("this is before the fetch")
     const response = await fetch(`${process.env.REST_API_URL}/users/${updatedUser.userId}`,
         {
         method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': session.data?.authorization || ''
-        },
+        headers: responseHeaders,
         body: JSON.stringify(updatedUser),
         })
     console.log("hello!")

@@ -9,6 +9,8 @@ import {type Request, type Response} from 'express'
 import {serverErrorResponse, zodErrorResponse} from "../../utils/response.utils.ts";
 import type {Status} from "../../utils/interfaces/Status.ts";
 import {UserInterestSchema} from "../interests/interest.model.ts";
+import {verify} from "node:crypto";
+import {generateJwt} from "../../utils/auth.utils.ts";
 
 
 export async function putUserController (request: Request, response: Response): Promise<void> {
@@ -46,6 +48,40 @@ export async function putUserController (request: Request, response: Response): 
         user.userImgUrl = userImgUrl
 
         await updatePublicUser(user)
+
+        const jwt = request.session.jwt ?? ''
+        const signature = request.session.signature ?? ''
+        const parsedJwt = verify(jwt, signature)
+        if (typeof parsedJwt === "string") {
+            response.json({status: 400, data: null,message:"Invalid JWT Token" })
+        }
+        parsedJwt.auth = {
+            userId: user.userId,
+            userBio: user.userBio,
+            userName: user.userName,
+            userAvailability: user.userAvailability,
+            userCity: user.userCity,
+            userCreated: user.userCreated,
+            userState: user.userState,
+            userImgUrl: user.userImgUrl,
+        }
+
+        const newJwt = generateJwt(parsedJwt.auth, signature)
+        request.session.user = {
+            userId: user.userId,
+            userBio: user.userBio,
+            userName: user.userName,
+            userAvailability: user.userAvailability,
+            userCity: user.userCity,
+            userCreated: user.userCreated,
+            userState: user.userState,
+            userImgUrl: user.userImgUrl,
+        }
+
+        request.session.jwt = newJwt
+        response.header({
+            authorization: newJwt
+        })
         response.json({status: 200, data: null,message:"User updated" })
 
     } catch (error: any) {

@@ -8,6 +8,7 @@ const { verify } = pkg
 export function isLoggedInController(request: Request, response: Response, next: NextFunction): void {
     const status: Status = {status:401, message: 'please login', data:null}
     try {
+        console.log(request.session.signature)
         const user: PublicUser | undefined = request.session?.user
         const signature: string | undefined = request.session?.signature ?? ''
         const unverifiedJwtToken: string | undefined = request.headers?.authorization
