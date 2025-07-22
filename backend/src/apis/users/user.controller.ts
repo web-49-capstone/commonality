@@ -25,7 +25,7 @@ export async function putUserController (request: Request, response: Response): 
             return
         }
         const {userId} = paramsValidationResult.data
-        const {userName, userBio, userAvailability, userCity, userState, userImgUrl, userCreated} = bodyValidationResult.data
+        const {userName, userBio, userAvailability, userCity, userState, userImgUrl} = bodyValidationResult.data
 
         const userFromSession = request.session.user
         const userIdFromSession = userFromSession?.userId
@@ -41,7 +41,6 @@ export async function putUserController (request: Request, response: Response): 
         user.userBio = userBio
         user.userName = userName
         user.userAvailability = userAvailability
-        user.userCreated = userCreated
         user.userCity = userCity
         user.userState = userState
         user.userImgUrl = userImgUrl

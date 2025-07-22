@@ -8,7 +8,7 @@ import type {Route} from "../+types/root";
 import {UserSchema} from "~/utils/models/user-schema";
 import {postSignIn} from "~/utils/models/sign-in.model";
 import process from "node:process";
-import {Form} from "react-router";
+import {Form, redirect, useActionData} from "react-router";
 const userName = "djdkjfsk fsjkfsjfds"
 const allInterests = [
     "Gaming",
@@ -46,48 +46,48 @@ export function loader({request} : Route.LoaderArgs) {
     )
 }
 
+export async function action({ request }: Route.ActionArgs) {
+
+    // pull the userId from the session
+    const session = await getSession(
+        request.headers.get("Cookie")
+    )
+
+    const formData = await request.formData()
+    const userInfo = Object.fromEntries(formData)
+
+    const updatedUser = {
+        ...session.data.user,
+        ...userInfo,
+    }
+console.log("this is before the fetch")
+    const response = await fetch(`${process.env.REST_API_URL}/users/${updatedUser.userId}`,
+        {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': session.data?.authorization || ''
+        },
+        body: JSON.stringify(updatedUser),
+        })
+    console.log("hello!")
+    const data = await response.json();
+    console.log(data);
+    if (data.status === 200) {
+    return redirect("/")}
+}
+
 export default function CreateProfile({loaderData} : Route.ComponentProps) {
     const data: any = loaderData
 
     const initialUser = data.data.user
-
-    console.log(data.data.user)
-
-    const [formData, setFormData] = useState(initialUser)
-    console.log("form data: ", formData)
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        const {name, value} = event.target
-        setFormData((prev) => ({...prev, [name]: value}))
-    };
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0] || null
-        setFormData((prev) => ({
-            ...prev,
-            userImgUrl: file,
-        }))
-        if (file) {
-            const objectUrl = URL.createObjectURL(file);
-            setPreviewUrl(objectUrl);
-        } else {
-            setPreviewUrl(null);
-        }
-    }
-    const handleSubmit = (event: React.FormEvent) => {
-        event.preventDefault()
-        console.log(formData)
-        localStorage.setItem("profile", JSON.stringify(formData));
-
-    }
-    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-    const [selectedState, setSelectedState] = useState<string>('');
-
 
     return (
         <>
             <h1 className="text-4xl font-bold text-center py-5">Welcome to Commonality!</h1>
             <h2 className="text-3xl text-center pb-10">Lets get started by creating your profile.</h2>
             <section className="flex flex-col items-center gap-6 mx-6">
-                <Form className="w-full max-w-4xl flex flex-col lg:flex-row justify-between items-start gap-10 ">
+                <Form method="put" id="updateProfile" className="w-full max-w-4xl flex flex-col lg:flex-row justify-between items-start gap-10 ">
                     <div className="flex flex-col items-center gap-4 w-full lg:w-1/3">
                     {/*<input*/}
                     {/*    type='file'*/}
@@ -112,10 +112,11 @@ export default function CreateProfile({loaderData} : Route.ComponentProps) {
                     {/*</label>*/}
                     <h2 className="text-2xl">{initialUser.userName}</h2>
 
-
                     <select
-                        value={selectedState}
-                        onChange={(e) => setSelectedState(e.target.value)}
+                        name = "userState"
+                        defaultValue={initialUser.userState}
+                        // value={selectedState}
+                        // onChange={(e) => setSelectedState(e.target.value)}
                         className="w-full p-2 border rounded mb-4"
                         >
                     <option value="">Select a state</option>
@@ -129,18 +130,17 @@ export default function CreateProfile({loaderData} : Route.ComponentProps) {
                     </div>
 
                     <div className="flex flex-col gap-4 w-full lg:w-2/3">
-                        <input type="textarea" name="userBio" placeholder="Tell us about yourself..."          className="border-2 border-black px-3 w-full h-32" required defaultValue={formData.userBio}/>
+                        <input type="textarea" name="userBio" placeholder="Tell us about yourself..."          className="border border-black px-3 w-full h-32" required defaultValue={initialUser.userBio}/>
 
                         <div className="border border-black rounded-lg p-4">
                             <label className="font-semibold">Availability</label>
                             <div className="flex items-center gap-3 mt-2">
-                                <span className="text-sm text-gray-600">Show availability on profile</span>
+                                {/*<span className="text-sm text-gray-600">Show availability on profile</span>*/}
                             </div>
                             <input
                                 name="userAvailability"
-                                value={formData.userAvailability}
-                                onChange={handleChange}
-                                placeholder="Optional"
+                                defaultValue={initialUser.userAvailability}
+                                placeholder="Optional - leave blank to not display."
                                 className="border border-black mt-3 px-2 py-1 w-full"
                             />
                         </div>
