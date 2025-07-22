@@ -1,15 +1,10 @@
-import React, {useState} from "react";
-import {InterestSelector} from "~/components/interests";
-import {IconContext} from "react-icons";
+import React from "react";
 import {States} from "~/utils/types/states";
-import { CgProfile } from "react-icons/cg";
-import {getSession} from "~/utils/session.server";
+import {commitSession, getSession} from "~/utils/session.server";
 import type {Route} from "../+types/root";
+import {Form, redirect} from "react-router";
+import {jwtDecode} from "jwt-decode";
 import {UserSchema} from "~/utils/models/user-schema";
-import {postSignIn} from "~/utils/models/sign-in.model";
-import process from "node:process";
-import {Form, redirect, useActionData} from "react-router";
-const userName = "djdkjfsk fsjkfsjfds"
 const allInterests = [
     "Gaming",
     "Hiking",
@@ -61,27 +56,45 @@ export async function action({ request }: Route.ActionArgs) {
         ...userInfo,
     }
 
-    const responseHeaders = new Headers()
-    responseHeaders.append('Content-Type', 'application/json')
-    responseHeaders.append('Authorization', session.data?.authorization || '')
+    const requestHeaders = new Headers()
+    requestHeaders.append('Content-Type', 'application/json')
+    requestHeaders.append('Authorization', session.data?.authorization || '')
     const cookie = request.headers.get('Cookie')
-    if(cookie) {
-        responseHeaders.append('Cookie', cookie)
+    if (cookie) {
+        requestHeaders.append('Cookie', cookie)
     }
 
-        console.log("this is before the fetch")
     const response = await fetch(`${process.env.REST_API_URL}/users/${updatedUser.userId}`,
         {
-        method: 'PUT',
-        headers: responseHeaders,
-        body: JSON.stringify(updatedUser),
+            method: 'PUT',
+            headers: requestHeaders,
+            body: JSON.stringify(updatedUser),
         })
-    console.log("hello!")
+    const headers = response.headers
     const data = await response.json();
-    console.log(data);
     if (data.status === 200) {
-    return redirect("/")}
+        const authorization = headers.get('authorization');
+        if (!authorization) {
+            session.flash('error', 'profile is malformed')
+            return {success: false, error: 'internal server error try again later', status: 400}
+        }
+        const parsedJwtToken = jwtDecode(authorization) as any
+        console.log(parsedJwtToken)
+        const validationResult = UserSchema.safeParse(parsedJwtToken.auth);
+        if (!validationResult.success) {
+            session.flash('error', 'profile is malformed')
+            return {success: false, error: 'internal server error try again later', status: 400}
+        }
+        session.set('authorization', authorization);
+        session.set('user', validationResult.data)
+        const responseHeaders = new Headers()
+        responseHeaders.append('Set-Cookie', await commitSession(session))
+        console.log('user', validationResult.data)
+        return redirect("/", {headers: responseHeaders});
+    }
+    return {success: false, error: data.message, status: data.status};
 }
+
 
 export default function CreateProfile({loaderData} : Route.ComponentProps) {
     const data: any = loaderData

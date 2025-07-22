@@ -7,7 +7,7 @@ export default function MatchingBegin() {
             <div>
                 <div className="grid grid-cols-1 lg:grid-cols-2 mt-5 lg:mt-10 container mx-auto">
                     <div className="text-center">
-                        <img src="../../public/commonality-logo.png" alt="Commonality Logo" className="w-1/4 mx-auto"/>
+                        <img src="/commonality-logo.png" alt="Commonality Logo" className="w-1/4 mx-auto"/>
                         <h2 className="text-4xl my-3">Let's Get Started!</h2>
                         <p className="text-xl text-gray-900 mx-10">Pick an interest from your profile to see other users with the same interest.</p>
                         {/*<hr className="mt-10 lg:mb-10 w-3/5 mx-auto"/>*/}
