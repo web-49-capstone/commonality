@@ -36,9 +36,13 @@ const allInterests = [
 ]
 
 export function loader({request} : Route.LoaderArgs) {
-    return getSession(
+    const session = getSession(
         request.headers.get("Cookie")
     )
+    const url = new URL(request.url)
+    const q = url.searchParams.get("q")
+    const interests = await fetch(`${process.env.REST_API_URL}/interests/interestByInterestName/${q}`)
+    return {session, interests, q}
 }
 
 export async function action({ request }: Route.ActionArgs) {
@@ -97,9 +101,24 @@ export async function action({ request }: Route.ActionArgs) {
 
 
 export default function CreateProfile({loaderData} : Route.ComponentProps) {
-    const data: any = loaderData
-
+    // const data: any = loaderData
+    const {contacts, q, data} = loaderData;
     const initialUser = data.data.user
+    
+    const navigation = useNavigation();
+    const submit = useSubmit();
+    const searching =
+        navigation.location &&
+        new URLSearchParams(navigation.location.search).has(
+            "q"
+        )
+
+    useEffect(() => {
+        const searchInterest = document.getElementById("q");
+        if (searchInterest instanceof HTMLInputElement) {
+            searchInterest.value = q || "";
+        }
+    }, [q])
 
     return (
         <>
@@ -163,30 +182,26 @@ export default function CreateProfile({loaderData} : Route.ComponentProps) {
                                 className="border border-black mt-3 px-2 py-1 w-full"
                             />
                         </div>
-                        <div>
-                            {/*<div className="flex gap-2 mb-2">*/}
-                            {/*    <InterestSelector*/}
-                            {/*        availableInterests={allInterests}*/}
-                            {/*        selectedInterests={formData.interests}*/}
-                            {/*        setSelectedInterests={(newInterests) =>*/}
-                            {/*            setFormData({ ...formData, interests: newInterests })*/}
-                            {/*        }*/}
-                            {/*        label="Add Your Interests"*/}
-                            {/*    />*/}
-                            {/*</div>*/}
-
-                            <p className="text-sm text-gray-500 mb-1">Suggested interests :</p>
-                            <div className="flex flex-wrap gap-2 mb-2">
-
-                            </div>
                         </div>
                         <div className="flex justify-end mt-4">
                             <button type="submit" className="bg-black text-white px-6 py-2 rounded">
                                 Create Account
                             </button>
                         </div>
-                    </div>
                 </Form>
+              <Form onChange={(event) => {
+                  const isFirstSearch = q === null;
+                  submit(event.currentTarget, {
+                      replace: !isFirstSearch,
+                  });
+              }}
+                    role="search" id="searchInterest" className="w-full max-w-4xl flex flex-col lg:flex-row justify-between items-start gap-10 ">
+                  <div className="flex gap-2 mb-2">
+                      <InterestSelector
+
+                      />
+                  </div>
+              </Form>
             </section>
 
         </>
