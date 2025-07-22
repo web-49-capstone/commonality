@@ -174,7 +174,7 @@ console.log(errors)
                             <button className=" flex justify-start text-sm hover:text-red-600 my-2">Forgot Password?</button>
                             <button
                                 type="submit"
-                                className="w-full bg-blue-600 hover:bg-blue-700 p-2 rounded text-white disabled:bg-gray-500" disabled={buttonDisabled}
+                                className="w-full bg-blue-600 hover:bg-blue-700 p-2 rounded text-white disabled:bg-gray-500 disabled:cursor-not-allowed" disabled={buttonDisabled}
                             >Login
                             </button>
                         </div>

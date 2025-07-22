@@ -33,6 +33,13 @@ export default function Signup() {
     const [errorMessage, setErrorMessage] = useState("");
     const navigate = useNavigate();
     const actionData = useActionData();
+    const [formData, setFormData] = useState({
+        userName: "",
+        userEmail: "",
+        userPassword: "",
+        userPasswordConfirm: ""
+    });
+
 
 
 
@@ -59,6 +66,8 @@ export default function Signup() {
                         name="userName"
                         placeholder="Full Name"
                         className="w-full p-2 pl-10 rounded bg-zinc-500 text-white"
+                        value={formData.userName}
+                        onChange={(e) => setFormData({...formData, userName: e.target.value})}
                         required
 
                     />
@@ -71,6 +80,8 @@ export default function Signup() {
                         name="userEmail"
                         placeholder="Email"
                         className="w-full p-2 pl-10 rounded bg-zinc-500 text-white"
+                        value={formData.userEmail}
+                        onChange={(e) => setFormData({...formData, userEmail: e.target.value})}
                         required
                     />
                 </div>
@@ -83,6 +94,9 @@ export default function Signup() {
                         name="userPassword"
                         placeholder="Password"
                         className="w-full p-2 pl-10 rounded bg-zinc-500 text-white"
+                        value={formData.userPassword}
+                        onChange={(e) => setFormData({...formData, userPassword: e.target.value})}
+
                         required
                     />
                     <IconContext.Provider value={{size: '1.5em'}}>
@@ -101,6 +115,8 @@ export default function Signup() {
                             name="userPasswordConfirm"
                             placeholder="Confirm Password"
                             className="w-full p-2 pl-10 rounded bg-zinc-500 text-white"
+                            value={formData.userPasswordConfirm}
+                            onChange={(e) => setFormData({...formData, userPasswordConfirm: e.target.value})}
                             required
                         />
                         <IconContext.Provider value={{size: '1.5em'}}>
@@ -114,7 +130,13 @@ export default function Signup() {
 
                     <button
                         type="submit"
-                        className="w-full bg-blue-600 hover:bg-blue-700 p-2 rounded text-white"
+                        className={`w-full p-2 rounded text-white ${formData.userName && formData.userEmail && formData.userPassword && formData.userPasswordConfirm ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-400 cursor-not-allowed'}`}
+                        disabled={
+                            !formData.userName ||
+                            !formData.userEmail ||
+                            !formData.userPassword ||
+                            !formData.userPasswordConfirm
+                        }
                     >Sign Up
                     </button>
 
