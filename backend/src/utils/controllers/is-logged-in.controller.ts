@@ -14,6 +14,7 @@ export function isLoggedInController(request: Request, response: Response, next:
         const unverifiedJwtToken: string | undefined = request.headers?.authorization
         if (user === undefined || signature === undefined || unverifiedJwtToken === undefined) {
             response.json(status)
+            return
         }
 
         if ( !unverifiedJwtToken || unverifiedJwtToken !== request.session?.jwt) {

@@ -7,7 +7,7 @@ import {
     selectAllInterests,
     selectInterestByInterestId,
     selectInterestsByInterestName,
-    selectInterestsByUserId,
+    selectInterestsByUserId, selectUserInterestByUserInterest,
     type UserInterest,
     UserInterestSchema
 } from "./interest.model.ts";
@@ -120,6 +120,12 @@ export async function postUserInterestController (request: Request, response: Re
             userInterestInterestId,
             userInterestUserId
         }
+        const userInterestFromDatabase = await selectUserInterestByUserInterest(userInterest)
+        if (userInterestFromDatabase) {
+            response.json({ status: 400, message: 'you already have this interest', data: null })
+            return
+        }
+
         const result = await insertUserInterestInterestId(userInterest)
         const status: Status = { status: 200, message: result, data: null }
         response.json(status)

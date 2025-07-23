@@ -1,11 +1,13 @@
 import React, {useEffect, useState} from "react";
-import {Form, useNavigation, useSubmit} from "react-router";
+import {Form, useFetcher, useNavigation, useSubmit} from "react-router";
 import type {Interest} from "~/utils/models/interest.model";
+import type {User} from "~/utils/models/user-schema";
 
-type Props = {interests: Interest[], q: string | null}
+type Props = {interests: Interest[], q: string | null, user: User}
 export function InterestSelector(props: Props) {
-    const {interests, q} = props;
-
+    const {interests, q, user} = props;
+const fetcher = useFetcher()
+    console.log(fetcher.data)
     const navigation = useNavigation();
     const submit = useSubmit();
     const searching =
@@ -41,7 +43,24 @@ export function InterestSelector(props: Props) {
                 <ul className="bg-white text-black border rounded max-h-40 overflow-auto mb-2">
 
                     {interests.map((interest) => (
-                        <li key={interest.interestId} className="p-2 cursor-pointer hover:bg-gray-200">
+                        <li
+                            key={interest.interestId}
+                            className="p-2 cursor-pointer hover:bg-gray-200"
+                            onClick={() => {
+                                //Create a new user interest object
+                            const userInterest = {
+                                userInterestInterestId: interest.interestId,
+                                userInterestUserId: user.userId
+                            }
+
+                                //Perform a fetch to /apis/post-user-interests
+                                fetcher.submit(userInterest, {
+                                    method:"POST",
+                                    action: "/apis/post-user-interests",
+                                    encType: "application/json"
+                                })
+                            }}
+                        >
                             {interest.interestName}
                         </li>
                     ))} </ul>
