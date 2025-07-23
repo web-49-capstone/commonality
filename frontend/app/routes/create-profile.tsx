@@ -1,47 +1,24 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {States} from "~/utils/types/states";
 import {commitSession, getSession} from "~/utils/session.server";
 import type {Route} from "../+types/root";
-import {Form, redirect} from "react-router";
+import {Form, redirect, useNavigation, useSubmit} from "react-router";
 import {jwtDecode} from "jwt-decode";
 import {UserSchema} from "~/utils/models/user-schema";
-const allInterests = [
-    "Gaming",
-    "Hiking",
-    "Coding",
-    "Music",
-    "Fitness",
-    "Art",
-    "Photography",
-    "Cooking",
-    "Writing",
-    "Traveling",
-    "Reading",
-    "Dancing",
-    "Yoga",
-    "Meditation",
-    "Gardening",
-    "Running",
-    "Cycling",
-    "Swimming",
-    "Board Games",
-    "Chess",
-    "Movies",
-    "Theater",
-    "Podcasting",
-    "DIY Projects",
-    "Technology",
-    "Machine Learning",
-    "AI",
-]
+import {InterestSelector} from "~/components/interests";
+import {fetchInterestsByInterestName} from "~/utils/models/interest.model";
 
-export function loader({request} : Route.LoaderArgs) {
-    const session = getSession(
+
+export async function loader({request} : Route.LoaderArgs) {
+    const session = await getSession(
         request.headers.get("Cookie")
     )
+    if (!session.has("user")){
+        return redirect("/login")
+    }
     const url = new URL(request.url)
     const q = url.searchParams.get("q")
-    const interests = await fetch(`${process.env.REST_API_URL}/interests/interestByInterestName/${q}`)
+    const interests = await fetchInterestsByInterestName(q)
     return {session, interests, q}
 }
 
@@ -83,7 +60,6 @@ export async function action({ request }: Route.ActionArgs) {
             return {success: false, error: 'internal server error try again later', status: 400}
         }
         const parsedJwtToken = jwtDecode(authorization) as any
-        console.log(parsedJwtToken)
         const validationResult = UserSchema.safeParse(parsedJwtToken.auth);
         if (!validationResult.success) {
             session.flash('error', 'profile is malformed')
@@ -93,7 +69,6 @@ export async function action({ request }: Route.ActionArgs) {
         session.set('user', validationResult.data)
         const responseHeaders = new Headers()
         responseHeaders.append('Set-Cookie', await commitSession(session))
-        console.log('user', validationResult.data)
         return redirect("/", {headers: responseHeaders});
     }
     return {success: false, error: data.message, status: data.status};
@@ -101,24 +76,10 @@ export async function action({ request }: Route.ActionArgs) {
 
 
 export default function CreateProfile({loaderData} : Route.ComponentProps) {
-    // const data: any = loaderData
-    const {contacts, q, data} = loaderData;
-    const initialUser = data.data.user
-    
-    const navigation = useNavigation();
-    const submit = useSubmit();
-    const searching =
-        navigation.location &&
-        new URLSearchParams(navigation.location.search).has(
-            "q"
-        )
+    const {session, interests, q}: any = loaderData
+    const initialUser = session.data.user
+    console.log(interests)
 
-    useEffect(() => {
-        const searchInterest = document.getElementById("q");
-        if (searchInterest instanceof HTMLInputElement) {
-            searchInterest.value = q || "";
-        }
-    }, [q])
 
     return (
         <>
@@ -189,19 +150,12 @@ export default function CreateProfile({loaderData} : Route.ComponentProps) {
                             </button>
                         </div>
                 </Form>
-              <Form onChange={(event) => {
-                  const isFirstSearch = q === null;
-                  submit(event.currentTarget, {
-                      replace: !isFirstSearch,
-                  });
-              }}
-                    role="search" id="searchInterest" className="w-full max-w-4xl flex flex-col lg:flex-row justify-between items-start gap-10 ">
                   <div className="flex gap-2 mb-2">
                       <InterestSelector
-
+                          interests={interests}
+                          q={q}
                       />
                   </div>
-              </Form>
             </section>
 
         </>

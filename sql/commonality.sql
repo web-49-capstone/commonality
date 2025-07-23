@@ -90,4 +90,30 @@ CREATE INDEX ON message(message_sender_id);
 --                                  member_group_id uuid
 -- );
 
-
+INSERT INTO interest (interest_id, interest_name) VALUES ('019837fd-b294-7db7-9de3-320d4078618c', 'Gaming');
+INSERT INTO interest (interest_id, interest_name) VALUES ('019837fd-b294-7b32-987d-d40fbfb8f19b', 'Hiking');
+INSERT INTO interest (interest_id, interest_name) VALUES ('019837fd-b294-751d-b90d-e70a3458bfc5', 'Coding');
+INSERT INTO interest (interest_id, interest_name) VALUES ('019837fd-b294-7952-b1e5-a345a56da742', 'Music');
+INSERT INTO interest (interest_id, interest_name) VALUES ('019837fd-b294-7dfb-bb83-89186745ad30', 'Fitness');
+INSERT INTO interest (interest_id, interest_name) VALUES ('019837fd-b294-761b-8b88-7e82cd4beea0', 'Art');
+INSERT INTO interest (interest_id, interest_name) VALUES ('019837fd-b294-7f75-868e-991859349e2f', 'Photography');
+INSERT INTO interest (interest_id, interest_name) VALUES ('019837fd-b294-71c1-9c30-ae2f273b263c', 'Cooking');
+INSERT INTO interest (interest_id, interest_name) VALUES ('019837fd-b294-7ac8-bdde-48624f423083', 'Writing');
+INSERT INTO interest (interest_id, interest_name) VALUES ('019837fd-b294-73c9-9bb7-c1994b9e74ef', 'Traveling');
+INSERT INTO interest (interest_id, interest_name) VALUES ('019837fd-b294-791f-9f8f-c45c2a90d9fc', 'Reading');
+INSERT INTO interest (interest_id, interest_name) VALUES ('019837fd-b294-7168-a762-78baab3d49b6', 'Dancing');
+INSERT INTO interest (interest_id, interest_name) VALUES ('019837fd-b294-7eec-82d7-90935dc36e5e', 'Yoga');
+INSERT INTO interest (interest_id, interest_name) VALUES ('019837fd-b294-7bf5-90f1-8c88edc8660e', 'Meditation');
+INSERT INTO interest (interest_id, interest_name) VALUES ('019837fd-b294-723e-9597-af52fe0323bf', 'Gardening');
+INSERT INTO interest (interest_id, interest_name) VALUES ('019837fd-b294-7368-804c-cbe253bd3f0f', 'Running');
+INSERT INTO interest (interest_id, interest_name) VALUES ('019837fd-b294-706a-86ef-e830d2918d5e', 'Cycling');
+INSERT INTO interest (interest_id, interest_name) VALUES ('019837fd-b294-7ac4-ac35-6a9256b8b51d', 'Swimming');
+INSERT INTO interest (interest_id, interest_name) VALUES ('019837fd-b294-7621-805d-cca7e9a6a31b', 'Board Games');
+INSERT INTO interest (interest_id, interest_name) VALUES ('019837fd-b294-7d6c-abb3-35f9f134b8b0', 'Chess');
+INSERT INTO interest (interest_id, interest_name) VALUES ('019837fd-b294-79b2-be3c-f97403ed45c8', 'Movies');
+INSERT INTO interest (interest_id, interest_name) VALUES ('019837fd-b294-7c3b-9e20-1777db6bf461', 'Theater');
+INSERT INTO interest (interest_id, interest_name) VALUES ('019837fd-b294-76dd-8a2c-70995f81f6b7', 'Podcasting');
+INSERT INTO interest (interest_id, interest_name) VALUES ('019837fd-b294-7ea9-acda-9fa3ae627685', 'DIY Projects');
+INSERT INTO interest (interest_id, interest_name) VALUES ('019837fd-b294-7339-8d52-17f2b2560bd6', 'Technology');
+INSERT INTO interest (interest_id, interest_name) VALUES ('019837fd-b294-7f00-8f29-86a110bb1b32', 'Machine Learning');
+INSERT INTO interest (interest_id, interest_name) VALUES ('019837fd-b294-7951-b6fd-810279618fd9', 'AI');

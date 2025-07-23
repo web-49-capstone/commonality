@@ -1,19 +1,33 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
+import {Form, useNavigation, useSubmit} from "react-router";
+import type {Interest} from "~/utils/models/interest.model";
 
-interface InterestSelectorProps {
-    availableInterests: string[];
-    selectedInterests: string[];
-    setSelectedInterests: (interests: string[]) => void;
-    label?: string;
-    placeholder?: string;
-}
+type Props = {interests: Interest[], q: string | null}
+export function InterestSelector(props: Props) {
+    const {interests, q} = props;
 
-export function InterestSelector() {
+    const navigation = useNavigation();
+    const submit = useSubmit();
+    const searching =
+        navigation.location &&
+        new URLSearchParams(navigation.location.search).has(
+            "q"
+        )
+
+    useEffect(() => {
+        const searchInterest = document.getElementById("q");
+        if (searchInterest instanceof HTMLInputElement) {
+            searchInterest.value = q || "";
+        }
+    }, [q])
 
     return (
         <div className="w-full">
-            {label && <label className="block mb-1 font-semibold">{label}</label>}
-    <Form method="post">
+    <Form onChange={(event) => {
+    const isFirstSearch = q === null;
+    submit(event.currentTarget, {
+        replace: !isFirstSearch,
+    })}}>
             <input
                 aria-label="Search contacts"
                 defaultValue={q || ""}
@@ -27,7 +41,7 @@ export function InterestSelector() {
                 <ul className="bg-white text-black border rounded max-h-40 overflow-auto mb-2">
 
                     {interests.map((interest) => (
-                        <li key={interestId} className="p-2 cursor-pointer hover:bg-gray-200">
+                        <li key={interest.interestId} className="p-2 cursor-pointer hover:bg-gray-200">
                             {interest.interestName}
                         </li>
                     ))} </ul>
@@ -36,20 +50,32 @@ export function InterestSelector() {
                     )}
 
     </Form>
-    <Form action="destroy" method="delete">
-            <div className="flex flex-wrap gap-2">
-                {selectedInterests.map((interest) => (
-                    <span
-                        key={interest}
-                        className="bg-blue-600 text-white px-2 py-1 rounded-full text-sm flex items-center"
-                    >
-            {interest}
-                        <button type="submit" className="ml-2 font-bold text-xs hover:text-red-300">
-              ✕
-            </button>
-          </span>))}
-            </div>
-    </Form>
+    {/*<Form action="destroy" method="delete">*/}
+    {/*        <div className="flex flex-wrap gap-2">*/}
+    {/*            {selectedInterests.map((interest) => (*/}
+    {/*                <span*/}
+    {/*                    key={interest}*/}
+    {/*                    className="bg-blue-600 text-white px-2 py-1 rounded-full text-sm flex items-center"*/}
+    {/*                >*/}
+    {/*        {interest}*/}
+    {/*                    <button type="submit" className="ml-2 font-bold text-xs hover:text-red-300">*/}
+    {/*          ✕*/}
+    {/*        </button>*/}
+    {/*      </span>))}*/}
+    {/*        </div>*/}
+    {/*</Form>*/}
         </div>
     );
 }
+
+
+// <Form
+// }}
+//       role="search" id="searchInterest" className="w-full max-w-4xl flex flex-col lg:flex-row justify-between items-start gap-10 ">
+//     <div className="flex gap-2 mb-2">
+//         {/*<InterestSelector*/}
+//         {/*    interests={loaderData}*/}
+//
+//         {/*/>*/}
+//     </div>
+// </Form>
