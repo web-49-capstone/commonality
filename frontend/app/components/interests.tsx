@@ -80,7 +80,7 @@ export function InterestSelector(props: Props) {
                     <p className="p-2 text-gray-500">No matches found</p>
                 )}
                 <div className="container mx-auto text-center">
-                    {!hideMessage && (
+                    {!hideMessage && fetcher.data?.status === 400 && (
                         <div
                             className="flex items-center justify-between bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6 shadow-md">
                             <span className="block sm:inline">{fetcher.data?.message}</span>
@@ -97,7 +97,6 @@ export function InterestSelector(props: Props) {
             </Form>
 {/* Adding pills for already selected interests*/}
 
-
             <Form>
                     <div className="flex flex-wrap gap-2">
                         {userInterests.map((userInterest) => (
@@ -106,7 +105,8 @@ export function InterestSelector(props: Props) {
                                 className="bg-blue-600 text-white px-2 py-1 rounded-full text-sm flex items-center"
                             >{userInterest.interestName}
                                 <button onClick={() => {
-                                    deleteFetcher.submit(userInterest.interestId, {
+                                    deleteFetcher.submit(
+                                        {userInterestInterestId: userInterest.interestId}, {
                                         method: "DELETE",
                                         action: "/apis/delete-user-interests",
                                         encType: "application/json"
