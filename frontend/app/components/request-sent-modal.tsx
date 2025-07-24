@@ -1,6 +1,3 @@
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "flowbite-react";
-import { useState } from "react";
-
 import type {User} from "~/components/profile-matching-section";
 
 type Props = {
