@@ -46,7 +46,8 @@ CREATE TABLE IF NOT EXISTS user_interest(
     user_interest_interest_id uuid,
     user_interest_user_id     uuid,
     FOREIGN KEY (user_interest_interest_id) REFERENCES interest (interest_id),
-    FOREIGN KEY (user_interest_user_id) REFERENCES "user" (user_id)
+    FOREIGN KEY (user_interest_user_id) REFERENCES "user" (user_id),
+    PRIMARY KEY (user_interest_interest_id, user_interest_user_id)
 );
 CREATE INDEX ON user_interest (user_interest_interest_id);
 CREATE INDEX ON user_interest (user_interest_user_id);
