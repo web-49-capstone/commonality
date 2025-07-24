@@ -122,7 +122,7 @@ export async function postUserInterestController (request: Request, response: Re
         }
         const userInterestFromDatabase = await selectUserInterestByUserInterest(userInterest)
         if (userInterestFromDatabase) {
-            response.json({ status: 400, message: 'you already have this interest', data: null })
+            response.json({ status: 400, message: 'You already have this interest.', data: null })
             return
         }
 

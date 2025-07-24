@@ -28,7 +28,7 @@ export async function selectAllInterests (): Promise<Interest[]> {
     return InterestSchema.array().parse(result)
 }
 export async function selectInterestsByInterestName (interestName: string): Promise<Interest[]|null> {
-    const rowList = await sql`SELECT interest_id, interest_name FROM interest WHERE interest_name LIKE ${interestName + '%'}`
+    const rowList = await sql`SELECT interest_id, interest_name FROM interest WHERE interest_name ILIKE ${interestName + '%'}`
     return InterestSchema.array().parse(rowList) ?? null
 }
 

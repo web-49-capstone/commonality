@@ -6,7 +6,7 @@ import {Form, redirect, useNavigation, useSubmit} from "react-router";
 import {jwtDecode} from "jwt-decode";
 import {UserSchema} from "~/utils/models/user-schema";
 import {InterestSelector} from "~/components/interests";
-import {fetchInterestsByInterestName} from "~/utils/models/interest.model";
+import {fetchInterestsByInterestName, InterestSchema} from "~/utils/models/interest.model";
 
 
 export async function loader({request} : Route.LoaderArgs) {
@@ -19,7 +19,17 @@ export async function loader({request} : Route.LoaderArgs) {
     const url = new URL(request.url)
     const q = url.searchParams.get("q")
     const interests = await fetchInterestsByInterestName(q)
-    return {session, interests, q}
+
+    const response = await fetch(`${process.env.REST_API_URL}/interest/userInterestUserId/${session.data.user?.userId}`)
+        .then(res => {
+            if (!res.ok) {
+                throw new Error('failed to fetch interests')
+            }
+            return res.json()
+        })
+    console.log(response)
+    const userInterests = InterestSchema.array().parse(response.data)
+    return {session, interests, q, userInterests}
 }
 
 export async function action({ request }: Route.ActionArgs) {
@@ -76,12 +86,12 @@ export async function action({ request }: Route.ActionArgs) {
 
 
 export default function CreateProfile({loaderData} : Route.ComponentProps) {
-    const {session, interests, q} = loaderData
+    const {session, interests, q, userInterests} = loaderData
     const initialUser = session.data.user
     if (!initialUser){
         return redirect("/login")
     }
-    console.log(interests)
+    console.log(userInterests)
 
 
     return (
@@ -158,6 +168,7 @@ export default function CreateProfile({loaderData} : Route.ComponentProps) {
                           user={initialUser}
                           interests={interests}
                           q={q}
+                          userInterests={userInterests}
                       />
                   </div>
             </section>

@@ -25,6 +25,9 @@ type Pages = {
   "/apis/post-user-interests": {
     params: {};
   };
+  "/apis/delete-user-interests": {
+    params: {};
+  };
   "/connect": {
     params: {};
   };
@@ -42,7 +45,7 @@ type Pages = {
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/login" | "/signup" | "/create-profile" | "/apis/post-user-interests" | "/connect" | "/profile" | "/user" | "/chat";
+    page: "/" | "/login" | "/signup" | "/create-profile" | "/apis/post-user-interests" | "/apis/delete-user-interests" | "/connect" | "/profile" | "/user" | "/chat";
   };
   "routes/login.tsx": {
     id: "routes/login";
@@ -59,6 +62,10 @@ type RouteFiles = {
   "routes/interest-component-route.tsx": {
     id: "routes/interest-component-route";
     page: "/apis/post-user-interests";
+  };
+  "routes/delete-interest-route.tsx": {
+    id: "routes/delete-interest-route";
+    page: "/apis/delete-user-interests";
   };
   "layouts/navigation.tsx": {
     id: "layouts/navigation";
