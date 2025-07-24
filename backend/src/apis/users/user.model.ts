@@ -46,7 +46,7 @@ export const PrivateUserSchema = z.object ({
         .nullable(),
 })
 
-export const PublicUserSchema = PrivateUserSchema.omit({userActivationToken: true, userHash: true, userEmail: true, userLat: true, userLng: true})
+export const PublicUserSchema = PrivateUserSchema.omit({userActivationToken: true, userHash: true, userEmail: true})
 
 export type PrivateUser = z.infer<typeof PrivateUserSchema>
 export type PublicUser = z.infer<typeof PublicUserSchema>
@@ -78,13 +78,13 @@ export async function selectPrivateUserByUserEmail (userEmail: string): Promise<
 }
 
 export async function selectPublicUserByUserId (userId: string): Promise<PublicUser | null> {
-    const rowList = await sql`SELECT user_id, user_availability, user_bio, user_city, user_created, user_img_url, user_name, user_state FROM "user" WHERE user_id = ${userId}`
+    const rowList = await sql`SELECT user_id, user_availability, user_bio, user_city, user_created, user_img_url, user_name, user_state, user_lat, user_lng FROM "user" WHERE user_id = ${userId}`
     const result = PublicUserSchema.array().max(1).parse(rowList)
     return result[0] ?? null
 
 }
 export async function updatePublicUser (user: PublicUser ): Promise<string> {
-    const {userId, userBio, userAvailability, userCity, userCreated, userImgUrl, userName, userState} = user
+    const {userId, userBio, userAvailability, userCity, userCreated, userImgUrl, userName, userState, userLat, userLng} = user
     await sql`UPDATE "user"
               SET user_bio          = ${userBio},
                   user_availability = ${userAvailability},
@@ -92,13 +92,15 @@ export async function updatePublicUser (user: PublicUser ): Promise<string> {
                   user_created      = ${userCreated},
                   user_img_url      = ${userImgUrl},
                   user_name         = ${userName},
-                  user_state        = ${userState}
+                  user_state        = ${userState},
+                  user_lat          = ${userLat},
+                  user_lng          = ${userLng}
               WHERE user_id = ${userId}`
     return 'User updated successfully'
 }
 
 export async function selectPublicUserByInterestId (userInterestInterestId: string): Promise<PublicUser[]> {
-    const rowList = await sql`SELECT user_id, user_availability, user_bio, user_city, user_created, user_img_url, user_name, user_state FROM "user" JOIN user_interest ON user_id = user_interest.user_interest_user_id WHERE user_interest.user_interest_interest_id = ${userInterestInterestId}`
+    const rowList = await sql`SELECT user_id, user_availability, user_bio, user_city, user_created, user_img_url, user_name, user_state, user_lat, user_lng FROM "user" JOIN user_interest ON user_id = user_interest.user_interest_user_id WHERE user_interest.user_interest_interest_id = ${userInterestInterestId}`
     return PublicUserSchema.array().parse(rowList)
 }
 

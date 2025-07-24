@@ -28,7 +28,7 @@ export async function putUserController (request: Request, response: Response): 
             return
         }
         const {userId} = paramsValidationResult.data
-        const {userName, userBio, userAvailability, userCity, userState, userImgUrl} = bodyValidationResult.data
+        const {userName, userBio, userAvailability, userCity, userState, userImgUrl, userLat, userLng} = bodyValidationResult.data
 
         const userFromSession = request.session.user
         const userIdFromSession = userFromSession?.userId
@@ -47,6 +47,8 @@ export async function putUserController (request: Request, response: Response): 
         user.userCity = userCity
         user.userState = userState
         user.userImgUrl = userImgUrl
+        user.userLat = userLat
+        user.userLng = userLng
 
         await updatePublicUser(user)
 
@@ -65,6 +67,8 @@ export async function putUserController (request: Request, response: Response): 
             userCreated: user.userCreated,
             userState: user.userState,
             userImgUrl: user.userImgUrl,
+            userLat: user.userLat,
+            userLng: user.userLng
         }
 
         const newJwt = generateJwt(parsedJwt.auth, signature)
@@ -77,6 +81,8 @@ export async function putUserController (request: Request, response: Response): 
             userCreated: user.userCreated,
             userState: user.userState,
             userImgUrl: user.userImgUrl,
+            userLat: user.userLat,
+            userLng: user.userLng
         }
 
         request.session.jwt = newJwt

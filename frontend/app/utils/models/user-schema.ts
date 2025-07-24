@@ -28,5 +28,11 @@ export const UserSchema = z.object ({
         .length(2, 'Please provide a valid userState (max 2 characters)')
         .trim()
         .nullable(),
+    userLat: z.number('Please provide valid latitude')
+        .min(-90, 'Please provide a valid userLat (min -90)')
+        .max(90, 'Please provide a valid userLat (max 90)'),
+    userLng: z.number('Please provide valid longitude')
+        .min(-180, 'Please provide a valid userLong (min -180)')
+        .max(180, 'Please provide a valid userLong (max 180)')
 })
 export type User = z.infer<typeof UserSchema>
