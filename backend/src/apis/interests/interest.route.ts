@@ -25,7 +25,7 @@ router.route('/interestByInterestName/:interestName')
 
 router.route('/deleteUserInterest/:userInterestInterestId')
     .delete(isLoggedInController, deleteUserInterestController)
-router.route('/userInterestUserid')
+router.route('/userInterestUserId')
     .post(isLoggedInController, postUserInterestController)
 
 

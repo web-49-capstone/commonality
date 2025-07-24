@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import {States} from "~/utils/types/states";
 import {commitSession, getSession} from "~/utils/session.server";
-import type {Route} from "../+types/root";
+import type {Route} from "./+types/create-profile";
 import {Form, redirect, useNavigation, useSubmit} from "react-router";
 import {jwtDecode} from "jwt-decode";
 import {UserSchema} from "~/utils/models/user-schema";
@@ -76,8 +76,11 @@ export async function action({ request }: Route.ActionArgs) {
 
 
 export default function CreateProfile({loaderData} : Route.ComponentProps) {
-    const {session, interests, q}: any = loaderData
+    const {session, interests, q} = loaderData
     const initialUser = session.data.user
+    if (!initialUser){
+        return redirect("/login")
+    }
     console.log(interests)
 
 
@@ -113,7 +116,7 @@ export default function CreateProfile({loaderData} : Route.ComponentProps) {
 
                     <select
                         name = "userState"
-                        defaultValue={initialUser.userState}
+                        defaultValue={initialUser.userState ?? ''}
                         // value={selectedState}
                         // onChange={(e) => setSelectedState(e.target.value)}
                         className="w-full p-2 border rounded mb-4"
@@ -129,7 +132,7 @@ export default function CreateProfile({loaderData} : Route.ComponentProps) {
                     </div>
 
                     <div className="flex flex-col gap-4 w-full lg:w-2/3">
-                        <input type="textarea" name="userBio" placeholder="Tell us about yourself..."          className="border border-black px-3 w-full h-32" required defaultValue={initialUser.userBio}/>
+                        <input type="textarea" name="userBio" placeholder="Tell us about yourself..."          className="border border-black px-3 w-full h-32" required defaultValue={initialUser.userBio ?? ''}/>
 
                         <div className="border border-black rounded-lg p-4">
                             <label className="font-semibold">Availability</label>
@@ -138,7 +141,7 @@ export default function CreateProfile({loaderData} : Route.ComponentProps) {
                             </div>
                             <input
                                 name="userAvailability"
-                                defaultValue={initialUser.userAvailability}
+                                defaultValue={initialUser.userAvailability ?? ''}
                                 placeholder="Optional - leave blank to not display."
                                 className="border border-black mt-3 px-2 py-1 w-full"
                             />
@@ -152,6 +155,7 @@ export default function CreateProfile({loaderData} : Route.ComponentProps) {
                 </Form>
                   <div className="flex gap-2 mb-2">
                       <InterestSelector
+                          user={initialUser}
                           interests={interests}
                           q={q}
                       />

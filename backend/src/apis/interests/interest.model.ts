@@ -51,6 +51,13 @@ export async function insertUserInterestInterestId (userInterest: UserInterest):
     return 'Added a new interest to user interests'
 }
 
+export async function selectUserInterestByUserInterest(userInterest: UserInterest): Promise<UserInterest|null> {
+    const { userInterestInterestId, userInterestUserId } = userInterest
+    const rowList = await sql`SELECT user_interest_interest_id, user_interest_user_id FROM user_interest WHERE user_interest_interest_id = ${userInterestInterestId} AND user_interest_user_id = ${userInterestUserId}`
+    const result = UserInterestSchema.array().max(1).parse(rowList)
+    return result[0] ?? null
+}
+
 export async function deleteUserInterest (userInterest: UserInterest): Promise<string> {
     const { userInterestInterestId, userInterestUserId } = userInterest
     await sql`DELETE FROM user_interest WHERE user_interest_interest_id = ${userInterestInterestId} AND user_interest_user_id = ${userInterestUserId}`

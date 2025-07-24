@@ -4,6 +4,7 @@ export default [
     route("login", "routes/login.tsx"),
     route("signup", "routes/signup.tsx"),
     route("create-profile", "routes/create-profile.tsx"),
+    route("apis/post-user-interests", "routes/interest-component-route.tsx"),
 
     layout("layouts/navigation.tsx", [
         index("routes/home.tsx"),
