@@ -149,7 +149,7 @@ export default function CreateProfile({loaderData}: Route.ComponentProps) {
                         <input type="text"
                                name="userCity"
                                placeholder="City"
-                               className="border border-black px-3 w-full"
+                               className="w-full p-2 border rounded mb-4"
                                required
                                defaultValue={initialUser.userCity ?? ''}
                         />
@@ -159,9 +159,19 @@ export default function CreateProfile({loaderData}: Route.ComponentProps) {
                     </div>
 
                     <div className="flex flex-col gap-4 w-full lg:w-2/3">
-                        <input type="textarea" name="userBio" placeholder="Tell us about yourself..."
-                               className="border border-black px-3 w-full h-32" required
-                               defaultValue={initialUser.userBio ?? ''}/>
+
+                        <div className="border border-black rounded-lg p-4">
+                            <label className="font-semibold">Bio</label>
+                            <div className="flex items-center gap-3 mt-2">
+                                {/*<span className="text-sm text-gray-600">Show availability on profile</span>*/}
+                            </div>
+                            <input type="textarea" name="userBio" placeholder="Tell us about yourself..."
+                                   className="border border-gray-400 px-3 w-full h-32" required
+                                   defaultValue={initialUser.userBio ?? ''}/>
+                        </div>
+
+
+
 
                         <div className="border border-black rounded-lg p-4">
                             <label className="font-semibold">Availability</label>
@@ -172,7 +182,7 @@ export default function CreateProfile({loaderData}: Route.ComponentProps) {
                                 name="userAvailability"
                                 defaultValue={initialUser.userAvailability ?? ''}
                                 placeholder="Optional - leave blank to not display."
-                                className="border border-black mt-3 px-2 py-1 w-full"
+                                className="border border-gray-400 mt-3 px-2 py-1 w-full"
                             />
                         </div>
                     </div>

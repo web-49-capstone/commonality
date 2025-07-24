@@ -28,11 +28,11 @@ export const PrivateUserSchema = z.object ({
     userImgUrl: z.string('Please provide valid imgUrl')
         .max(255, 'Please provide a valid userImgUrl (max 255 characters)')
         .trim(),
-    userLat: z.number('Please provide valid latitude')
+    userLat: z.coerce.number('Please provide valid latitude')
         .min(-90, 'Please provide a valid userLat (min -90)')
         .max(90, 'Please provide a valid userLat (max 90)')
         .nullable(),
-    userLng: z.number('Please provide valid longitude')
+    userLng: z.coerce.number('Please provide valid longitude')
         .min(-180, 'Please provide a valid userLong (min -180)')
         .max(180, 'Please provide a valid userLong (max 180)')
         .nullable(),
