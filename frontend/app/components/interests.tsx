@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import {Form, useFetcher, useNavigation, useSubmit} from "react-router";
 import type {Interest} from "~/utils/models/interest.model";
 import type {User} from "~/utils/models/user-schema";
+import {AiOutlineClose} from "react-icons/ai";
 
 type Props = {interests: Interest[], q: string | null, user: User}
 export function InterestSelector(props: Props) {
@@ -16,12 +17,27 @@ const fetcher = useFetcher()
             "q"
         )
 
+    const [hideMessage, setHideMessage] = useState(true);
+
+    useEffect(() => {
+        if (fetcher.data?.status === 400) {
+            setHideMessage(false);
+        }
+    }, [fetcher.data]);
+
+
     useEffect(() => {
         const searchInterest = document.getElementById("q");
         if (searchInterest instanceof HTMLInputElement) {
             searchInterest.value = q || "";
         }
     }, [q])
+    // useEffect(() => {
+    //     if (message) {
+    //         const timer = setTimeout(() => setShowToast(false), 5000);
+    //         return () => clearTimeout(timer);
+    //     }
+    // }, [message]);
 
     return (
         <div className="w-full">
@@ -67,7 +83,20 @@ const fetcher = useFetcher()
                     ) : (
                     <p className="p-2 text-gray-500">No matches found</p>
                     )}
-
+        <div className="container mx-auto text-center">
+            {!hideMessage &&(
+                <div className="flex items-center justify-between bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6 shadow-md">
+                    <span className="block sm:inline">{fetcher.data?.message}</span>
+                    <button
+                        className="ml-4"
+                        onClick={() => setHideMessage(true)}
+                        aria-label="Close"
+                    >
+                        <AiOutlineClose className="h-5 w-5 text-red-700" />
+                    </button>
+                </div>
+                )}
+        </div>
     </Form>
     {/*<Form action="destroy" method="delete">*/}
     {/*        <div className="flex flex-wrap gap-2">*/}
