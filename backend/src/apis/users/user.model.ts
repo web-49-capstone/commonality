@@ -83,7 +83,7 @@ export async function selectPublicUserByUserId (userId: string): Promise<PublicU
     return result[0] ?? null
 
 }
-export async function updatePublicUser (user: PublicUser ): Promise<string> {
+export async function updatePublicUser (user: PublicUser): Promise<string> {
     const {userId, userBio, userAvailability, userCity, userCreated, userImgUrl, userName, userState, userLat, userLng} = user
     await sql`UPDATE "user"
               SET user_bio          = ${userBio},

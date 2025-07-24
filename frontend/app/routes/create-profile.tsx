@@ -153,8 +153,8 @@ export default function CreateProfile({loaderData}: Route.ComponentProps) {
                                required
                                defaultValue={initialUser.userCity ?? ''}
                         />
-                        <input type="hidden" name="userLat" id="userLat" defaultValue={initialUser.userLat ?? ''}/>
-                        <input type="hidden" name="userLng" id="userLng" defaultValue={initialUser.userLng ?? ''}/>
+                        {/*<input type="hidden" name="userLat" id="userLat" defaultValue={initialUser.userLat ?? ''}/>*/}
+                        {/*<input type="hidden" name="userLng" id="userLng" defaultValue={initialUser.userLng ?? ''}/>*/}
 
                     </div>
 

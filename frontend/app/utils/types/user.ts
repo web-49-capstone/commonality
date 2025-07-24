@@ -7,4 +7,6 @@ export interface User {
     userImgUrl?: string;
     userCity: string;
     userState: string;
+    userLat: number | null;
+    userLng: number | null;
 }
