@@ -23,7 +23,7 @@ const fetcher = useFetcher()
         if (fetcher.data?.status === 400) {
             setHideMessage(false);
         }
-    }, [fetcher.data?.status]);
+    }, [fetcher.data]);
 
 
     useEffect(() => {
