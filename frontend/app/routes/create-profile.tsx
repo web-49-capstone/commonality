@@ -46,13 +46,28 @@ export async function action({request}: Route.ActionArgs) {
         request.headers.get("Cookie")
     )
 
-    const uploadHandler = async (file: FileUpload) => {
-        if (file.fieldName === 'userImgUrl') {
-            const cloudinaryUrl = await uploadToCloudinary(file.stream())
-            return cloudinaryUrl
+    const uploadHandler = async (file: FileUpload | string | undefined | null) => {
+        if (!file) return undefined;
+
+        if (typeof file === 'string') {
+
+            return undefined;
         }
-        return undefined
-    }
+
+        if (file.fieldName === 'userImgUrl') {
+            try {
+                const cloudinaryUrl = await uploadToCloudinary(file.stream());
+                return cloudinaryUrl;
+            } catch (error) {
+                console.error("Cloudinary upload failed:", error);
+                return undefined;
+            }
+        }
+
+        return undefined;
+    };
+
+
     const formData = await parseFormData(request, uploadHandler)
     console.log("formData: ", formData)
     const userInfo = Object.fromEntries(formData)
@@ -145,110 +160,125 @@ export default function CreateProfile({loaderData}: Route.ComponentProps) {
 
     return (
         <>
-            <h1 className="text-4xl font-bold text-center py-5">Welcome to Commonality!</h1>
-            <h2 className="text-3xl text-center pb-10">Lets get started by creating your profile.</h2>
-            <section className="flex flex-col items-center gap-6 mx-6">
-                <Form method="post" encType="multipart/form-data" id="updateProfile"
-                      className="w-full max-w-4xl flex flex-col lg:flex-row justify-between items-start gap-10 ">
-                    <div className="flex flex-col items-center gap-4 w-full lg:w-1/3">
+            <h1 className="text-4xl sm:text-5xl font-extrabold text-center pt-10 text-gray-900 tracking-tight">
+                Welcome to Commonality!
+            </h1>
+            <h2 className="text-lg sm:text-xl text-center pb-8 text-gray-600 max-w-xl mx-auto">
+                Let’s create your profile and help others connect with you.
+            </h2>
 
+            <section className="flex flex-col items-center gap-10 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
+                {/* ✅ Wrapper box around everything */}
+                <div className="w-full bg-white shadow-xl rounded-3xl p-6 sm:p-10 space-y-10 transition-all">
 
-                        <input
-                            type='file'
-                            accept="image/*"
-                            onChange={handleFileChange}
-                            className="hidden"
-                            id="userImgUrl"
-                            name="userImgUrl"
-                        />
-                        <label htmlFor="userImgUrl" className="cursor-pointer flex flex-col items-center">
-                            <IconContext.Provider value={{size: "6em"}}>
-                            <div className="w-24 h-24 bg-gray-200 rounded-full overflow-hidden flex items-center justify-center">
-                                {previewUrl ? (
-                                    <img src={previewUrl} alt="Profile Preview" className="object-cover w-full h-full" />
-                                ) : (
-                                    <CgProfile />
-                                )}
-                            </div>
-                            </IconContext.Provider>
-                            <p className="text-sm text-gray-500 mt-2">Select a profile picture</p>
-                        </label>
-                        <h2 className="text-2xl">{initialUser.userName}</h2>
-                        <label htmlFor="userState">State</label>
-                        <select
-                            name="userState"
-                            defaultValue={initialUser.userState ?? ''}
-                            required
-                            className="w-full p-2 border rounded mb-4"
-                        >
-                            <option value="">Select a state</option>
-                            {States.map((state) => (
-                                <option key={state.code} value={state.code}>
-                                    {state.name}
-                                </option>
-                            ))}
-                        </select>
-                        <label htmlFor="userCity">City</label>
-                        <input type="text"
-                               name="userCity"
-                               placeholder="City"
-                               className="w-full p-2 border rounded mb-4"
-                               required
-                               defaultValue={initialUser.userCity ?? ''}
-                        />
-                        {/*<input type="hidden" name="userLat" id="userLat" defaultValue={initialUser.userLat ?? ''}/>*/}
-                        {/*<input type="hidden" name="userLng" id="userLng" defaultValue={initialUser.userLng ?? ''}/>*/}
-                        {actionData?.error && (
-                            <div className="text-red-500 font-semibold">
-                                {actionData.error}
-                            </div>
-                        )}
+                    <Form method="post" encType="multipart/form-data" id="updateProfile"
+                          className="w-full flex flex-col lg:flex-row justify-between items-start gap-8">
 
-                    </div>
+                        {/* LEFT SIDE */}
+                        <div className="flex flex-col items-center gap-6 w-full lg:w-1/3">
 
-                    <div className="flex flex-col gap-4 w-full lg:w-2/3">
-
-                        <div className="border border-black rounded-lg p-4">
-                            <label className="font-semibold">Bio</label>
-                            <div className="flex items-center gap-3 mt-2">
-                                {/*<span className="text-sm text-gray-600">Show availability on profile</span>*/}
-                            </div>
-                            <input type="textarea" name="userBio" placeholder="Tell us about yourself..."
-                                   className="border border-gray-400 px-3 w-full h-32" required
-                                   defaultValue={initialUser.userBio ?? ''}/>
-                        </div>
-
-
-
-
-                        <div className="border border-black rounded-lg p-4">
-                            <label className="font-semibold">Availability</label>
-                            <div className="flex items-center gap-3 mt-2">
-                                {/*<span className="text-sm text-gray-600">Show availability on profile</span>*/}
-                            </div>
                             <input
-                                name="userAvailability"
-                                defaultValue={initialUser.userAvailability ?? ''}
-                                placeholder="Optional - leave blank to not display."
-                                className="border border-gray-400 mt-3 px-2 py-1 w-full"
+                                type="file"
+                                accept="image/*"
+                                name="userImgUrl"
+                                id="userImgUrl"
+                                onChange={handleFileChange}
+                                className="hidden"
                             />
+                            <label htmlFor="userImgUrl" className="cursor-pointer flex flex-col items-center group">
+                                <IconContext.Provider value={{ size: "6em" }}>
+                                    <div className="w-32 h-32 bg-gradient-to-br from-blue-100 to-indigo-100 border border-gray-300 rounded-full overflow-hidden flex items-center justify-center shadow-md group-hover:scale-105 transition-transform duration-200 ease-out">
+                                        {previewUrl ? (
+                                            <img src={previewUrl} alt="Profile Preview" className="object-cover w-full h-full" />
+                                        ) : (
+                                            <CgProfile className="text-indigo-400" />
+                                        )}
+                                    </div>
+                                </IconContext.Provider>
+                                <p className="text-sm text-indigo-500 mt-2 group-hover:underline">
+                                    {previewUrl ? "Change photo" : "Select a profile picture"}
+                                </p>
+                            </label>
+
+                            <h2 className="text-lg font-semibold text-gray-800">{initialUser.userName}</h2>
+
+                            <label htmlFor="userState" className="w-full text-sm text-gray-700 font-medium">State</label>
+                            <select
+                                name="userState"
+                                defaultValue={initialUser.userState ?? ''}
+                                required
+                                className="w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            >
+                                <option value="">Select a state</option>
+                                {States.map((state) => (
+                                    <option key={state.code} value={state.code}>
+                                        {state.name}
+                                    </option>
+                                ))}
+                            </select>
+
+                            <label htmlFor="userCity" className="w-full text-sm text-gray-700 font-medium">City</label>
+                            <input
+                                type="text"
+                                name="userCity"
+                                placeholder="Enter your city"
+                                required
+                                defaultValue={initialUser.userCity ?? ''}
+                                className="w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            />
+
+                            {actionData?.error && (
+                                <div className="text-red-600 font-medium">{actionData.error}</div>
+                            )}
                         </div>
+
+                        {/* RIGHT SIDE */}
+                        <div className="flex flex-col gap-6 w-full lg:w-2/3">
+
+                            <div className="border border-gray-200 rounded-xl p-5 bg-gray-50 shadow-sm">
+                                <label className="block text-gray-700 font-semibold mb-2">Bio</label>
+                                <textarea
+                                    name="userBio"
+                                    placeholder="Tell us about yourself..."
+                                    required
+                                    defaultValue={initialUser.userBio ?? ''}
+                                    className="w-full h-32 px-3 py-2 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                />
+                            </div>
+
+                            <div className="border border-gray-200 rounded-xl p-5 bg-gray-50 shadow-sm">
+                                <label className="block text-gray-700 font-semibold mb-2">Availability</label>
+                                <input
+                                    name="userAvailability"
+                                    defaultValue={initialUser.userAvailability ?? ''}
+                                    placeholder="Optional - e.g. Weekends, Evenings, Anytime"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                />
+                            </div>
+
+                            <div className="flex justify-end mt-2">
+                                <button
+                                    type="submit"
+                                    className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-semibold shadow-md transition duration-200 ease-in-out"
+                                >
+                                    Create Account
+                                </button>
+                            </div>
+                        </div>
+                    </Form>
+
+                    {/* ✅ Interests are inside the same card box now */}
+                    <div className="w-full">
+                        <InterestSelector
+                            user={initialUser}
+                            interests={interests}
+                            q={q}
+                            userInterests={userInterests}
+                        />
                     </div>
-                    <div className="flex justify-end mt-4">
-                        <button type="submit" className="bg-black text-white px-6 py-2 rounded">
-                            Create Account
-                        </button>
-                    </div>
-                </Form>
-                <div className="flex gap-2 mb-2">
-                    <InterestSelector
-                        user={initialUser}
-                        interests={interests}
-                        q={q}
-                        userInterests={userInterests}
-                    />
                 </div>
             </section>
+
 
         </>
     )
