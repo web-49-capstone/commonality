@@ -48,8 +48,10 @@ export async function action({request}: Route.ActionArgs) {
 
     const uploadHandler = async (file: FileUpload) => {
         if (file.fieldName === 'userImgUrl') {
-            return uploadToCloudinary(file.stream())
+            const cloudinaryUrl = await uploadToCloudinary(file.stream())
+            return cloudinaryUrl
         }
+        return undefined
     }
     const formData = await parseFormData(request, uploadHandler)
     console.log("formData: ", formData)
@@ -126,17 +128,12 @@ export default function CreateProfile({loaderData}: Route.ComponentProps) {
         userImgUrl: null as File | null,
 
     })
-    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+    const [previewUrl, setPreviewUrl] = useState<string | null>(initialUser.userImgUrl ?? null);
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0] || null
 
 
-
-        // setFormData((prev) => ({
-        //     ...prev,
-        //     userImgUrl: file,
-        // }))
         if (file) {
             const objectUrl = URL.createObjectURL(file);
             setPreviewUrl(objectUrl);
