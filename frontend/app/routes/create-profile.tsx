@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 import {States} from "~/utils/types/states";
 import {commitSession, getSession} from "~/utils/session.server";
 import type {Route} from "./+types/create-profile";
-import {Form, redirect, useNavigation, useSubmit} from "react-router";
+import {Form, redirect, useActionData, useNavigation, useSubmit} from "react-router";
 import {jwtDecode} from "jwt-decode";
 import {UserSchema} from "~/utils/models/user-schema";
 import {InterestSelector} from "~/components/interests";
@@ -44,6 +44,14 @@ export async function action({request}: Route.ActionArgs) {
     const userInfo = Object.fromEntries(formData)
     const geocoder = new Geocodio(`${process.env.GEOCODIO_API_KEY}`);
     const location = await geocoder.geocode(`${userInfo.userCity}, ${userInfo.userState}`, [], 1)
+
+    if (!location?.results?.length || !location.results[0]?.location) {
+        return {
+            success: false,
+            error: 'Invalid location. Please enter a valid city and state.',
+            status: 400
+        }
+    }
 
     const userLat = location.results[0].location.lat
     const userLng = location.results[0].location.lng
@@ -100,6 +108,8 @@ export default function CreateProfile({loaderData}: Route.ComponentProps) {
     if (!initialUser) {
         return redirect("/login")
     }
+    const actionData = useActionData()
+
 
     return (
         <>
@@ -155,6 +165,11 @@ export default function CreateProfile({loaderData}: Route.ComponentProps) {
                         />
                         {/*<input type="hidden" name="userLat" id="userLat" defaultValue={initialUser.userLat ?? ''}/>*/}
                         {/*<input type="hidden" name="userLng" id="userLng" defaultValue={initialUser.userLng ?? ''}/>*/}
+                        {actionData?.error && (
+                            <div className="text-red-500 font-semibold">
+                                {actionData.error}
+                            </div>
+                        )}
 
                     </div>
 
