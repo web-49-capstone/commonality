@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {States} from "~/utils/types/states";
 import {commitSession, getSession} from "~/utils/session.server";
 import type {Route} from "./+types/create-profile";
@@ -8,6 +8,12 @@ import {UserSchema} from "~/utils/models/user-schema";
 import {InterestSelector} from "~/components/interests";
 import {fetchInterestsByInterestName, InterestSchema} from "~/utils/models/interest.model";
 import Geocodio from 'geocodio-library-node';
+import { IconContext } from "react-icons";
+import {CgProfile} from "react-icons/cg";
+
+import {type FileUpload, parseFormData} from '@remix-run/form-data-parser'
+import {uploadToCloudinary} from "~/utils/cloudinary.server";
+
 
 
 export async function loader({request}: Route.LoaderArgs) {
@@ -40,7 +46,13 @@ export async function action({request}: Route.ActionArgs) {
         request.headers.get("Cookie")
     )
 
-    const formData = await request.formData()
+    const uploadHandler = async (file: FileUpload) => {
+        if (file.fieldName === 'userImgUrl') {
+            return uploadToCloudinary(file.stream())
+        }
+    }
+    const formData = await parseFormData(request, uploadHandler)
+    console.log("formData: ", formData)
     const userInfo = Object.fromEntries(formData)
     const geocoder = new Geocodio(`${process.env.GEOCODIO_API_KEY}`);
     const location = await geocoder.geocode(`${userInfo.userCity}, ${userInfo.userState}`, [], 1)
@@ -110,36 +122,60 @@ export default function CreateProfile({loaderData}: Route.ComponentProps) {
     }
     const actionData = useActionData()
 
+    const [formData, setFormData] = useState({
+        userImgUrl: null as File | null,
+
+    })
+    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0] || null
+
+
+
+        // setFormData((prev) => ({
+        //     ...prev,
+        //     userImgUrl: file,
+        // }))
+        if (file) {
+            const objectUrl = URL.createObjectURL(file);
+            setPreviewUrl(objectUrl);
+        } else {
+            setPreviewUrl(null);
+        }
+    }
+
 
     return (
         <>
             <h1 className="text-4xl font-bold text-center py-5">Welcome to Commonality!</h1>
             <h2 className="text-3xl text-center pb-10">Lets get started by creating your profile.</h2>
             <section className="flex flex-col items-center gap-6 mx-6">
-                <Form method="put" id="updateProfile"
+                <Form method="post" encType="multipart/form-data" id="updateProfile"
                       className="w-full max-w-4xl flex flex-col lg:flex-row justify-between items-start gap-10 ">
                     <div className="flex flex-col items-center gap-4 w-full lg:w-1/3">
-                        {/*<input*/}
-                        {/*    type='file'*/}
-                        {/*    accept="image/*"*/}
-                        {/*    onChange={handleFileChange}*/}
-                        {/*    className="hidden"*/}
-                        {/*    id="profile-upload"*/}
-                        {/*/>*/}
-                        {/*<label htmlFor="profile-upload" className="cursor-pointer flex flex-col items-center">*/}
-                        {/*    <IconContext.Provider value={{size: "6em"}}>*/}
-                        {/*    <div className="w-24 h-24 bg-gray-200 rounded-full overflow-hidden flex items-center justify-center">*/}
-                        {/*        {previewUrl ? (*/}
-                        {/*            <img src={previewUrl} alt="Profile Preview" className="object-cover w-full h-full" />*/}
-                        {/*        ) : (*/}
-                        {/*            <CgProfile />*/}
 
 
-                        {/*        )}*/}
-                        {/*    </div>*/}
-                        {/*    </IconContext.Provider>*/}
-                        {/*    <p className="text-sm text-gray-500 mt-2">Select a profile picture</p>*/}
-                        {/*</label>*/}
+                        <input
+                            type='file'
+                            accept="image/*"
+                            onChange={handleFileChange}
+                            className="hidden"
+                            id="userImgUrl"
+                            name="userImgUrl"
+                        />
+                        <label htmlFor="userImgUrl" className="cursor-pointer flex flex-col items-center">
+                            <IconContext.Provider value={{size: "6em"}}>
+                            <div className="w-24 h-24 bg-gray-200 rounded-full overflow-hidden flex items-center justify-center">
+                                {previewUrl ? (
+                                    <img src={previewUrl} alt="Profile Preview" className="object-cover w-full h-full" />
+                                ) : (
+                                    <CgProfile />
+                                )}
+                            </div>
+                            </IconContext.Provider>
+                            <p className="text-sm text-gray-500 mt-2">Select a profile picture</p>
+                        </label>
                         <h2 className="text-2xl">{initialUser.userName}</h2>
                         <label htmlFor="userState">State</label>
                         <select

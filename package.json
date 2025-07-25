@@ -1,5 +1,7 @@
 {
   "dependencies": {
+    "@remix-run/form-data-parser": "^0.10.1",
+    "cloudinary": "^2.7.0",
     "flowbite": "^3.1.2",
     "geocodio-library-node": "^1.11.0"
   }
