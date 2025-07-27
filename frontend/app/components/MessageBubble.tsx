@@ -1,12 +1,13 @@
-import type {Message} from "~/utils/types/message";
-
-interface MessageProps {
-message: Message
-}
+import type {Message} from "~/utils/models/message.model";
+import type {User} from "~/utils/types/user";
 
 
-const MessageBubble = ({ message }: MessageProps) => {
-    const userId = "jfjakjkfdsajksjfd"
+
+type Props = {message: Message, userId: string}
+
+
+export async function MessageBubble  (props: Props)  {
+    const {message, userId} = props;
     return (
         <div className={`flex ${message.messageSenderId === userId ? 'justify-end' : 'justify-start'}`}>
             <div className={`max-w-xs lg:max-w-md px-4 py-2 rounded-2xl ${
@@ -18,11 +19,13 @@ const MessageBubble = ({ message }: MessageProps) => {
                 <p className={`text-md mt-1 ${
                     message.messageSenderId === userId ? 'text-blue-100' : 'text-gray-500'
                 }`}>
-                    {message.messageSentAt}
+                    {message.messageSentAt.toLocaleTimeString([], {
+                        hour: 'numeric',
+                        minute: '2-digit'
+                    })}
                 </p>
             </div>
         </div>
     );
-};
+}
 
-export default MessageBubble;

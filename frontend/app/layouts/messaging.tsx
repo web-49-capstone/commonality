@@ -1,87 +1,59 @@
-import {useState, useRef, useEffect} from 'react'
+import {useState} from 'react'
 import 'flowbite'
-import {FaPlus} from "react-icons/fa"
 import {FaSearch} from "react-icons/fa"
 import {CiCircleInfo} from "react-icons/ci"
 import {BsFillSendFill} from "react-icons/bs"
-import MessageBubble from "../components/MessageBubble"
+import {MessageBubble} from "~/components/MessageBubble"
 import ChatTabs from "../components/ChatTabs"
 import type {User} from "~/utils/types/user";
-import type { Message } from '~/utils/types/message'
+import type {Route} from "./+types/messaging";
+import {getSession} from "~/utils/session.server";
+import {NavLink, Outlet, redirect} from "react-router";
+import {MessageSchema, PartnerMessageSchema} from "~/utils/models/message.model";
+import type {Message} from "~/utils/types/message";
 
 
-const MessagingApp = () => {
+export async function loader ({request} : Route.LoaderArgs) {
+    const session = await getSession(
+        request.headers.get("Cookie"))
+
+
+    if (!session.has("user")) {
+        return redirect("/login")
+    }
+    const requestHeaders = new Headers()
+    requestHeaders.append('Content-Type', 'application/json')
+    requestHeaders.append('Authorization', session.data?.authorization || '')
+    const cookie = request.headers.get('Cookie')
+    if (cookie) {
+        requestHeaders.append('Cookie', cookie)
+    }
+
+
+
+    const lastMessageFetch = await fetch (`${process.env.REST_API_URL}/message/${session.data.user?.userId}/lastMessage`, {
+        method: 'GET',
+        headers: requestHeaders
+    })
+        .then (res => {
+            if (!res.ok) {
+                throw new Error('failed to fetch last message')
+            }
+            return res.json()
+        })
+
+
+    const lastMessage = PartnerMessageSchema.array().parse(lastMessageFetch.data)
+
+    return {session, lastMessage }
+}
+
+export default function MessagingApp  ({loaderData} : Route.ComponentProps) {
+    const {session, lastMessage} = loaderData;
+    // const {session, lastMessage, userMessages} = loaderData;
+    const initialUser = session.data.user;
     const [isSelected, setIsSelected] = useState(0);
-    const [newMessage, setNewMessage] = useState('');
-    const user =
-        {
-            userId: "0197d20f-c2a2-7877-93a6-7248762b4b2d",
-            userName: 'Marcus Rodriguez',
-            userImgUrl: '',
-            userBio: "ajakjfd",
-            userAvailability: "sjkjf",
-            userCity: "fajkajf",
-            userCreated: "kdjajf",
-            userState: "nm",
-        }
-    const users: User[] = [{
-        userId: "0197d20f-c2a2-7877-93a6-7248762b4b2d",
-        userName: 'Marcus Rodriguez',
-        userImgUrl: '',
-        userBio: "ajakjfd",
-        userAvailability: "sjkjf",
-        userCity: "fajkajf",
-        userCreated: "kdjajf",
-        userState: "nm",
-    } ]
-    const loggedInUser = {userId: "0197d1d2-e6ef-7e8a-80db-ce603e81d16f", userName: "Alex Thompson"}
-    const message  =
-        {
-            messageId: "jajkjfakfdkasj",
-            messageBody: 'Hey! What up?!?!',
-            messageSenderId: "0197d1d1-b061-7345-9763-33a7ca2b7d64",
-            messageReceiverId: "0197d1d2-e6ef-7e8a-80db-ce603e81d16f",
-            messageSentAt: '2:25 PM',
-            messageOpened: true,
-        }
-    const messages: Message[]  = [
-        {messageId: "jajkjfakfdkasj",
-            messageBody: 'Hey! What up?!?!',
-            messageSenderId: "0197d1d1-b061-7345-9763-33a7ca2b7d64",
-            messageReceiverId: "0197d1d2-e6ef-7e8a-80db-ce603e81d16f",
-            messageSentAt: '2:25 PM',
-            messageOpened: true
-        }]
-    //     {
-    //         messageId: 2,
-    //         messageBody: 'I\'m doing great! Just working on some new projects. How about you?',
-    //         messageSenderId: "0197d1d2-e6ef-7e8a-80db-ce603e81d16f",
-    //         messageReceiverId: "0197d1d1-b061-7345-9763-33a7ca2b7d64",
-    //         messageSentAt: '2:26 PM'
-    //     },
-    //     {messageId: 1, messageBody: 'I\'m ok... "Working 9-5!" as the kids say.', messageSenderId: "0197d1d1-b061-7345-9763-33a7ca2b7d64", messageReceiverId: "0197d1d2-e6ef-7e8a-80db-ce603e81d16f", messageSentAt: '2:28 PM'},
-    //     {
-    //         messageId: 2,
-    //         messageBody: 'Awwh! Well you need a destress! We should grab coffee this week and I can tell you all about my day.',
-    //         messageSenderId: "0197d1d2-e6ef-7e8a-80db-ce603e81d16f",
-    //         messageReceiverId: "0197d1d1-b061-7345-9763-33a7ca2b7d64",
-    //         messageSentAt: '2:29 PM'
-    //     },
-    //     {messageId: 1, messageBody: 'Perfect! How about Thursday afternoon?', messageSenderId: "0197d1d1-b061-7345-9763-33a7ca2b7d64", messageReceiverId: "0197d1d2-e6ef-7e8a-80db-ce603e81d16f", messageSentAt: '2:30 PM'},
-    // ];
 
-    const messageHandler = () => {
-        if (newMessage.trim()) {
-            setNewMessage('');
-        }
-    }
-
-    const handleKeyPress = (e: any) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault()
-            messageHandler()
-        }
-    }
 
 
     return (
@@ -93,43 +65,7 @@ const MessagingApp = () => {
                     <div className="flex items-center justify-between mb-4">
                         <h1 className="text-2xl font-bold text-gray-900">Chats</h1>
                         <div className="flex gap-2">
-                            {/*<button className="p-2 hover:bg-gray-100 rounded-full">*/}
-                            {/*    <FaPlus size={20} className="text-gray-600"/>*/}
-                            {/*</button>*/}
-                            {/*<button type="button" data-dropdown-toggle="language-dropdown-menu"*/}
-                            {/*        className="inline-flex items-center font-medium justify-center px-4 py-2 text-sm bg-gray-300  onClick-bg-gray 400 text-gray-900 rounded-lg cursor-pointer hover:bg-gray-200">*/}
-                            {/*    <svg className="w-5 h-5 rounded-full me-3" aria-hidden="true"*/}
-                            {/*         xmlns="http://www.w3.org/2000/svg" href="http://www.w3.org/1999/xlink"*/}
-                            {/*         viewBox="0 0 3900 3900">*/}
-                            {/*        <path fill="#b22234" d="M0 0h7410v3900H0z"/>*/}
-                            {/*        <path d="M0 450h7410m0 600H0m0 600h7410m0 600H0m0 600h7410m0 600H0" stroke="#fff"*/}
-                            {/*              stroke-width="300"/>*/}
-                            {/*        <path fill="#3c3b6e" d="M0 0h2964v2100H0z"/>*/}
-                            {/*        <g fill="#fff">*/}
-                            {/*            <g id="d">*/}
-                            {/*                <g id="c">*/}
-                            {/*                    <g id="e">*/}
-                            {/*                        <g id="b">*/}
-                            {/*                            <path id="a"*/}
-                            {/*                                  d="M247 90l70.534 217.082-184.66-134.164h228.253L176.466 307.082z"/>*/}
-                            {/*                            <use href="#a" y="420"/>*/}
-                            {/*                            <use href="#a" y="840"/>*/}
-                            {/*                            <use href="#a" y="1260"/>*/}
-                            {/*                        </g>*/}
-                            {/*                        <use href="#a" y="1680"/>*/}
-                            {/*                    </g>*/}
-                            {/*                    <use href="#b" x="247" y="210"/>*/}
-                            {/*                </g>*/}
-                            {/*                <use href="#c" x="494"/>*/}
-                            {/*            </g>*/}
-                            {/*            <use href="#d" x="988"/>*/}
-                            {/*            <use href="#c" x="1976"/>*/}
-                            {/*            <use href="#e" x="2470"/>*/}
-                            {/*        </g>*/}
-                            {/*    </svg>*/}
-                            {/*    Individual*/}
-                            {/*</button>*/}
-                            {/*/!*Dropdown*!/*/}
+
                             <div
                                 className="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow-sm dark:bg-gray-700"
                                 id="language-dropdown-menu">
@@ -216,70 +152,59 @@ const MessagingApp = () => {
                 </div>
 
                 {/* Chat List */}
-                <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
-                    {users.map((user: User) => (
-                        <ChatTabs user={user} message={message} />
+                <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50" >
+                    {lastMessage.map((lastMessage) => (
+                        <NavLink to={`/chat/${lastMessage.partnerId}`}   className="">
+                        <ChatTabs  partnerMessage={lastMessage}/>
+                        </NavLink>
                     ))}
                 </div>
             </div>
 
-            {/* Main Chat Area */}
-            <div className="flex-1 flex flex-col">
-                {/* Chat Header */}
-                <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-white">
-                    <div className="flex items-center">
-                        <div className="relative">
-                            <div
-                                className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white">
-                                {user.userName}
-                            </div>
-                        </div>
-                        <div className="ml-3">
-                            <h2 className="font-semibold text-gray-900">{user.userName}</h2>
-                        </div>
-                    </div>
-                    <div className="flex gap-3">
-                        <button className="p-2 hover:bg-gray-100 rounded-full">
-                            <CiCircleInfo size={20} className="text-blue-500"/>
-                        </button>
-                    </div>
-                </div>
 
-                {/* Messages */}
-                <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
-                    {messages.map((message) => (
-                        <MessageBubble  key={message.messageId} message={message} />
-                    ))}
-                </div>
+            <Outlet />
 
-                {/* Message Input */}
-                <div className="p-4 border-t border-gray-200 bg-white">
-                    <div className="flex items-end gap-3">
-                      <div className="flex-1">
-              <textarea
-                  value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                  placeholder="Type a message..."
-                  className="w-full px-4 py-3 bg-gray-100 rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-12 max-h-32"
-              />
-                      </div>
-                        <button
-                            onClick={messageHandler}
-                            disabled={!newMessage.trim()}
-                            className={`right-2 bottom-2 p-2 rounded-full ${
-                                newMessage.trim()
-                                    ? 'bg-blue-500 text-white hover:bg-blue-600'
-                                    : 'cursor-not-allowed'
-                            }`}
-                        >
-                            <BsFillSendFill size={30}/>
-                        </button>
-                    </div>
-                </div>
-            </div>
         </div>
     );
 };
 
-export default MessagingApp;
+
+
+
+{/*<button className="p-2 hover:bg-gray-100 rounded-full">*/}
+{/*    <FaPlus size={20} className="text-gray-600"/>*/}
+{/*</button>*/}
+{/*<button type="button" data-dropdown-toggle="language-dropdown-menu"*/}
+{/*        className="inline-flex items-center font-medium justify-center px-4 py-2 text-sm bg-gray-300  onClick-bg-gray 400 text-gray-900 rounded-lg cursor-pointer hover:bg-gray-200">*/}
+{/*    <svg className="w-5 h-5 rounded-full me-3" aria-hidden="true"*/}
+{/*         xmlns="http://www.w3.org/2000/svg" href="http://www.w3.org/1999/xlink"*/}
+{/*         viewBox="0 0 3900 3900">*/}
+{/*        <path fill="#b22234" d="M0 0h7410v3900H0z"/>*/}
+{/*        <path d="M0 450h7410m0 600H0m0 600h7410m0 600H0m0 600h7410m0 600H0" stroke="#fff"*/}
+{/*              stroke-width="300"/>*/}
+{/*        <path fill="#3c3b6e" d="M0 0h2964v2100H0z"/>*/}
+{/*        <g fill="#fff">*/}
+{/*            <g id="d">*/}
+{/*                <g id="c">*/}
+{/*                    <g id="e">*/}
+{/*                        <g id="b">*/}
+{/*                            <path id="a"*/}
+{/*                                  d="M247 90l70.534 217.082-184.66-134.164h228.253L176.466 307.082z"/>*/}
+{/*                            <use href="#a" y="420"/>*/}
+{/*                            <use href="#a" y="840"/>*/}
+{/*                            <use href="#a" y="1260"/>*/}
+{/*                        </g>*/}
+{/*                        <use href="#a" y="1680"/>*/}
+{/*                    </g>*/}
+{/*                    <use href="#b" x="247" y="210"/>*/}
+{/*                </g>*/}
+{/*                <use href="#c" x="494"/>*/}
+{/*            </g>*/}
+{/*            <use href="#d" x="988"/>*/}
+{/*            <use href="#c" x="1976"/>*/}
+{/*            <use href="#e" x="2470"/>*/}
+{/*        </g>*/}
+{/*    </svg>*/}
+{/*    Individual*/}
+{/*</button>*/}
+{/*/!*Dropdown*!/*/}

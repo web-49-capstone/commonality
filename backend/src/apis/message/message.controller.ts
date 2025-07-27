@@ -146,9 +146,9 @@ export async function getMessageBySenderAndReceiverController(request: Request, 
 
         await updateMessageWhenOpened(userIdFromSession, validationResult.data.userId)
 
-        const messages = await selectMessagesBySenderAndReceiver(userIdFromSession, validationResult.data.userId)
+        const data = await selectMessagesBySenderAndReceiver(userIdFromSession, validationResult.data.userId)
 
-        response.json({status: 200, message: null, messages })
+        response.json({status: 200, message: null, data })
 
     } catch (error) {
         serverErrorResponse(response, null)

@@ -13,7 +13,10 @@ export default [
         route("profile", "routes/my-profile.tsx"),
         route("user", "routes/user-profile-page.tsx"),
         // route("messages", "routes/view-connections-messages.tsx"),
-        route("chat/", "routes/messaging.tsx")
+        layout("layouts/messaging.tsx", [
+            route("chat/:partnerId?", "routes/main-chat.tsx"),
+        ]),
+        // route("chat", "routes/messaging.tsx")
     ]),
 
 ] satisfies RouteConfig;

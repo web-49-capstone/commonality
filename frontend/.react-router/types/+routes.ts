@@ -37,15 +37,17 @@ type Pages = {
   "/user": {
     params: {};
   };
-  "/chat": {
-    params: {};
+  "/chat/:partnerId?": {
+    params: {
+      "partnerId"?: string;
+    };
   };
 };
 
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/login" | "/signup" | "/create-profile" | "/apis/post-user-interests" | "/apis/delete-user-interests" | "/connect" | "/profile" | "/user" | "/chat";
+    page: "/" | "/login" | "/signup" | "/create-profile" | "/apis/post-user-interests" | "/apis/delete-user-interests" | "/connect" | "/profile" | "/user" | "/chat/:partnerId?";
   };
   "routes/login.tsx": {
     id: "routes/login";
@@ -69,7 +71,7 @@ type RouteFiles = {
   };
   "layouts/navigation.tsx": {
     id: "layouts/navigation";
-    page: "/" | "/connect" | "/profile" | "/user" | "/chat";
+    page: "/" | "/connect" | "/profile" | "/user" | "/chat/:partnerId?";
   };
   "routes/home.tsx": {
     id: "routes/home";
@@ -87,8 +89,12 @@ type RouteFiles = {
     id: "routes/user-profile-page";
     page: "/user";
   };
-  "routes/messaging.tsx": {
-    id: "routes/messaging";
-    page: "/chat";
+  "layouts/messaging.tsx": {
+    id: "layouts/messaging";
+    page: "/chat/:partnerId?";
+  };
+  "routes/main-chat.tsx": {
+    id: "routes/main-chat";
+    page: "/chat/:partnerId?";
   };
 };
