@@ -71,10 +71,12 @@ export default function MatchingProfiles({loaderData}: Route.ComponentProps) {
                         {/*<p className="hidden lg:block text-xl text-gray-900 mb-2 font-bold">Want to start a new group instead?</p>*/}
                     </div>
                     <hr className="md:hidden my-5 md:my-10 w-3/4 mx-auto"></hr>
-                    <h2 className="text-3xl lg:text-3xl mt-5 lg:mt-10">Finding profiles interested in:</h2>
+                    <hr className="hidden md:block my-5 md:my-10 w-3/4 mx-auto"></hr>
+
+                    <h2 className="text-3xl lg:text-2xl mt-5 lg:mt-10">Finding profiles interested in:</h2>
+
                     <MyInterestsDropdown userInterests={userInterests} />
 
-                    <hr className="hidden md:block my-5 md:my-10 w-3/4 mx-auto"></hr>
 
                     {/*<hr className="my-10 w-3/4 mx-auto "></hr>*/}
                     {/*<p className="hidden lg:block text-xl text-gray-900 mb-2 font-bold">Want to start a new group instead?</p>*/}
