@@ -2,7 +2,7 @@ import {getSession} from "../utils/session.server";
 import {redirect} from "react-router";
 import type {Route} from "../+types/root";
 
-export async function action({ request}: Route.ActionArgs) {
+export async function action({request, params}: Route.ActionArgs) {
     const session = await getSession(
         request.headers.get("Cookie")
     )
