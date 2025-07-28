@@ -1,18 +1,7 @@
 import React, {useState} from "react";
 import {RequestSentButton, RequestSentContent} from "~/components/request-sent-modal";
 import {Link} from "react-router";
-
-export type User = {
-    userId: string;
-    userFirstName: string;
-    userLastName: string;
-    userEmail: string;
-    userBio: string;
-    userAvailability: string;
-    userImageString: string;
-    userInterestPlaceholder: string[];
-    userCityState: string;
-}
+import type {User} from "~/utils/types/user";
 
 type Props = {
     user: User
@@ -29,17 +18,17 @@ export function ProfileMatchingSection({user}: Props) {
     return(
         <>
             <div className="w-11/12 lg:w-3/4 mx-auto">
-                <img src={user.userImageString} alt="Profile Image" className="rounded-full w-1/2 mt-5 mx-auto"/>
-                <h2 className="text-4xl mt-3 mx-auto">{user.userFirstName} {user.userLastName[0]}</h2>
-                <p className="text-lg mb-3 mx-auto">{user.userCityState}</p>
+                <img src={user.userImgUrl} alt="Profile Image" className="rounded-full w-1/2 mt-5 mx-auto"/>
+                <h2 className="text-4xl mt-3 mx-auto">{user.userName}</h2>
+                <p className="text-lg mb-3 mx-auto">{user.userCity}, {user.userState}</p>
                 <p className="text-lg"><strong>Shared Interests: </strong>
-                    <span className="flex flex-wrap gap-2 mb-2">
-                                {user.userInterestPlaceholder.map((interest, index) => (
-                                    <span key={index} className={"bg-gray-600 text-gray-100 px-3 py-1 rounded-xl text-sm"}>{interest}</span>))}</span>
+                    {/*<span className="flex flex-wrap gap-2 mb-2">*/}
+                                {/*{user.userInterestPlaceholder.map((interest, index) => (*/}
+                                {/*    <span key={index} className={"bg-gray-600 text-gray-100 px-3 py-1 rounded-xl text-sm"}>{interest}</span>))}</span>*/}
                 </p>
                 <p className="text-lg"><strong>Availability: </strong>{user.userAvailability}</p>
                 <div className="bg-gray-100 border-1 border-gray-900 rounded-2xl py-3 px-5 my-3">
-                    <p className="text-lg text-gray-900 font-bold">About {user.userFirstName}:</p>
+                    <p className="text-lg text-gray-900 font-bold">About {user.userName}:</p>
                     <p className="text-md text-gray-900">{user.userBio}</p>
                 </div>
                 <div className="flex justify-between gap-5">

@@ -104,7 +104,7 @@ export async function selectPublicUserByInterestId (userInterestInterestId: stri
     return PublicUserSchema.array().parse(rowList)
 }
 
-
+// users by interest ID. users
 
 // export async function updateUser (user: PrivateUser): Promise<string> {
 //     PrivateUserSchema.parse(user)

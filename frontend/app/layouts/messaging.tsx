@@ -29,8 +29,6 @@ export async function loader ({request} : Route.LoaderArgs) {
         requestHeaders.append('Cookie', cookie)
     }
 
-
-
     const lastMessageFetch = await fetch (`${process.env.REST_API_URL}/message/${session.data.user?.userId}/lastMessage`, {
         method: 'GET',
         headers: requestHeaders

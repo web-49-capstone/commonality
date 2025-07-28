@@ -30,7 +30,6 @@ export function MyInterestsDropdown({userInterests}: InterestProp) {
         <Form>
             <div className="w-full max-w-xs mx-auto">
                 <label htmlFor="userDropdown" className="block mb-2 text-sm font-medium text-gray-800">
-                    Select an interest from your profile:
                 </label>
                 <select
                     name="interestId"
