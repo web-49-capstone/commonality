@@ -19,7 +19,7 @@ export type Message = z.infer<typeof MessageSchema>
 
 export async function insertMessage(message: Message): Promise<string> {
     const { messageId, messageReceiverId, messageSenderId, messageBody, messageOpened, messageSentAt } = message
-    await sql`INSERT INTO message(message_id, message_receiver_id, message_sender_id, message_body, message_opened, message_sent_at) VALUES (${messageId}, ${messageReceiverId}, ${messageSenderId}, ${messageBody}, ${messageOpened}, ${messageSentAt})`
+    await sql`INSERT INTO message(message_id, message_receiver_id, message_sender_id, message_body, message_opened, message_sent_at) VALUES (${messageId}, ${messageReceiverId}, ${messageSenderId}, ${messageBody}, ${messageOpened}, now())`
     return 'Added a new message'
 }
 
@@ -39,7 +39,7 @@ export async function deleteMessage(messageId: string): Promise<string> {
 // }
 
 export async function selectMessagesBySenderAndReceiver(userId1: string, userId2: string): Promise<Message[]> {
-    const rowList = await sql`SELECT message_id, message_receiver_id, message_sender_id, message_body, message_opened, message_sent_at FROM message WHERE (message_receiver_id = ${userId1} AND message_sender_id = ${userId2}) OR (message_receiver_id = ${userId2} AND message_sender_id = ${userId1}) ORDER BY message_sent_at DESC`
+    const rowList = await sql`SELECT message_id, message_receiver_id, message_sender_id, message_body, message_opened, message_sent_at FROM message WHERE (message_receiver_id = ${userId1} AND message_sender_id = ${userId2}) OR (message_receiver_id = ${userId2} AND message_sender_id = ${userId1}) ORDER BY message_sent_at ASC`
     return MessageSchema.array().parse(rowList)
 }
 

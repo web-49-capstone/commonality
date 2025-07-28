@@ -6,7 +6,7 @@ import type {User} from "~/utils/types/user";
 type Props = {message: Message, userId: string}
 
 
-export async function MessageBubble  (props: Props)  {
+export function MessageBubble  (props: Props)  {
     const {message, userId} = props;
     return (
         <div className={`flex ${message.messageSenderId === userId ? 'justify-end' : 'justify-start'}`}>
