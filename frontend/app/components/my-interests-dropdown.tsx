@@ -41,6 +41,7 @@ export function MyInterestsDropdown({userInterests}: InterestProp) {
                     <option value="" disabled>
                         Select an Interest to Update Search
                     </option>
+
                     {userInterests.map((interest) => (
                             <option id="selectedItem" key={interest.interestId} value={interest.interestId}>
                                 {interest.interestName}

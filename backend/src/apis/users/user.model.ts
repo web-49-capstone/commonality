@@ -99,9 +99,49 @@ export async function updatePublicUser (user: PublicUser): Promise<string> {
     return 'User updated successfully'
 }
 
-export async function selectPublicUserByInterestId (userInterestInterestId: string): Promise<PublicUser[]> {
-    const rowList = await sql`SELECT user_id, user_availability, user_bio, user_city, user_created, user_img_url, user_name, user_state, user_lat, user_lng FROM "user" JOIN user_interest ON user_id = user_interest.user_interest_user_id WHERE user_interest.user_interest_interest_id = ${userInterestInterestId}`
-    return PublicUserSchema.array().parse(rowList)
+// export async function selectPublicUserByInterestId (userInterestInterestId: string): Promise<PublicUser[]> {
+//     const rowList = await sql`SELECT user_id, user_availability, user_bio, user_city, user_created, user_img_url, user_name, user_state, user_lat, user_lng FROM "user" JOIN user_interest ON user_id = user_interest.user_interest_user_id WHERE user_interest.user_interest_interest_id = ${userInterestInterestId}`
+//     return PublicUserSchema.array().parse(rowList)
+// }
+
+export async function selectPublicUserByInterestId (
+    interestId: string,
+    currentUserId: string
+): Promise<PublicUser[]> {
+    const rowList = await sql`
+    SELECT
+      u.user_id,
+      u.user_availability,
+      u.user_bio,
+      u.user_city,
+      u.user_created,
+      u.user_img_url,
+      u.user_name,
+      u.user_state,
+      u.user_lat,
+      u.user_lng
+    FROM "user" u
+    JOIN user_interest ui ON u.user_id = ui.user_interest_user_id
+    WHERE ui.user_interest_interest_id = ${interestId}
+      AND u.user_id != ${currentUserId}
+      AND (
+        NOT EXISTS (
+          SELECT 1 FROM match m
+          WHERE
+            (m.match_maker_id = ${currentUserId} AND m.match_receiver_id = u.user_id)
+            OR
+            (m.match_maker_id = u.user_id AND m.match_receiver_id = ${currentUserId})
+        )
+        OR EXISTS (
+          SELECT 1 FROM match m
+          WHERE
+            m.match_maker_id = u.user_id
+            AND m.match_receiver_id = ${currentUserId}
+            AND m.match_accepted IS NULL
+        )
+      );
+  `;
+    return PublicUserSchema.array().parse(rowList);
 }
 //
 // users by interest ID. users
