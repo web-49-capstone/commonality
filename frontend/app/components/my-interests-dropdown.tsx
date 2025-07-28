@@ -8,7 +8,16 @@ interface InterestProp {
 }
 export function MyInterestsDropdown({userInterests}: InterestProp) {
     // const [searchParams] = useSearchParams()
-    // const navigate = useNavigate()
+    const navigate = useNavigate()
+
+    const [searchParams, setSearchParams] = useSearchParams();
+    const selectedInterestId = searchParams.get("interestId") || "";
+
+    const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = event.target.value;
+        setSearchParams({ interestId: value });
+    };
+
     // useEffect(() => {
     //     const qParam = searchParams.get("q")
     //     // if (qParam) {
@@ -24,11 +33,14 @@ export function MyInterestsDropdown({userInterests}: InterestProp) {
                     Select an interest from your profile:
                 </label>
                 <select
+                    name="interestId"
+                    value={selectedInterestId}
+                    onChange={handleChange}
                     id="userInterests"
                     className="block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                     <option value="" disabled>
-                        -- Select an Interest --
+                        Select an Interest to Update Search
                     </option>
                     {userInterests.map((interest) => (
                             <option id="selectedItem" key={interest.interestId} value={interest.interestId}>
@@ -36,7 +48,7 @@ export function MyInterestsDropdown({userInterests}: InterestProp) {
                             </option>
                     ))}
                 </select>
-                <button className="bg-gray-900 text-gray-200 border-1 border-gray-200 rounded-xl mt-5 py-3 px-6 w-3/4 mx-auto lg:order-2 hover:cursor-pointer"><NavLink to={`/connect/${selectedItem.innerText}`}>Update Search</NavLink></button>
+                {/*<button type="submit" className="bg-gray-900 text-gray-200 border-1 border-gray-200 rounded-xl mt-5 py-3 px-6 w-3/4 mx-auto lg:order-2 hover:cursor-pointer">Update Search</button>*/}
             </div>
         </Form>
     );
