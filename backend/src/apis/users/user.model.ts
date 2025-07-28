@@ -103,7 +103,7 @@ export async function selectPublicUserByInterestId (userInterestInterestId: stri
     const rowList = await sql`SELECT user_id, user_availability, user_bio, user_city, user_created, user_img_url, user_name, user_state, user_lat, user_lng FROM "user" JOIN user_interest ON user_id = user_interest.user_interest_user_id WHERE user_interest.user_interest_interest_id = ${userInterestInterestId}`
     return PublicUserSchema.array().parse(rowList)
 }
-
+//
 // users by interest ID. users
 
 // export async function updateUser (user: PrivateUser): Promise<string> {
