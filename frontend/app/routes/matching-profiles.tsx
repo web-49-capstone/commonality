@@ -46,9 +46,9 @@ export async function loader ({ request }: Route.LoaderArgs) {
             }
             return res.json()
         })
-    console.log("MATCHING USER: ",sharedInterestsFetch.data)
 
     const matchingUsers = UserSchema.array().parse(sharedInterestsFetch.data)
+    console.log("this",matchingUsers)
 
     return {userInterests, interestId, matchingUsers, userId}
 }
@@ -56,7 +56,7 @@ export async function loader ({ request }: Route.LoaderArgs) {
 export default function MatchingProfiles({loaderData}: Route.ComponentProps) {
     // @ts-ignore
     let {userInterests, interestId, matchingUsers, userId} = loaderData;
-    matchingUsers = matchingUsers.filter((user: User) => user.userId !== userId)
+    // matchingUsers = matchingUsers.filter((user: User) => user.userId !== userId)
     return(
         <>
             <div className="grid grid-cols-1 lg:grid-cols-3 mt-5 lg:mt-10 container mx-auto">
