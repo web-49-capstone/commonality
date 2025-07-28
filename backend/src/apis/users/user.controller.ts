@@ -119,8 +119,12 @@ export async function getPublicUserByInterestIdController (request: Request, res
             zodErrorResponse(response, validationResult.error)
             return
         }
+
+        const userFromSession = request.session.user
+        const userIdFromSession = userFromSession?.userId ?? ''
+
         const {userInterestInterestId} = validationResult.data
-        const data = await selectPublicUserByInterestId(userInterestInterestId)
+        const data = await selectPublicUserByInterestId(userInterestInterestId, userIdFromSession)
         const staus: Status = {status: 200, data, message: null}
         response.json(staus)
     } catch (error: any) {
