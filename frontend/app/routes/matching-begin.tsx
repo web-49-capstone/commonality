@@ -15,7 +15,7 @@ export default function MatchingBegin() {
                     </div>
                     <div className="text-center content-center">
                         <h2 className="text-3xl lg:text-4xl my-5 lg:my-10">Find People Interested In:</h2>
-                        <MyInterestsDropdown />
+                        <MyInterestsDropdown  />
                         <button className="bg-gray-900 text-gray-200 border-1 border-gray-200 rounded-xl mt-6 py-3 px-6 w-3/4 md:w-1/2 mx-auto lg:order-2 hover:cursor-pointer"><Link to="/connect">Begin Matching</Link></button>
 
                     </div>

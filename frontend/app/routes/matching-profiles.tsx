@@ -5,7 +5,7 @@ import type {Route} from "../../.react-router/types/app/+types/root";
 import {getSession} from "~/utils/session.server";
 import {UserInterestSchema} from "~/utils/models/user-interest.model";
 import {InterestSchema} from "~/utils/models/interest.model";
-import {UserSchema} from "~/utils/models/user-schema";
+import {UserMatchingSchema, UserSchema} from "~/utils/models/user-schema";
 import type {User} from "~/utils/types/user";
 
 
@@ -48,7 +48,7 @@ export async function loader ({ request }: Route.LoaderArgs) {
         })
 
     const matchingUsers = UserSchema.array().parse(sharedInterestsFetch.data)
-    console.log("MATCHING USER: ",matchingUsers)
+    console.log("this",matchingUsers)
 
     return {userInterests, interestId, matchingUsers, userId}
 }
@@ -56,6 +56,7 @@ export async function loader ({ request }: Route.LoaderArgs) {
 export default function MatchingProfiles({loaderData}: Route.ComponentProps) {
     // @ts-ignore
     let {userInterests, interestId, matchingUsers, userId} = loaderData;
+    // matchingUsers = matchingUsers.filter((user: User) => user.userId !== userId)
 
     if (matchingUsers.length === 0) {
         return(
