@@ -69,6 +69,10 @@ export async function action ({request}: Route.ActionArgs) {
     } else {
         actionType = null
     }
+    if (matchReceiverId.userId === session.data.user?.userId && actionType === null) {
+        actionType = true
+    }
+
     console.log("userIds: ", formData)
     // @ts-ignore
     const matchBody = {
@@ -90,6 +94,31 @@ console.log(matchBody)
     const cookie = request.headers.get('Cookie')
     if (cookie) {
         requestHeaders.append('Cookie', cookie)
+    }
+
+    if (matchReceiverId.userId === session.data.user?.userId && actionType === true || false) {
+        const response = await fetch(`${process.env.REST_API_URL}/matching/updateMatch/${matchMakerId.userId}/${matchReceiverId.userId}`, {
+            method: "PUT",
+            headers: requestHeaders,
+            body: JSON.stringify(matchBody)
+
+        })
+        if (actionType === true) {
+            const messageResponse = await fetch(`process.env.REST_API_URL}/message`, {
+                method: "POST",
+                headers: requestHeaders,
+                body: JSON.stringify({
+                    messageId: uuidv7(),
+                    messageSenderId: user.userId,
+                    messageReceiverId: matchReceiverId.userId,
+                    messageBody: "You have a new match!",
+                    messageOpened: false,
+                    messageSentAt: null
+                })
+            })
+            const data = await messageResponse.json()
+            return redirect(`/chat/${matchMakerId.userId}`)
+        }
     }
 
     const response = await fetch(`${process.env.REST_API_URL}/matching`, {
