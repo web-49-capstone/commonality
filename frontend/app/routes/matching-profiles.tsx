@@ -2,7 +2,6 @@ import {MyInterestsDropdown} from "~/components/my-interests-dropdown";
 import {ProfileMatchingSection} from "~/components/profile-matching-section";
 import {Form, Link, redirect, useParams, useSearchParams} from "react-router";
 import type {Route} from "../../.react-router/types/app/+types/root";
-import {commitSession, getSession} from "~/utils/session.server";
 import {UserInterestSchema} from "~/utils/models/user-interest.model";
 import {InterestSchema} from "~/utils/models/interest.model";
 import {UserSchema} from "~/utils/models/user-schema";
@@ -10,6 +9,7 @@ import type {User} from "~/utils/types/user";
 import {jwtDecode} from "jwt-decode";
 import {RequestSentContent} from "~/components/request-sent-modal";
 import React, {useState} from "react";
+import {commitSession, getSession} from "~/utils/session.server";
 
 
 export async function loader ({ request }: Route.LoaderArgs) {
@@ -38,6 +38,7 @@ export async function loader ({ request }: Route.LoaderArgs) {
             return res.json()
         })
     const userInterests = InterestSchema.array().parse(userInterestsFetch.data)
+
     const sharedInterestsFetch = await fetch(`${process.env.REST_API_URL}/users/userInterestInterestId/${interestId}`, {
         method: 'GET',
         headers: requestHeaders
@@ -174,7 +175,7 @@ export default function MatchingProfiles({loaderData}: Route.ComponentProps) {
                     ):(
                     <Form method="post">
                         <input type="hidden" name="userId" value={matchingUsers[0]?.userId} />
-                    <button onClick={handleOpen} className="bg-gray-900 text-gray-200 border-1 border-gray-200 rounded-xl w-full py-3 px-6 hover:cursor-pointer" name="actionType" value={null}>Request to Connect</button>
+                    <button onClick={handleOpen} className="bg-gray-900 text-gray-200 border-1 border-gray-200 rounded-xl w-full py-3 px-6 hover:cursor-pointer" name="actionType" value={null | true}>Request to Connect</button>
                     <button className="bg-gray-300 text-gray-900 border-1 border-gray-200 rounded-xl w-full py-3 px-6 hover:cursor-pointer" name="actionType" value={false}>Next Profile</button>
                     </Form>)}
                 </div>

@@ -1,23 +1,54 @@
 import {MyInterestsDropdown} from "~/components/my-interests-dropdown";
 import {Link} from "react-router";
+import React from "react";
+import {InterestSchema} from "~/utils/models/interest.model";
+import type {Route} from "../../.react-router/types/app/+types/root";
+
+// export async function loader ({ request }: Route.LoaderArgs) {
+//     const url = new URL(request.url)
+//     const interestId = url.searchParams.get('interestId')
+//
+//     const session = await getSession(
+//         request.headers.get("Cookie")
+//     )
+//     const userId = session.data.user?.userId
+//     const requestHeaders = new Headers()
+//     requestHeaders.append('Content-Type', 'application/json')
+//     requestHeaders.append('Authorization', session.data?.authorization || '')
+//     const cookie = request.headers.get('Cookie')
+//     if (cookie) {
+//         requestHeaders.append('Cookie', cookie)
+//     }
+//     const userInterestsFetch = await fetch(`${process.env.REST_API_URL}/interest/userInterestUserId/${userId}`, {
+//         method: 'GET',
+//         headers: requestHeaders
+//     })
+//         .then(res => {
+//             if (!res.ok) {
+//                 throw new Error('failed to fetch interests')
+//             }
+//             return res.json()
+//         })
+//     const userInterests = InterestSchema.array().parse(userInterestsFetch.data)
+//     return {userInterests, userId, interestId}
+// }
 
 export default function MatchingBegin() {
+    // const {userInterests, userId, interestId} = loaderData;
     return(
         <>
             <div>
-                <div className="grid grid-cols-1 lg:grid-cols-2 mt-5 lg:mt-10 container mx-auto">
+                <div className="grid grid-cols-1 mt-5 lg:mt-10 container mx-auto">
                     <div className="text-center">
                         <img src="/commonality-logo.png" alt="Commonality Logo" className="w-1/4 mx-auto"/>
                         <h2 className="text-4xl my-3">Let's Get Started!</h2>
-                        <p className="text-xl text-gray-900 mx-10">Pick an interest from your profile to see other users with the same interest.</p>
+                        <h3 className="text-xl lg:text-xl my-5 lg:my-10">Click the button below to begin matching with others.</h3>
+                        {/*<MyInterestsDropdown userInterests={userInterests} />*/}
+                        <Link to="/connect"><button className="bg-gray-900 text-gray-200 border-1 border-gray-200 rounded-xl mt-6 py-3 px-6 w-3/4 md:w-1/2 mx-auto lg:order-2 hover:cursor-pointer">Begin Matching</button></Link>
+
+                        {/*<p className="text-xl text-gray-900 mx-10">Pick an interest from your profile to see other users with the same interest.</p>*/}
                         {/*<hr className="mt-10 lg:mb-10 w-3/5 mx-auto"/>*/}
                         {/*<p className="hidden lg:block text-xl text-gray-900 mb-2 font-bold">Want to start a new group instead?</p>*/}
-                    </div>
-                    <div className="text-center content-center">
-                        <h2 className="text-3xl lg:text-4xl my-5 lg:my-10">Find People Interested In:</h2>
-                        <MyInterestsDropdown  />
-                        <button className="bg-gray-900 text-gray-200 border-1 border-gray-200 rounded-xl mt-6 py-3 px-6 w-3/4 md:w-1/2 mx-auto lg:order-2 hover:cursor-pointer"><Link to="/connect">Begin Matching</Link></button>
-
                     </div>
                 </div>
                 <div className="grid grid-cols-1 lg:grid-cols-2 mt-5 lg:mt-0 container mx-auto">
