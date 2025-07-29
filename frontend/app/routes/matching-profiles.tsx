@@ -1,12 +1,13 @@
 import {MyInterestsDropdown} from "~/components/my-interests-dropdown";
 import {ProfileMatchingSection} from "~/components/profile-matching-section";
-import {Link, useParams, useSearchParams} from "react-router";
+import {Form, Link, redirect, useParams, useSearchParams} from "react-router";
 import type {Route} from "../../.react-router/types/app/+types/root";
-import {getSession} from "~/utils/session.server";
+import {commitSession, getSession} from "~/utils/session.server";
 import {UserInterestSchema} from "~/utils/models/user-interest.model";
 import {InterestSchema} from "~/utils/models/interest.model";
 import {UserSchema} from "~/utils/models/user-schema";
 import type {User} from "~/utils/types/user";
+import {jwtDecode} from "jwt-decode";
 
 
 export async function loader ({ request }: Route.LoaderArgs) {
@@ -52,6 +53,65 @@ export async function loader ({ request }: Route.LoaderArgs) {
     return {userInterests, interestId, matchingUsers, userId}
 }
 
+export async function action ({request}: Route.ActionArgs, {loaderData}: Route.ComponentProps) {
+    const session = await getSession(
+        request.headers.get("Cookie")
+    )
+    // @ts-ignore
+    const {userInterests, interestId, matchingUsers, userId} = loaderData
+    console.log(matchingUsers)
+    const matchBody = {
+        matchMakerId: userId,
+        matchReceiverId: matchingUsers[0].userId,
+        matchCreated: null,
+        matchAccepted: null,
+    }
+
+    const user = session.get('user')
+    const authorization = session.get('authorization')
+    if (!user || !authorization) {
+        return redirect('/login')
+    }
+
+    const requestHeaders = new Headers()
+    requestHeaders.append('Content-Type', 'application/json')
+    requestHeaders.append('Authorization', session.data?.authorization || '')
+    const cookie = request.headers.get('Cookie')
+    if (cookie) {
+        requestHeaders.append('Cookie', cookie)
+    }
+
+    const response = await fetch(`${process.env.REST_API_URL}/matching`, {
+        method: "POST",
+        headers: requestHeaders,
+        body: JSON.stringify(matchBody)
+
+    })
+
+    const headers = response.headers
+    const data = await response.json();
+    if (data.status === 200) {
+        const authorization = headers.get('authorization');
+        if (!authorization) {
+            session.flash('error', 'profile is malformed')
+            return {success: false, error: 'internal server error try again later', status: 400}
+        }
+        const parsedJwtToken = jwtDecode(authorization) as any
+        const validationResult = UserSchema.safeParse(parsedJwtToken.auth);
+        if (!validationResult.success) {
+            session.flash('error', 'profile is malformed')
+            return {success: false, error: 'internal server error try again later', status: 400}
+        }
+        session.set('authorization', authorization);
+        session.set('user', validationResult.data)
+        const responseHeaders = new Headers()
+        responseHeaders.append('Set-Cookie', await commitSession(session))
+        return redirect("/", {headers: responseHeaders});
+    }
+    return {success: false, error: data.message, status: data.status};
+
+}
+
 export default function MatchingProfiles({loaderData}: Route.ComponentProps) {
     // @ts-ignore
     let {userInterests, interestId, matchingUsers, userId} = loaderData;
@@ -88,9 +148,13 @@ export default function MatchingProfiles({loaderData}: Route.ComponentProps) {
                         <p className="text-red-900 text-xl text-center pt-20">NO FRIENDS, GO OUTSIDE.</p>
                         ):(
                         <ProfileMatchingSection user={matchingUsers[0]}/>
-                        )}
 
+                )}
+                    <Form method="post">
+                        <button className="bg-gray-900 text-gray-200 border-1 border-gray-200 rounded-xl w-full py-3 px-6 hover:cursor-pointer">Request to Connect</button>
+                    </Form>
                 </div>
+
             </div>
         </>
     )

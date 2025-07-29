@@ -33,7 +33,6 @@ export function ProfileMatchingSection({user}: Props) {
                 </div>
                 <div className="flex justify-between gap-5">
                     <RequestSentButton onClick={handleOpen} />
-                    <button className="bg-gray-200 text-gray-900 border-1 border-gray-900 rounded-xl w-full py-3 px-6 hover:cursor-pointer"><Link to="/connect">Next Profile</Link></button>
                 </div>
                 {openModal && (
                     <div className="fixed inset-0 flex justify-center items-center bg-opacity-40 z-50">
