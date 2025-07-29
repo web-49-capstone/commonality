@@ -11,7 +11,7 @@ export default [
         index("routes/home.tsx"),
         route("connect/:interestId?", "routes/matching-profiles.tsx"),
         route("profile", "routes/my-profile.tsx"),
-        route("user", "routes/user-profile-page.tsx"),
+        route("user/:partnerId?", "routes/user-profile-page.tsx"),
         // route("messages", "routes/view-connections-messages.tsx"),
         layout("layouts/messaging.tsx", [
             route("chat/:partnerId?", "routes/main-chat.tsx"),

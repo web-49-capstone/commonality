@@ -5,7 +5,7 @@ import {MessageSchema} from "~/utils/models/message.model";
 import {getSession} from "~/utils/session.server";
 import type {Route} from "./+types/main-chat";
 import * as z from "zod/v4";
-import {Form, redirect, useActionData, useLocation, useParams, useRevalidator} from "react-router";
+import {Form, Link, redirect, useActionData, useLocation, useParams, useRevalidator} from "react-router";
 import {MessageBubble} from "~/components/MessageBubble";
 import {UserSchema} from "~/utils/models/user-schema";
 import {v7 as uuidv7} from "uuid"
@@ -154,13 +154,17 @@ export default function MainChat({loaderData} : Route.ComponentProps) {
                     <div className="flex items-center">
                         <div className="relative">
                             <div
-                                className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white">
-                                <img
+                                className="w-15 h-15 rounded-full  flex items-center justify-center text-white">
+                            <Link to={`/user/${partnerInfo?.userId}`}    >
+                            <img
+                                    className="rounded-full"
                                     alt={`${partnerInfo?.userName} profile picture`}
                                     key={partnerInfo?.userImgUrl}
                                     src={partnerInfo?.userImgUrl}
                                 />
-                            </div>
+                            </Link>
+
+                        </div>
                         </div>
                         <div className="ml-3">
                             <h2 className="font-semibold text-gray-900">{partnerInfo?.userName}</h2>
@@ -200,8 +204,7 @@ export default function MainChat({loaderData} : Route.ComponentProps) {
                         </div>
 
                 </div>
-
-            </div>
+                </div>
             </div>
         </>
     )

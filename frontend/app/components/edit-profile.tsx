@@ -39,7 +39,7 @@ export function EditProfile (props: Props) {
                 {/* ✅ Wrapper box around everything */}
                 <div className="w-full bg-white shadow-xl rounded-3xl p-6 sm:p-10 space-y-10 transition-all">
 
-                    <Form method="post" encType="multipart/form-data" id="updateProfile"
+                    <Form method="put" encType="multipart/form-data" id="updateProfile"
                           className="w-full flex flex-col lg:flex-row justify-between items-start gap-8">
 
                         {/* LEFT SIDE */}

@@ -7,16 +7,14 @@ import {UserSchema} from "~/utils/models/user-schema";
 import {redirect} from "react-router";
 
 export async function editProfileAction(request: Request) {
+
 // pull the userId from the session
     const session = await getSession(
         request.headers.get("Cookie")
     )
 
     const uploadHandler = async (file: FileUpload | string | undefined | null) => {
-        if (!file) return undefined;
-
-        if (typeof file === 'string') {
-
+        if (!file || typeof file === "string" || !file.stream) {
             return undefined;
         }
 
@@ -91,7 +89,7 @@ export async function editProfileAction(request: Request) {
         session.set('user', validationResult.data)
         const responseHeaders = new Headers()
         responseHeaders.append('Set-Cookie', await commitSession(session))
-        return redirect("/", {headers: responseHeaders});
+        return redirect("/profile", {headers: responseHeaders});
     }
     return {success: false, error: data.message, status: data.status};
 }
