@@ -34,7 +34,7 @@ export default function CreateProfile({loaderData}: Route.ComponentProps) {
                 Welcome to Commonality!
             </h1>
             <h2 className="text-lg sm:text-xl text-center pb-8 text-gray-600 max-w-xl mx-auto">
-                Let’s create your profile and help others connect with you.
+                Let's create your profile and help others connect with you.
             </h2>
 
            <EditProfile user={initialUser} interests={interests} errorMessage={actionData?.error} q={q} userInterests={userInterests}/>
