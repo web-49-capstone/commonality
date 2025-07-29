@@ -8,6 +8,8 @@ import {InterestSchema} from "~/utils/models/interest.model";
 import {UserSchema} from "~/utils/models/user-schema";
 import type {User} from "~/utils/types/user";
 import {jwtDecode} from "jwt-decode";
+import {RequestSentContent} from "~/components/request-sent-modal";
+import React, {useState} from "react";
 
 
 export async function loader ({ request }: Route.LoaderArgs) {
@@ -60,14 +62,19 @@ export async function action ({request}: Route.ActionArgs) {
 
     const formData = await request.formData()
     const matchReceiverId = Object.fromEntries(formData)
-
+    let actionType = formData.get('actionType')
+    if (actionType === "false") {
+        actionType = false
+    } else {
+        actionType = null
+    }
     console.log("userIds: ", formData)
     // @ts-ignore
     const matchBody = {
         matchMakerId: session.data.user?.userId,
         matchReceiverId: matchReceiverId.userId,
         matchCreated: null,
-        matchAccepted: null,
+        matchAccepted: actionType,
     }
 console.log(matchBody)
     const user = session.get('user')
@@ -124,6 +131,12 @@ export default function MatchingProfiles({loaderData}: Route.ComponentProps) {
     //     return newMatchingUsers = matchingUsers.shift()
     // }
 
+    const [openModal, setOpenModal] = useState(false)
+
+    const handleOpen = () => {
+        setOpenModal(true)
+        setTimeout(() => setOpenModal(false), 1500)
+    }
 
     return(
         <>
@@ -161,10 +174,17 @@ export default function MatchingProfiles({loaderData}: Route.ComponentProps) {
                     ):(
                     <Form method="post">
                         <input type="hidden" name="userId" value={matchingUsers[0]?.userId} />
-                        <button className="bg-gray-900 text-gray-200 border-1 border-gray-200 rounded-xl w-full py-3 px-6 hover:cursor-pointer">Request to Connect</button>
+                    <button onClick={handleOpen} className="bg-gray-900 text-gray-200 border-1 border-gray-200 rounded-xl w-full py-3 px-6 hover:cursor-pointer" name="actionType" value={null}>Request to Connect</button>
+                    <button className="bg-gray-300 text-gray-900 border-1 border-gray-200 rounded-xl w-full py-3 px-6 hover:cursor-pointer" name="actionType" value={false}>Next Profile</button>
                     </Form>)}
                 </div>
-
+                {openModal && (
+                    <div className="fixed inset-0 flex justify-center items-center bg-opacity-40 z-50">
+                        <div className="mx-3 p-6 shadow-lg max-w-md w-full bg-blue-200 border-2 border-blue-600 rounded-3xl text-center">
+                            <p className="text-xl text-gray-900 mb-2">Request to connect sent!</p>
+                        </div>
+                    </div>
+                )}
             </div>
         </>
     )

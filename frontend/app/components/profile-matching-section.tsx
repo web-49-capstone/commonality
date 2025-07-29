@@ -8,12 +8,7 @@ type Props = {
 }
 
 export function ProfileMatchingSection({user}: Props) {
-    const [openModal, setOpenModal] = useState(false)
 
-    const handleOpen = () => {
-        setOpenModal(true)
-        setTimeout(() => setOpenModal(false), 5000)
-    }
 
     return(
         <>
@@ -31,16 +26,6 @@ export function ProfileMatchingSection({user}: Props) {
                     <p className="text-lg text-gray-900 font-bold">About {user.userName}:</p>
                     <p className="text-md text-gray-900">{user.userBio}</p>
                 </div>
-                <div className="flex justify-between gap-5">
-                    <RequestSentButton onClick={handleOpen} />
-                </div>
-                {openModal && (
-                    <div className="fixed inset-0 flex justify-center items-center bg-opacity-40 z-50">
-                        <div className="mx-3 p-6 shadow-lg max-w-md w-full bg-blue-200 border-2 border-blue-600 rounded-3xl text-center">
-                            <RequestSentContent user={user} />
-                        </div>
-                    </div>
-                )}
             </div>
         </>
     )
