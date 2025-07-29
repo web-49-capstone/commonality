@@ -53,20 +53,23 @@ export async function loader ({ request }: Route.LoaderArgs) {
     return {userInterests, interestId, matchingUsers, userId}
 }
 
-export async function action ({request}: Route.ActionArgs, {loaderData}: Route.ComponentProps) {
+export async function action ({request}: Route.ActionArgs) {
     const session = await getSession(
         request.headers.get("Cookie")
     )
+
+    const formData = await request.formData()
+    const matchReceiverId = Object.fromEntries(formData)
+
+    console.log("userIds: ", formData)
     // @ts-ignore
-    const {userInterests, interestId, matchingUsers, userId} = loaderData
-    console.log(matchingUsers)
     const matchBody = {
-        matchMakerId: userId,
-        matchReceiverId: matchingUsers[0].userId,
+        matchMakerId: session.data.user?.userId,
+        matchReceiverId: matchReceiverId.userId,
         matchCreated: null,
         matchAccepted: null,
     }
-
+console.log(matchBody)
     const user = session.get('user')
     const authorization = session.get('authorization')
     if (!user || !authorization) {
@@ -117,6 +120,9 @@ export default function MatchingProfiles({loaderData}: Route.ComponentProps) {
     let {userInterests, interestId, matchingUsers, userId} = loaderData;
     // matchingUsers = matchingUsers.filter((user: User) => user.userId !== userId)
 
+    // if (matchingUsers.length > 1) {
+    //     return newMatchingUsers = matchingUsers.shift()
+    // }
 
 
     return(
@@ -150,9 +156,13 @@ export default function MatchingProfiles({loaderData}: Route.ComponentProps) {
                         <ProfileMatchingSection user={matchingUsers[0]}/>
 
                 )}
+                    {matchingUsers.length === 0 ? (
+                        <p></p>
+                    ):(
                     <Form method="post">
+                        <input type="hidden" name="userId" value={matchingUsers[0]?.userId} />
                         <button className="bg-gray-900 text-gray-200 border-1 border-gray-200 rounded-xl w-full py-3 px-6 hover:cursor-pointer">Request to Connect</button>
-                    </Form>
+                    </Form>)}
                 </div>
 
             </div>
