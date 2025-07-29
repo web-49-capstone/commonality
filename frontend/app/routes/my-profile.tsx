@@ -1,18 +1,32 @@
-import { useEffect, useState } from "react";
-import {ProfilePage} from "~/components/profile-page";
-import type {User} from "~/utils/types/user";
-export default function MyProfile() {
-    const [profile, setProfile] = useState<User | null>(null);
+import type {Route} from "../../.react-router/types/app/routes/+types/create-profile";
+import {getProfileLoaderData} from "~/utils/loaders/profile-loader";
+import {editProfileAction} from "~/utils/actions/edit-profile-action";
+import {redirect, useActionData} from "react-router";
+import {EditProfile} from "~/components/edit-profile";
+import React from "react";
 
-    useEffect(() => {
-        // Replace with our backend data later
-        const stored = localStorage.getItem("profile");
-        if (stored) {
-            setProfile(JSON.parse(stored));
-        }
-    }, []);
+export async function loader({request}: Route.LoaderArgs) {
+    return await getProfileLoaderData(request);
+}
 
-    if (!profile) return <p className="text-center mt-10">Profile not found.</p>;
+export async function action({request}: Route.ActionArgs) {
+    return await editProfileAction(request);
 
-    return <ProfilePage profile={profile} isCurrentUser={true} />;
+}
+
+
+
+export default function MyProfile({loaderData}: Route.ComponentProps) {
+    const {session, interests, q, userInterests} = loaderData
+    const initialUser = session.data.user
+    if (!initialUser) {
+        return redirect("/login")
+    }
+    const actionData = useActionData()
+
+    return (
+        <>
+            <EditProfile user={initialUser} interests={interests} errorMessage={actionData?.error} q={q} userInterests={userInterests}/>
+        </>
+    )
 }
