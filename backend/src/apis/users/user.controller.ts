@@ -54,7 +54,7 @@ export async function putUserController (request: Request, response: Response): 
 
         const jwt = request.session.jwt ?? ''
         const signature = request.session.signature ?? ''
-        const parsedJwt = verify(jwt, signature);
+        const parsedJwt = verify(jwt, signature) as any;
         if (typeof parsedJwt === "string") {
             response.json({status: 400, data: null,message:"Invalid JWT Token" })
         }

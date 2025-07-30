@@ -27,7 +27,7 @@ export default function MyProfile({loaderData}: Route.ComponentProps) {
     }
     const actionData = useActionData()
     React.useEffect(() => {
-        if (navigation.state === "idle" && editMode) {
+        if (navigation.state === "submitting" && editMode) {
             setEditMode(false);
         }
     }, [navigation.state]);

@@ -8,24 +8,23 @@ type Props = {message: Message, userId: string}
 
 export function MessageBubble  (props: Props)  {
     const {message, userId} = props;
+    const isOwn = message.messageSenderId === userId;
     return (
-        <div className={`flex ${message.messageSenderId === userId ? 'justify-end' : 'justify-start'}`}>
-            <div className={`max-w-xs lg:max-w-md px-4 py-2 rounded-2xl ${
-                message.messageSenderId === userId
-                    ? 'bg-blue-500 text-white rounded-br-md'
-                    : 'bg-white text-gray-900 rounded-bl-md border border-gray-200'
-            }`}>
-                <p className="text-xl">{message.messageBody}</p>
-                <p className={`text-md mt-1 ${
-                    message.messageSenderId === userId ? 'text-blue-100' : 'text-gray-500'
-                }`}>
+        <div className={`flex ${isOwn ? 'justify-end' : 'justify-start'} mb-3`}>
+            <div className={`relative max-w-xs lg:max-w-md px-5 py-3 rounded-3xl shadow-md transition-all duration-200
+                ${isOwn
+                    ? 'bg-gradient-to-br from-blue-500 to-blue-400 text-white rounded-br-xl'
+                    : 'bg-white text-gray-900 rounded-bl-xl border border-gray-200'}
+            `}>
+                <p className="text-base leading-relaxed break-words">{message.messageBody}</p>
+                <span className={`absolute -bottom-5 right-2 text-xs ${isOwn ? 'text-blue-100' : 'text-gray-400'}`}
+                    style={{fontSize: '0.75rem'}}>
                     {message.messageSentAt.toLocaleTimeString([], {
                         hour: 'numeric',
                         minute: '2-digit'
                     })}
-                </p>
+                </span>
             </div>
         </div>
     );
 }
-

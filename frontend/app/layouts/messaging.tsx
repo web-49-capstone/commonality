@@ -42,7 +42,7 @@ export async function loader ({request} : Route.LoaderArgs) {
         })
 
 
-    const lastMessage = PartnerMessageSchema.array().parse(lastMessageFetch.data)
+    const lastMessage = PartnerMessageSchema.array().parse(lastMessageFetch.data || [])
 
     return {session, lastMessage }
 }

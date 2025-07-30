@@ -2,7 +2,7 @@ import {MyInterestsDropdown} from "~/components/my-interests-dropdown";
 import {ProfileMatchingSection} from "~/components/profile-matching-section";
 import {Form, Link, redirect, useLoaderData} from "react-router";
 // import type {ActionArgs, LoaderArgs} from "@remix-run/node";
-import {UserSchema} from "~/utils/models/user-schema";
+import {UserSchema, UserUpdatedSchema} from "~/utils/models/user-schema";
 import {InterestSchema} from "~/utils/models/interest.model";
 import {MatchSchema} from "~/utils/models/match-schema";
 import {getSession} from "~/utils/session.server";
@@ -41,7 +41,7 @@ export async function loader({ request }: Route.LoaderArgs) {
         `${process.env.REST_API_URL}/users/userInterestInterestId/${interestId}`,
         {headers: requestHeaders}
     ).then(res => res.json());
-    const matchingUsers = UserSchema.array().parse(sharedInterestsFetch.data || []);
+    const matchingUsers = UserUpdatedSchema.array().parse(sharedInterestsFetch.data || []);
 
     let match = null;
     let matchDirection = null;

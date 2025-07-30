@@ -1,10 +1,9 @@
-import React, {useState} from "react";
-import {RequestSentButton, RequestSentContent} from "~/components/request-sent-modal";
-import {Link} from "react-router";
-import type {User} from "~/utils/types/user";
+import React from "react";
+
+import type {UserUpdated} from "~/utils/models/user-schema";
 
 type Props = {
-    user: User
+    user: UserUpdated
 }
 
 export function ProfileMatchingSection({user}: Props) {

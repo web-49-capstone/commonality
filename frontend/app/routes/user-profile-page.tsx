@@ -3,6 +3,7 @@ import {getSession} from "~/utils/session.server";
 import {UserSchema} from "~/utils/models/user-schema";
 import {InterestSchema} from "~/utils/models/interest.model";
 import type {Route} from "../../.react-router/types/app/+types/root";
+import type {Interest} from "~/utils/types/interest";
 
 export async function loader({params, request}: Route.LoaderArgs) {
     const session = await getSession(request.headers.get("Cookie"));
@@ -63,7 +64,7 @@ export default function UserProfilePage({loaderData}: Route.ComponentProps) {
                     <div>
                         <h3 className="font-medium text-gray-700 mb-1">Interests</h3>
                         <ul className="flex flex-wrap gap-2">
-                            {userInterests.map((interest) => (
+                            {userInterests.map((interest: Interest) => (
                                 <li
                                     key={interest.interestId}
                                     className="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm"
