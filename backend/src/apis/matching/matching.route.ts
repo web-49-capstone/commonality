@@ -1,7 +1,11 @@
 import {Router} from 'express'
 import {
-    getAcceptedMatchesByUserIdController, getDeclinedMatchesByUserIdController, getPendingMatchesByUserIdController,
-    postMatchController, putMatchController
+    getAcceptedMatchesByUserIdController,
+    getCheckIfMatchExistsBetweenTwoUsers,
+    getDeclinedMatchesByUserIdController,
+    getPendingMatchesByUserIdController,
+    postMatchController,
+    putMatchController
 } from './matching.controller'
 import {isLoggedInController} from "../../utils/controllers/is-logged-in.controller.ts";
 
@@ -16,8 +20,8 @@ router.route('/accepted/:userId')
     .get(isLoggedInController, getAcceptedMatchesByUserIdController)
 router.route('/declined/:userId')
     .get(isLoggedInController, getDeclinedMatchesByUserIdController)
-router.route('/pending/:userId')
-    .get(isLoggedInController, getPendingMatchesByUserIdController)
+router.route('/pending/:matchMakerId')
+    .get(isLoggedInController, getCheckIfMatchExistsBetweenTwoUsers)
 
 router.route('/updateMatch/:matchMakerId/:matchReceiverId')
     .put(isLoggedInController, putMatchController)

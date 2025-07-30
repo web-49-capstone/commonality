@@ -10,6 +10,8 @@ import {jwtDecode} from "jwt-decode";
 import {RequestSentContent} from "~/components/request-sent-modal";
 import React, {useState} from "react";
 import {commitSession, getSession} from "~/utils/session.server";
+import {uuidv7} from "zod/v4";
+import {MatchSchema} from "~/utils/models/match-schema";
 
 
 export async function loader ({ request }: Route.LoaderArgs) {
@@ -51,10 +53,28 @@ export async function loader ({ request }: Route.LoaderArgs) {
         })
 
     const matchingUsers = UserSchema.array().parse(sharedInterestsFetch.data || [])
-    console.log("this",matchingUsers)
 
+    if (matchingUsers.length !== 0) {
+        const matchExists = await fetch(`${process.env.REST_API_URL}/matching/pending/${matchingUsers[0].userId}`, {
+            method: 'GET',
+            headers: requestHeaders
+        })
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error('failed to fetch matches')
+                }
+                return res.json()
+            })
+        console.log("DOES MATCH EXIST",matchExists)
+
+        const match = MatchSchema.parse(matchExists.data)
+        return {userInterests, interestId, matchingUsers, userId, match}
+    }
     return {userInterests, interestId, matchingUsers, userId}
 }
+// IN ACTION, NEED TO CHECK IF MATCH EXISTS (ALREADY PULLED INTO LOADER) AND MAKE SURE IT PUTS IDS IN THE RIGHT PLACE BEFORE TRIGGERING THE CORRECT FETCH
+// if match exists, button actiontypes should be true or false (for decline button) and trigger PUT
+// if match does not exist, actiontypes should be null or false and trigger POST
 
 export async function action ({request}: Route.ActionArgs) {
     const session = await getSession(
@@ -66,22 +86,18 @@ export async function action ({request}: Route.ActionArgs) {
     let actionType = formData.get('actionType')
     if (actionType === "false") {
         actionType = false
+    } else if (matchReceiverId.userId === session.data.user?.userId && actionType === null) {
+        actionType = true
     } else {
         actionType = null
     }
-    if (matchReceiverId.userId === session.data.user?.userId && actionType === null) {
-        actionType = true
-    }
 
-    console.log("userIds: ", formData)
-    // @ts-ignore
-    const matchBody = {
-        matchMakerId: session.data.user?.userId,
-        matchReceiverId: matchReceiverId.userId,
+        const matchBody = {
+        matchMakerId: matchReceiverId.makerId,
+        matchReceiverId: matchReceiverId.receiverId,
         matchCreated: null,
         matchAccepted: actionType,
     }
-console.log(matchBody)
     const user = session.get('user')
     const authorization = session.get('authorization')
     if (!user || !authorization) {
@@ -96,29 +112,33 @@ console.log(matchBody)
         requestHeaders.append('Cookie', cookie)
     }
 
-    if (matchReceiverId.userId === session.data.user?.userId && actionType === true || false) {
-        const response = await fetch(`${process.env.REST_API_URL}/matching/updateMatch/${matchMakerId.userId}/${matchReceiverId.userId}`, {
+    if (matchReceiverId.userId === session.data.user?.userId && actionType === true) {
+        const response = await fetch(`${process.env.REST_API_URL}/matching/updateMatch/${matchReceiverId.makerId}/${matchReceiverId.receiverId}`, {
             method: "PUT",
             headers: requestHeaders,
             body: JSON.stringify(matchBody)
-
         })
-        if (actionType === true) {
-            const messageResponse = await fetch(`process.env.REST_API_URL}/message`, {
-                method: "POST",
-                headers: requestHeaders,
-                body: JSON.stringify({
-                    messageId: uuidv7(),
-                    messageSenderId: user.userId,
-                    messageReceiverId: matchReceiverId.userId,
-                    messageBody: "You have a new match!",
-                    messageOpened: false,
-                    messageSentAt: null
-                })
+        const messageResponse = await fetch(`process.env.REST_API_URL}/message`, {
+            method: "POST",
+            headers: requestHeaders,
+            body: JSON.stringify({
+                messageId: uuidv7(),
+                messageSenderId: user.userId,
+                messageReceiverId: matchReceiverId.makerId,
+                messageBody: "You have a new match!",
+                messageOpened: false,
+                messageSentAt: null
             })
-            const data = await messageResponse.json()
-            return redirect(`/chat/${matchMakerId.userId}`)
-        }
+        })
+        const data = await messageResponse.json()
+        return redirect(`/chat/${matchReceiverId.makerId}`)
+    }
+    if (matchReceiverId.userId === session.data.user?.userId && actionType === false) {
+        const response = await fetch(`${process.env.REST_API_URL}/matching/updateMatch/${matchReceiverId.makerId}/${matchReceiverId.receiverId}`, {
+            method: "PUT",
+            headers: requestHeaders,
+            body: JSON.stringify(matchBody)
+        })
     }
 
     const response = await fetch(`${process.env.REST_API_URL}/matching`, {
@@ -154,11 +174,28 @@ console.log(matchBody)
 
 export default function MatchingProfiles({loaderData}: Route.ComponentProps) {
     // @ts-ignore
-    let {userInterests, interestId, matchingUsers, userId} = loaderData;
-    // matchingUsers = matchingUsers.filter((user: User) => user.userId !== userId)
+    let {userInterests, match, interestId, matchingUsers, userId} = loaderData;
+    let receiverId = ''
+    let makerId = userId
 
-    // if (matchingUsers.length > 1) {
-    //     return newMatchingUsers = matchingUsers.shift()
+    if (matchingUsers.length > 0) {
+        makerId = userId
+        receiverId = matchingUsers[0].userId
+    } else if (match && match.matchReceiverId === userId && matchingUsers.length > 0) {
+        makerId = matchingUsers[0].userId
+        receiverId = userId
+    }
+
+
+
+
+
+    // if (matchingUsers.length !== 0) {
+    //     receiverId = userId
+    //     makerId = matchingUsers[0].userId
+    // } else if (match.matchReceiverId === userId) {
+    //     receiverId = userId
+    //     makerId = matchingUsers[0].userId
     // }
 
     const [openModal, setOpenModal] = useState(false)
@@ -203,8 +240,10 @@ export default function MatchingProfiles({loaderData}: Route.ComponentProps) {
                         <p></p>
                     ):(
                     <Form method="post">
-                        <input type="hidden" name="userId" value={matchingUsers[0]?.userId} />
-                    <button onClick={handleOpen} className="bg-gray-900 text-gray-200 border-1 border-gray-200 rounded-xl w-full py-3 px-6 hover:cursor-pointer" name="actionType" value={null | true}>Request to Connect</button>
+                        <input type="hidden" name="receiverId" value={receiverId} />
+                        <input type="hidden" name="makerId" value={makerId} />
+
+                        <button onClick={handleOpen} className="bg-gray-900 text-gray-200 border-1 border-gray-200 rounded-xl w-full py-3 px-6 hover:cursor-pointer" name="actionType" value={null}>Connect with {matchingUsers[0]?.userName}</button>
                     <button className="bg-gray-300 text-gray-900 border-1 border-gray-200 rounded-xl w-full py-3 px-6 hover:cursor-pointer" name="actionType" value={false}>Next Profile</button>
                     </Form>)}
                 </div>

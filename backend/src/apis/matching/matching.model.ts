@@ -40,6 +40,20 @@ export async function updateMatch (matchMakerId: string, matchReceiverId: string
     return 'Match updated successfully'
 }
 
+//select all matches for a user whether they are receiver or maker
+export async function selectMatchesByUserId (userId: string): Promise<Match[]|null> {
+    const rowList = await sql`SELECT match_maker_id, match_receiver_id, match_accepted, match_created FROM match WHERE match_maker_id = ${userId} OR match_receiver_id = ${userId}`
+    return MatchSchema.array().parse(rowList)
+}
 
 
+export async function selectPendingMatchesByUserId (userId: string): Promise<Match[]|null> {
+    const rowList = await sql`SELECT match_maker_id, match_receiver_id, match_accepted, match_created FROM match WHERE match_receiver_id = ${userId} AND match_accepted IS NULL`
+    return MatchSchema.array().parse(rowList)
+}
 
+export async function checkIfMatchExistsBetweenTwoUsers (matchReceiverId: string, matchMakerId: string): Promise<Match|null> {
+    const rowList = await sql`SELECT match_maker_id, match_receiver_id, match_accepted, match_created FROM match WHERE (match_receiver_id = ${matchReceiverId} AND match_maker_id = ${matchMakerId}) AND match_accepted IS NULL`
+    const result = MatchSchema.array().parse(rowList)
+    return result[0] ?? null
+}

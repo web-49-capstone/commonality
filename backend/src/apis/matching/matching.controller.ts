@@ -2,7 +2,7 @@ import {
     MatchSchema,
     type Match,
     selectAcceptedMatchesByUserId,
-    insertMatch, updateMatch,
+    insertMatch, updateMatch, selectPendingMatchesByUserId, checkIfMatchExistsBetweenTwoUsers,
 } from "./matching.model.ts"
 import {serverErrorResponse, zodErrorResponse} from "../../utils/response.utils.ts";
 import type {Request, Response} from "express"
@@ -84,23 +84,18 @@ export async function getDeclinedMatchesByUserIdController (request: Request, re
         serverErrorResponse(response, [])
     }
 }
-export async function getPendingMatchesByUserIdController (request: Request, response: Response): Promise<void> {
+export async function getCheckIfMatchExistsBetweenTwoUsers (request: Request, response: Response): Promise<void> {
     try {
-        const validationResult = PublicUserSchema.pick({userId:true}).safeParse(request.params)
+        const validationResult = MatchSchema.pick({matchMakerId:true}).safeParse(request.params)
         if (!validationResult.success) {
             zodErrorResponse(response, validationResult.error)
             return
         }
-        const {userId} = validationResult.data
-        // const {matchAccepted} = validationResult.data
-        const user = request.session?.user
-        const userIdFromSession = user?.userId
-        if (userId !== userIdFromSession) {
-            response.json({status: 400, message: 'you are not allowed to preform this task', data: null})
-            return
-        }
+        const {matchMakerId} = validationResult.data
+        const userFromSession = request.session?.user
+        const matchReceiverId = userFromSession?.userId ?? ''
 
-        const data = await selectAcceptedMatchesByUserId(userIdFromSession, null)
+        const data = await checkIfMatchExistsBetweenTwoUsers(matchReceiverId, matchMakerId)
         const status: Status = {status: 200, message: null, data}
         response.json (status)
     } catch (error) {
@@ -138,3 +133,4 @@ export async function putMatchController (request: Request, response: Response):
         serverErrorResponse(response, null)
     }
 }
+
