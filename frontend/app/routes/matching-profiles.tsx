@@ -14,9 +14,9 @@ export async function loader({ request }: Route.LoaderArgs) {
     const url = new URL(request.url);
     const interestId = url.searchParams.get("interestId");
 
-    if (!interestId) {
-        return { userInterests: [], interestId: null, matchingUsers: [], userId: null, match: null, matchDirection: null };
-    }
+    // if (!interestId) {
+    //     return { userInterests: [], interestId: null, matchingUsers: [], userId: null, match: null, matchDirection: null };
+    // }
 
     const session = await getSession(request.headers.get("Cookie"));
     const userId = session.data.user?.userId;

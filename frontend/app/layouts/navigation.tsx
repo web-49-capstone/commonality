@@ -32,7 +32,7 @@ export async function loader({request, params}: Route.LoaderArgs) {
             return res.json()
         })
     console.log("MESSAGES: ", response)
-    return {unreadMessages: response.data}
+    return {unreadMessages: response.data || []}
 }
 
 export default function Navigation({loaderData}: Route.ComponentProps) {
@@ -41,6 +41,7 @@ export default function Navigation({loaderData}: Route.ComponentProps) {
     const mobileNavClasses = "flex flex-col items-center gap-2 text-md hover:text-blue-600 hover:border-b-2 transition-colors"
     const desktopCurrentNavClasses = "flex items-center gap-2 text-lg text-blue-700 border-b-2 border-blue-700 transition-colors"
     const mobileCurrentNavClasses = "flex flex-col items-center gap-2 text-md text-blue-600 border-b-2 transition-colors"
+
 
     return (
         <>

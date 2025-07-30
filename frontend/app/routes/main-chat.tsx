@@ -131,7 +131,6 @@ function useAutoRevalidate(interval = 10000) {
 
 
 export default function MainChat({loaderData}: Route.ComponentProps) {
-    // @ts-ignore
     const {session: {user}, messages, partnerInfo} = loaderData;
     const actionData = useActionData<{ success: boolean }>();
     const formRef = useRef<HTMLFormElement>(null);
