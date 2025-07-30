@@ -1,7 +1,6 @@
 import type {User} from "~/utils/models/user-schema";
 import {createCookieSessionStorage} from "react-router";
 import * as process from "node:process";
-console.log('Session secret,',process.env.SESSION_SECRET)
 
 type SessionData = {
     user: User

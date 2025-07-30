@@ -33,7 +33,6 @@ export async function editProfileAction(request: Request) {
 
 
     const formData = await parseFormData(request, uploadHandler)
-    console.log("formData: ", formData)
     const userInfo = Object.fromEntries(formData)
     const geocoder = new Geocodio(`${process.env.GEOCODIO_API_KEY}`);
     const location = await geocoder.geocode(`${userInfo.userCity}, ${userInfo.userState}`, [], 1)
@@ -55,7 +54,6 @@ export async function editProfileAction(request: Request) {
         userLat,
         userLng
     }
-    console.log("updated user info: ", updatedUser)
 
     const requestHeaders = new Headers()
     requestHeaders.append('Content-Type', 'application/json')

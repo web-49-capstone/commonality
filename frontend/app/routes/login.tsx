@@ -51,7 +51,6 @@ try {
     const authorization = headers.get('authorization');
 
     const expressSessionCookie = headers.get('Set-Cookie');
-    console.log(result, authorization);
 if(result.status !== 200 || !authorization) {
     return {success: false, error: result.message, status: 400};
 }

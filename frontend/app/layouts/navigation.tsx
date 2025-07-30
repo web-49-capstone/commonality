@@ -31,7 +31,6 @@ export async function loader({request, params}: Route.LoaderArgs) {
             }
             return res.json()
         })
-    console.log("MESSAGES: ", response)
     return {unreadMessages: response.data || []}
 }
 

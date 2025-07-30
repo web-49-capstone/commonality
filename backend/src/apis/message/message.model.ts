@@ -98,7 +98,6 @@ export async function selectLastMessagesWithPartnerInfo(userId: string): Promise
         ORDER BY partner_id, message_sent_at DESC;
     `;
 
-    console.log("Returned message rows:", rows);
     return PartnerMessageSchema.array().parse(rows);
 }
 

@@ -149,7 +149,6 @@ export async function action({ request }: Route.ActionArgs) {
         });
 
         if (matchDirection === 'reverse' && acceptedStatus === true) {
-            console.log("Match accepted. Attempting to post message...");
             try {
                 const messageResponse = await fetch(`${process.env.REST_API_URL}/message`, {
                     method: "POST",
@@ -164,13 +163,11 @@ export async function action({ request }: Route.ActionArgs) {
                     }),
                 });
 
-                console.log("Message POST response status:", messageResponse.status);
 
                 if (!messageResponse.ok) {
                     const errorText = await messageResponse.text();
                     console.error("Failed to post message:", errorText);
                 } else {
-                    console.log("Successfully posted message.");
                 }
 
             } catch (error) {

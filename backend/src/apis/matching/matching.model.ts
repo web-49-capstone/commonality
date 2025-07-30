@@ -35,8 +35,6 @@ export async function selectAcceptedMatchesByUserId (userId: string, matchAccept
 
 export async function updateMatch (matchMakerId: string, matchReceiverId: string, matchAccepted: boolean| null) : Promise<string> {
     const result = await sql `UPDATE match SET match_accepted = ${matchAccepted} WHERE match_maker_id = ${matchMakerId} AND match_receiver_id = ${matchReceiverId}`
-    console.log(result)
-    console.log(matchMakerId)
     return 'Match updated successfully'
 }
 

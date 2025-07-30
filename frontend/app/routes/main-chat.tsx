@@ -80,7 +80,6 @@ export async function action({request, params}: Route.ActionArgs) {
     const formData = await request.formData()
     const newMessage = Object.fromEntries(formData)
     const partnerId = params?.partnerId
-    console.log(partnerId)
 
     const message = {
         messageId: uuidv7(),
@@ -90,7 +89,6 @@ export async function action({request, params}: Route.ActionArgs) {
         messageOpened: false,
         messageSentAt: null
     }
-    console.log(message)
 
     const requestHeaders = new Headers()
     requestHeaders.append('Content-Type', 'application/json')
@@ -107,7 +105,6 @@ export async function action({request, params}: Route.ActionArgs) {
         body: JSON.stringify(message)
     })
     const data = await response.json();
-    console.log(data)
     if (!response.ok) {
         throw new Error('failed to send message')
     }

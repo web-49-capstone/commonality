@@ -20,7 +20,6 @@ export async function getProfileLoaderData(request: Request) {
             }
             return res.json()
         })
-    // console.log(response)
     const userInterests = InterestSchema.array().parse(response.data)
     return {session, interests, q, userInterests}
 }
