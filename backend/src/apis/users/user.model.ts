@@ -104,9 +104,12 @@ export async function updatePublicUser (user: PublicUser): Promise<string> {
 //     return PublicUserSchema.array().parse(rowList)
 // }
 
-export async function selectPublicUserByInterestId (
+export async function selectPublicUserByInterestId(
     interestId: string,
-    currentUserId: string
+    currentUserId: string,
+    currentUserLat: number,
+    currentUserLng: number,
+    radiusMiles: number = 40
 ): Promise<PublicUser[]> {
     const rowList = await sql`
     SELECT
@@ -119,11 +122,15 @@ export async function selectPublicUserByInterestId (
       u.user_name,
       u.user_state,
       u.user_lat,
-      u.user_lng
+      u.user_lng,
+      haversine(${currentUserLng}, ${currentUserLat}, u.user_lng, u.user_lat) AS distance
     FROM "user" u
     JOIN user_interest ui ON u.user_id = ui.user_interest_user_id
     WHERE ui.user_interest_interest_id = ${interestId}
       AND u.user_id != ${currentUserId}
+      AND u.user_lat IS NOT NULL
+      AND u.user_lng IS NOT NULL
+      AND haversine(${currentUserLng}, ${currentUserLat}, u.user_lng, u.user_lat) <= ${radiusMiles}
       AND (
         NOT EXISTS (
           SELECT 1 FROM match m
@@ -139,7 +146,8 @@ export async function selectPublicUserByInterestId (
             AND m.match_receiver_id = ${currentUserId}
             AND m.match_accepted IS NULL
         )
-      );
+      )
+    ORDER BY distance ASC;
   `;
     return PublicUserSchema.array().parse(rowList);
 }

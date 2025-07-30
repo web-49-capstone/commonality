@@ -118,3 +118,43 @@ INSERT INTO interest (interest_id, interest_name) VALUES ('019837fd-b294-7ea9-ac
 INSERT INTO interest (interest_id, interest_name) VALUES ('019837fd-b294-7339-8d52-17f2b2560bd6', 'Technology');
 INSERT INTO interest (interest_id, interest_name) VALUES ('019837fd-b294-7f00-8f29-86a110bb1b32', 'Machine Learning');
 INSERT INTO interest (interest_id, interest_name) VALUES ('019837fd-b294-7951-b6fd-810279618fd9', 'AI');
+
+
+-- @author Dylan McDonald <dmcdonald21@cnm.edu>
+-- drop the procedure if already defined
+DROP FUNCTION IF EXISTS haversine(FLOAT, FLOAT, FLOAT, FLOAT);
+
+-- function to calculate the distance between two points using the Haversine formula
+-- @param FLOAT originX point of origin, x coordinate (longitude)
+-- @param FLOAT originY point of origin, y coordinate (latitude)
+-- @param FLOAT destinationX point heading out, x coordinate (longitude)
+-- @param FLOAT destinationY point heading out, y coordinate (latitude)
+-- @return FLOAT distance between the points, in miles
+CREATE OR REPLACE FUNCTION haversine(originX FLOAT, originY FLOAT, destinationX FLOAT, destinationY FLOAT)
+    RETURNS FLOAT
+    LANGUAGE plpgsql
+AS $$
+DECLARE
+    -- first, all variables; I don't think you can declare later
+    radius FLOAT;
+    latitudeAngle1 FLOAT;
+    latitudeAngle2 FLOAT;
+    latitudePhase FLOAT;
+    longitudePhase FLOAT;
+    alpha FLOAT;
+    corner FLOAT;
+    distance FLOAT;
+BEGIN
+    -- assign the variables that were declared & use them
+    radius := 3958.7613; -- radius of the earth in miles
+    latitudeAngle1 := RADIANS(originY);
+    latitudeAngle2 := RADIANS(destinationY);
+    latitudePhase := RADIANS(destinationY - originY);
+    longitudePhase := RADIANS(destinationX - originX);
+    alpha := POW(SIN(latitudePhase / 2), 2) + COS(latitudeAngle1) * COS(latitudeAngle2) * POW(SIN(longitudePhase / 2), 2);
+    corner := 2 * ASIN(SQRT(alpha));
+    distance := radius * corner;
+
+    RETURN distance;
+END;
+$$;

@@ -124,7 +124,10 @@ export async function getPublicUserByInterestIdController (request: Request, res
         const userIdFromSession = userFromSession?.userId ?? ''
 
         const {userInterestInterestId} = validationResult.data
-        const data = await selectPublicUserByInterestId(userInterestInterestId, userIdFromSession)
+        const userLat = userFromSession?.userLat ?? 0
+        const userLng = userFromSession?.userLng ?? 0
+        const radius = 40
+        const data = await selectPublicUserByInterestId(userInterestInterestId, userIdFromSession, userLat, userLng, radius)
         const staus: Status = {status: 200, data, message: null}
         response.json(staus)
     } catch (error: any) {
