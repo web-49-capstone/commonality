@@ -148,21 +148,19 @@ export default function MainChat({loaderData}: Route.ComponentProps) {
                 <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-white">
                     <div className="flex items-center">
                         <div className="relative">
-                            <div
-                                className="w-15 h-15 rounded-full  flex items-center justify-center text-white">
+                            <div className="w-[5em] h-[5em] rounded-full overflow-hidden">
                                 <Link to={`/user/${partnerInfo?.userId}`}>
                                     <img
-                                        className="rounded-full"
+                                        className="object-cover w-full h-full"
                                         alt={`${partnerInfo?.userName} profile picture`}
                                         key={partnerInfo?.userImgUrl}
                                         src={partnerInfo?.userImgUrl}
                                     />
                                 </Link>
-
                             </div>
                         </div>
                         <div className="ml-3">
-                            <h2 className="font-semibold text-gray-900">{partnerInfo?.userName}</h2>
+                            <h2 className="font-semibold text-2xl text-gray-900">{partnerInfo?.userName}</h2>
                         </div>
                     </div>
                     <div className="flex gap-3">

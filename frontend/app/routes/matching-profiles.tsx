@@ -293,7 +293,7 @@ export default function MatchingProfiles() {
                     )}
                 </div>
                 {openModal && (
-                    <div className="fixed inset-0 flex justify-center items-center bg-opacity-40 z-50">
+                    <div className="fixed inset-0 flex justify-center items-center backdrop-blur-md z-50">
                         <div
                             className="mx-3 p-6 shadow-lg max-w-md w-full bg-blue-200 border-2 border-blue-600 rounded-3xl text-center">
                             <p className="text-xl text-gray-900 mb-2">Request to connect sent!</p>
