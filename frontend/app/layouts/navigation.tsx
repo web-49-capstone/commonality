@@ -80,7 +80,7 @@ export default function Navigation({loaderData}: Route.ComponentProps) {
         {/*MOBILE HEADER with FOOTER*/}
         <div className="md:hidden fixed bottom-0 w-full bg-white border-t shadow-inner z-50 text-gray-700">
             <div className="md:hidden flex justify-evenly items-center gap-3 px-2 py-2 min-h-20">
-                <NavLink to="/messages" className={({
+                <NavLink to="/chat" className={({
                                                         isActive,
                                                         isPending
                                                     }) => isActive ? mobileCurrentNavClasses : mobileNavClasses}><MdOutlineMessage/>Messages</NavLink> |

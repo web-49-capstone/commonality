@@ -1,37 +1,9 @@
-import {MyInterestsDropdown} from "~/components/my-interests-dropdown";
 import {Link} from "react-router";
 import React from "react";
-import {InterestSchema} from "~/utils/models/interest.model";
-import type {Route} from "../../.react-router/types/app/+types/root";
 
-// export async function loader ({ request }: Route.LoaderArgs) {
-//     const url = new URL(request.url)
-//     const interestId = url.searchParams.get('interestId')
-//
-//     const session = await getSession(
-//         request.headers.get("Cookie")
-//     )
-//     const userId = session.data.user?.userId
-//     const requestHeaders = new Headers()
-//     requestHeaders.append('Content-Type', 'application/json')
-//     requestHeaders.append('Authorization', session.data?.authorization || '')
-//     const cookie = request.headers.get('Cookie')
-//     if (cookie) {
-//         requestHeaders.append('Cookie', cookie)
-//     }
-//     const userInterestsFetch = await fetch(`${process.env.REST_API_URL}/interest/userInterestUserId/${userId}`, {
-//         method: 'GET',
-//         headers: requestHeaders
-//     })
-//         .then(res => {
-//             if (!res.ok) {
-//                 throw new Error('failed to fetch interests')
-//             }
-//             return res.json()
-//         })
-//     const userInterests = InterestSchema.array().parse(userInterestsFetch.data)
-//     return {userInterests, userId, interestId}
-// }
+
+
+
 
 export default function MatchingBegin() {
     // const {userInterests, userId, interestId} = loaderData;
