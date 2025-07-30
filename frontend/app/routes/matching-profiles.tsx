@@ -269,7 +269,7 @@ export default function MatchingProfiles() {
                                     <input type="hidden" name="receiverId" value={receiverId}/>
                                     <input type="hidden" name="makerId" value={makerId}/>
                                     <input type="hidden" name="matchDirection" value={matchDirection || ''}/>
-
+                                    <div className="flex flex-col md:flex-row gap-4 items-center justify-center w-3/4 mx-auto">
                                     <button
                                         onClick={handleConnectClick}
                                         className="bg-gray-900 text-gray-200 border-1 border-gray-200 rounded-xl w-full py-3 px-6 hover:cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
@@ -286,13 +286,14 @@ export default function MatchingProfiles() {
                                     >
                                         {buttonState.declineText}
                                     </button>
+                                    </div>
                                 </Form>
                             )}
                         </>
                     )}
                 </div>
                 {openModal && (
-                    <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-40 z-50">
+                    <div className="fixed inset-0 flex justify-center items-center bg-opacity-40 z-50">
                         <div
                             className="mx-3 p-6 shadow-lg max-w-md w-full bg-blue-200 border-2 border-blue-600 rounded-3xl text-center">
                             <p className="text-xl text-gray-900 mb-2">Request to connect sent!</p>
