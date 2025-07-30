@@ -3,6 +3,7 @@ import {getProfileLoaderData} from "~/utils/loaders/profile-loader";
 import {editProfileAction} from "~/utils/actions/edit-profile-action";
 import {redirect, useActionData, useNavigation} from "react-router";
 import {EditProfile} from "~/components/edit-profile";
+import { Form } from "react-router";
 import React from "react";
 
 export async function loader({request}: Route.LoaderArgs) {
@@ -39,6 +40,7 @@ export default function MyProfile({loaderData}: Route.ComponentProps) {
             <section className="max-w-4xl mx-auto p-6">
                 <div className="flex justify-between items-center mb-6">
                     <h1 className="text-3xl font-bold text-gray-900">My Profile</h1>
+                    <div className="flex flex-row gap-4">
                     {!editMode && (
                         <button
                             onClick={() => setEditMode(true)}
@@ -47,8 +49,17 @@ export default function MyProfile({loaderData}: Route.ComponentProps) {
                             Edit
                         </button>
                     )}
+                    {/* Sign Out Button */}
+                    <Form method="post" action="/signout">
+                        <button
+                            type="submit"
+                            className="bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-700 transition"
+                        >
+                            Sign Out
+                        </button>
+                    </Form>
+                  </div>
                 </div>
-
                 {editMode ? (
                     <EditProfile
                         user={initialUser}
