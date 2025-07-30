@@ -39,7 +39,6 @@ try {
     const session = await getSession(
         request.headers.get("Cookie")
     )
-
     // const formData = await request.formData();
 
     // const signInObject = Object.fromEntries(formData)
@@ -66,8 +65,15 @@ session.set('authorization', authorization);
 session.set('user', validationResult.data)
     const responseHeaders = new Headers()
     responseHeaders.append('Set-Cookie', await commitSession(session))
+
     if(expressSessionCookie) {
         responseHeaders.append('Set-Cookie', expressSessionCookie);
+
+    }
+    const userBio = session.data.user?.userBio
+
+    if (userBio === null || userBio === '') {
+        return redirect('/create-profile', {headers: responseHeaders})
     }
     return redirect('/', {headers: responseHeaders});
 } catch (error) {
