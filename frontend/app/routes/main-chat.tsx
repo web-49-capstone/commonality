@@ -9,10 +9,11 @@ import {Form, Link, redirect, useActionData, useLocation, useParams, useRevalida
 import {MessageBubble} from "~/components/MessageBubble";
 import {UserSchema} from "~/utils/models/user-schema";
 import {v7 as uuidv7} from "uuid"
+
 export const handle = {
     id: 'main-chat',
     // @ts-ignore
-    shouldRevalidate: ({ currentUrl, nextUrl, formMethod, defaultShouldRevalidate }) => {
+    shouldRevalidate: ({currentUrl, nextUrl, formMethod, defaultShouldRevalidate}) => {
         return defaultShouldRevalidate;
     }
 };
@@ -23,9 +24,9 @@ export async function loader({request, params}: Route.LoaderArgs) {
         request.headers.get("Cookie")
     )
     const partnerId = params?.partnerId
-if (!partnerId) {
-    return {session, messages: [], partner: null}
-}
+    if (!partnerId) {
+        return {session, messages: [], partner: null}
+    }
 
     const requestHeaders = new Headers()
     requestHeaders.append('Content-Type', 'application/json')
@@ -45,11 +46,11 @@ if (!partnerId) {
             return res.json()
         })
 
-    const userMessagesFetch = await fetch (`${process.env.REST_API_URL}/message/messageThread/${partnerId}`, {
+    const userMessagesFetch = await fetch(`${process.env.REST_API_URL}/message/messageThread/${partnerId}`, {
         method: 'GET',
         headers: requestHeaders
     })
-        .then (res => {
+        .then(res => {
             if (!res.ok) {
                 throw new Error('failed to fetch user messages')
             }
@@ -66,7 +67,8 @@ if (!partnerId) {
     return {session: {user}, messages, partnerInfo}
 
 }
-export async function action ({request, params}: Route.ActionArgs) {
+
+export async function action({request, params}: Route.ActionArgs) {
     const session = await getSession(
         request.headers.get("Cookie")
     )
@@ -128,10 +130,10 @@ function useAutoRevalidate(interval = 10000) {
 }
 
 
-export default function MainChat({loaderData} : Route.ComponentProps) {
+export default function MainChat({loaderData}: Route.ComponentProps) {
     // @ts-ignore
     const {session: {user}, messages, partnerInfo} = loaderData;
- const actionData = useActionData<{success: boolean}>();
+    const actionData = useActionData<{ success: boolean }>();
     const formRef = useRef<HTMLFormElement>(null);
     useAutoRevalidate(10000)
 
@@ -140,10 +142,6 @@ export default function MainChat({loaderData} : Route.ComponentProps) {
             formRef.current?.reset();
         }
     }, [actionData]);
-
-
-
-
 
 
     return (
@@ -155,16 +153,16 @@ export default function MainChat({loaderData} : Route.ComponentProps) {
                         <div className="relative">
                             <div
                                 className="w-15 h-15 rounded-full  flex items-center justify-center text-white">
-                            <Link to={`/user/${partnerInfo?.userId}`}    >
-                            <img
-                                    className="rounded-full"
-                                    alt={`${partnerInfo?.userName} profile picture`}
-                                    key={partnerInfo?.userImgUrl}
-                                    src={partnerInfo?.userImgUrl}
-                                />
-                            </Link>
+                                <Link to={`/user/${partnerInfo?.userId}`}>
+                                    <img
+                                        className="rounded-full"
+                                        alt={`${partnerInfo?.userName} profile picture`}
+                                        key={partnerInfo?.userImgUrl}
+                                        src={partnerInfo?.userImgUrl}
+                                    />
+                                </Link>
 
-                        </div>
+                            </div>
                         </div>
                         <div className="ml-3">
                             <h2 className="font-semibold text-gray-900">{partnerInfo?.userName}</h2>
@@ -180,7 +178,7 @@ export default function MainChat({loaderData} : Route.ComponentProps) {
                 {/* Messages */}
                 <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
                     {messages.map((message) => (
-                        <MessageBubble  key={message.messageId} message={message} userId={user.userId} />
+                        <MessageBubble key={message.messageId} message={message} userId={user.userId}/>
                     ))}
                 </div>
 
@@ -188,22 +186,22 @@ export default function MainChat({loaderData} : Route.ComponentProps) {
                 <div className="p-4 border-t border-gray-200 bg-white">
                     <div className="flex items-end gap-3">
                         <div className="flex-1">
-                            <Form method="post" id="sendMessage" ref={formRef} >
+                            <Form method="post" id="sendMessage" ref={formRef}>
               <textarea
                   name="messageBody"
                   placeholder="Type a message..."
                   className="w-full px-4 py-3 bg-gray-100 rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-12 max-h-32"
               />
-                        <button
-                            className='right-2 bottom-2 p-2 rounded-full bg-blue-500 text-white hover:bg-blue-600'
-                            type="submit"
-                        >
-                            <BsFillSendFill size={30}/>
-                        </button>
-                    </Form>
+                                <button
+                                    className='right-2 bottom-2 p-2 rounded-full bg-blue-500 text-white hover:bg-blue-600'
+                                    type="submit"
+                                >
+                                    <BsFillSendFill size={30}/>
+                                </button>
+                            </Form>
                         </div>
 
-                </div>
+                    </div>
                 </div>
             </div>
         </>
