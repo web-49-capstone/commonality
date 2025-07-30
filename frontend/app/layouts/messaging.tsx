@@ -11,6 +11,7 @@ import {getSession} from "~/utils/session.server";
 import {NavLink, Outlet, redirect} from "react-router";
 import {MessageSchema, PartnerMessageSchema} from "~/utils/models/message.model";
 import type {Message} from "~/utils/types/message";
+import { useLocation, useMatch } from "react-router";
 
 
 export async function loader ({request} : Route.LoaderArgs) {
@@ -52,7 +53,8 @@ export default function MessagingApp  ({loaderData} : Route.ComponentProps) {
     const initialUser = session.data.user;
     const [isSelected, setIsSelected] = useState(0);
 
-
+    const location = useLocation();
+    const isRootMessaging = useMatch("/chat")
 
     return (
         <div className="flex bg-white">
@@ -159,8 +161,13 @@ export default function MessagingApp  ({loaderData} : Route.ComponentProps) {
                 </div>
             </div>
 
-
-            <Outlet />
+            {isRootMessaging ? (
+                <div className="flex-1 flex items-center justify-center bg-gray-50 text-gray-400">
+                    <p>Select a chat to start messaging.</p>
+                </div>
+            ) : (
+                <Outlet />
+            )}
 
         </div>
     );

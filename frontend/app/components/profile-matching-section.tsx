@@ -13,7 +13,9 @@ export function ProfileMatchingSection({user}: Props) {
     return(
         <>
             <div className="w-11/12 lg:w-3/4 mx-auto">
-                <img src={user.userImgUrl} alt="Profile Image" className="rounded-full w-1/2 mt-5 mx-auto"/>
+                <div className="w-[250px] h-[250px] mx-auto rounded-full overflow-hidden mt-5">
+                    <img src={user.userImgUrl} alt="Profile Image" className="rounded-full h-full object-cover w-full"/>
+                </div>
                 <h2 className="text-4xl mt-3 mx-auto">{user.userName}</h2>
                 <p className="text-lg mb-3 mx-auto">{user.userCity}, {user.userState}</p>
                 <p className="text-lg"><strong>Shared Interests: </strong>

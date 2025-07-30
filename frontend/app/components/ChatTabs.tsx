@@ -22,11 +22,12 @@ const ChatTabs = ({partnerMessage} : ChatTabProps) =>
                 <div>
                     <div className="relative">
                         <div
-                            className="w-12 h-12 rounded-full flex items-center justify-center text-white text-xl">
+                            className="w-[3em] h-[3em] rounded-full overflow-hidden">
                             <img
-                            alt={`${partnerMessage.partnerName} profile picture`}
-                            key={partnerMessage.partnerImg}
-                            src={partnerMessage.partnerImg}
+                                className="object-cover w-full h-full"
+                                alt={`${partnerMessage.partnerName} profile picture`}
+                                key={partnerMessage.partnerImg}
+                                src={partnerMessage.partnerImg}
                             />
 
                         </div>
