@@ -254,6 +254,8 @@ export default function MatchingProfiles() {
                     <hr className="my-5 md:my-10 w-3/4 mx-auto"></hr>
                     <h2 className="text-3xl lg:text-2xl mt-5 lg:mt-10">Finding profiles interested in:</h2>
                     <MyInterestsDropdown userInterests={userInterests}/>
+                    <p className="text-sm text-gray-900 mx-10 pt-5 italic">Profiles within 40 miles are displayed. <a className="text-blue-500 hover:text-blue-700" href="/profile">Change your city and state</a> to search somewhere else.</p>
+
                 </div>
                 <div className="lg:col-span-2 order-1 lg:order-2">
                     {!matchingUsers || matchingUsers.length === 0 ? (
