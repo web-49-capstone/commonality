@@ -3,7 +3,6 @@ import {
     getAcceptedMatchesByUserIdController,
     getCheckIfMatchExistsBetweenTwoUsers,
     getDeclinedMatchesByUserIdController,
-    getPendingMatchesByUserIdController,
     postMatchController,
     putMatchController
 } from './matching.controller'
