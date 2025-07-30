@@ -1,6 +1,6 @@
 import {MyInterestsDropdown} from "~/components/my-interests-dropdown";
 import {ProfileMatchingSection} from "~/components/profile-matching-section";
-import {Form, Link, redirect, useLoaderData} from "react-router";
+import {Form, Link, Outlet, redirect, useLoaderData, useLocation, useMatch, useSearchParams} from "react-router";
 // import type {ActionArgs, LoaderArgs} from "@remix-run/node";
 import {UserSchema, UserUpdatedSchema} from "~/utils/models/user-schema";
 import {InterestSchema} from "~/utils/models/interest.model";
@@ -239,7 +239,12 @@ export default function MatchingProfiles() {
         };
     };
 
-    const buttonState = getButtonState();
+    const buttonState = getButtonState()
+    const location = useLocation()
+    const [searchParams]= useSearchParams()
+    console.log("searchParams: ", searchParams)
+    const isRootMessaging = !searchParams.has('interestId')
+    console.log("search params??: ", isRootMessaging)
 
     return (
         <>
@@ -248,8 +253,7 @@ export default function MatchingProfiles() {
                     <div className="text-center">
                         <img src="/commonality-logo.png" alt="Commonality Logo" className="w-1/4 mx-auto"/>
                         <h2 className="text-4xl my-3">Let's Get Started!</h2>
-                        <p className="text-xl text-gray-900 mx-10">Pick an interest from your profile to see other
-                            users with the same interest.</p>
+                        <p className="text-xl text-gray-900 mx-10">Pick an interest from your profile to see other users with the same interest.</p>
                     </div>
                     <hr className="my-5 md:my-10 w-3/4 mx-auto"></hr>
                     <h2 className="text-3xl lg:text-2xl mt-5 lg:mt-10">Finding profiles interested in:</h2>
@@ -260,8 +264,16 @@ export default function MatchingProfiles() {
                 <div className="lg:col-span-2 order-1 lg:order-2">
                     {!matchingUsers || matchingUsers.length === 0 ? (
                         <div className="text-center pt-20">
-                            <p className="text-red-900 text-xl">No new profiles for this interest.</p>
-                            <p className="text-gray-600 mt-2">Try selecting another interest or check back later!</p>
+                            {isRootMessaging ? (
+                                <div className="text-red-900 text-xl">
+                                    <p>Select an interest to the left to start matching.</p>
+                                </div>
+                            ) : (
+                                <div>
+                                    <p className="text-red-900 text-xl">No new profiles for this interest.</p>
+                                    <p className="text-gray-600 mt-2">Try selecting another interest or check back later!</p>
+                                </div>
+                            )}
                         </div>
                     ) : (
                         <>
