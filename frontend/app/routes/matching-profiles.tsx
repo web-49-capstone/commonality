@@ -5,7 +5,7 @@ import {Form, Link, redirect, useLoaderData} from "react-router";
 import {UserSchema} from "~/utils/models/user-schema";
 import {InterestSchema} from "~/utils/models/interest.model";
 import {MatchSchema} from "~/utils/models/match-schema";
-import {getSession} from "../utils/session.server";
+import {getSession} from "~/utils/session.server";
 import React, {useState} from "react";
 import type {Route} from "../../.react-router/types/app/+types/root";
 import {v7 as uuidv7} from "uuid"
