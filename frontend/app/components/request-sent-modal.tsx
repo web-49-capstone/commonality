@@ -1,7 +1,4 @@
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "flowbite-react";
-import { useState } from "react";
-
-import type {User} from "~/components/profile-matching-section";
+import type {User} from "~/utils/types/user.ts";
 
 type Props = {
     user: User
@@ -20,7 +17,7 @@ export function RequestSentButton({ onClick }: RequestButtonProps) {
 export function RequestSentContent({user}: Props) {
     return(
         <>
-           <p className="text-lg text-gray-900">Requested to Connect with {user.userFirstName}!</p>
+           <p className="text-lg text-gray-900">Requested to Connect with {user.userName}!</p>
         </>
     )
 }

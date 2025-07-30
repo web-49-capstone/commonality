@@ -1,41 +1,55 @@
 import React, { useState, useEffect } from 'react';
+import type {Interest} from "~/utils/types/interest";
+import {Form, Link, NavLink, useNavigate, useSearchParams} from "react-router";
 
-export function MyInterestsDropdown() {
-    // Simulate data from user profile
-    const [profileItems, setProfileItems] = useState([]);
-    const [selectedItem, setSelectedItem] = useState('');
 
-    useEffect(() => {
-        // STILL NEED TO REPLACE THIS WITH A REAL FETCH CALL
-        const fakeProfileItems = ['Hiking', 'Cooking', 'Tennis', 'Board Games'];
-        setProfileItems(fakeProfileItems);
-    }, []);
+interface InterestProp {
+    userInterests: Interest[]
+}
+export function MyInterestsDropdown({userInterests}: InterestProp) {
+    // const [searchParams] = useSearchParams()
+    const navigate = useNavigate()
 
-    const handleChange = (event) => {
-        setSelectedItem(event.target.value);
-        console.log('Selected:', event.target.value);
+    const [searchParams, setSearchParams] = useSearchParams();
+    const selectedInterestId = searchParams.get("interestId") || "";
+
+    const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = event.target.value;
+        setSearchParams({ interestId: value });
     };
 
+    // useEffect(() => {
+    //     const qParam = searchParams.get("q")
+    //     // if (qParam) {
+    //     //     navigate(`/search?q=${qParam}`)
+    //     // }
+    //     }, []
+    // )
+
     return (
-        <div className="w-full max-w-xs mx-auto">
-            <label htmlFor="userDropdown" className="block mb-2 text-sm font-medium text-gray-800">
-                Select an interest from your profile:
-            </label>
-            <select
-                id="userDropdown"
-                value={selectedItem}
-                onChange={handleChange}
-                className="block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-                <option value="" disabled>
-                    -- Select one --
-                </option>
-                {profileItems.map((item, index) => (
-                    <option key={index} value={item}>
-                        {item}
+        <Form>
+            <div className="w-full max-w-xs mx-auto">
+                <label htmlFor="userDropdown" className="block mb-2 text-sm font-medium text-gray-800">
+                </label>
+                <select
+                    name="interestId"
+                    value={selectedInterestId}
+                    onChange={handleChange}
+                    id="userInterests"
+                    className="block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                    <option value="" disabled>
+                        Select an Interest to Update Search
                     </option>
-                ))}
-            </select>
-        </div>
+
+                    {userInterests.map((interest) => (
+                            <option id="selectedItem" key={interest.interestId} value={interest.interestId}>
+                                {interest.interestName}
+                            </option>
+                    ))}
+                </select>
+                {/*<button type="submit" className="bg-gray-900 text-gray-200 border-1 border-gray-200 rounded-xl mt-5 py-3 px-6 w-3/4 mx-auto lg:order-2 hover:cursor-pointer">Update Search</button>*/}
+            </div>
+        </Form>
     );
 }

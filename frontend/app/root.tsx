@@ -9,8 +9,7 @@ import {
 
 import type { Route } from "./+types/root";
 import "./app.css";
-import {ThemeModeScript} from "flowbite-react";
-import {Navigation} from "~/layouts/navigation";
+// import {ThemeModeScript} from "flowbite-react";
 import { Footer } from "~/layouts/footer";
 
 
@@ -36,12 +35,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
-        <ThemeModeScript />
+        {/*<ThemeModeScript />*/}
       </head>
       <body>
         {children}
         <ScrollRestoration />
         <Scripts />
+      <Footer />
       </body>
     </html>
   );
@@ -51,11 +51,9 @@ export default function App() {
   return (
       <>
         <div className="min-h-screen flex flex-col pb-30 md:pb-0">
-          <Navigation/>
           <main className="flex-1">
             <Outlet/>
           </main>
-          <Footer/>
         </div>
       </>
   )}

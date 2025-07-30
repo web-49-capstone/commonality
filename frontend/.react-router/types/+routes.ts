@@ -13,29 +13,92 @@ type Pages = {
   "/": {
     params: {};
   };
+  "/login": {
+    params: {};
+  };
+  "/signup": {
+    params: {};
+  };
+  "/create-profile": {
+    params: {};
+  };
+  "/apis/post-user-interests": {
+    params: {};
+  };
+  "/apis/delete-user-interests": {
+    params: {};
+  };
+  "/connect/:interestId?": {
+    params: {
+      "interestId"?: string;
+    };
+  };
   "/profile": {
     params: {};
   };
-  "/connect": {
-    params: {};
+  "/user/:partnerId?": {
+    params: {
+      "partnerId"?: string;
+    };
+  };
+  "/chat/:partnerId?": {
+    params: {
+      "partnerId"?: string;
+    };
   };
 };
 
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/profile" | "/connect";
+    page: "/" | "/login" | "/signup" | "/create-profile" | "/apis/post-user-interests" | "/apis/delete-user-interests" | "/connect/:interestId?" | "/profile" | "/user/:partnerId?" | "/chat/:partnerId?";
+  };
+  "routes/login.tsx": {
+    id: "routes/login";
+    page: "/login";
+  };
+  "routes/signup.tsx": {
+    id: "routes/signup";
+    page: "/signup";
+  };
+  "routes/create-profile.tsx": {
+    id: "routes/create-profile";
+    page: "/create-profile";
+  };
+  "routes/interest-component-route.tsx": {
+    id: "routes/interest-component-route";
+    page: "/apis/post-user-interests";
+  };
+  "routes/delete-interest-route.tsx": {
+    id: "routes/delete-interest-route";
+    page: "/apis/delete-user-interests";
+  };
+  "layouts/navigation.tsx": {
+    id: "layouts/navigation";
+    page: "/" | "/connect/:interestId?" | "/profile" | "/user/:partnerId?" | "/chat/:partnerId?";
   };
   "routes/home.tsx": {
     id: "routes/home";
     page: "/";
   };
-  "routes/create-profile.tsx": {
-    id: "routes/create-profile";
-    page: "/profile";
-  };
   "routes/matching-profiles.tsx": {
     id: "routes/matching-profiles";
-    page: "/connect";
+    page: "/connect/:interestId?";
+  };
+  "routes/my-profile.tsx": {
+    id: "routes/my-profile";
+    page: "/profile";
+  };
+  "routes/user-profile-page.tsx": {
+    id: "routes/user-profile-page";
+    page: "/user/:partnerId?";
+  };
+  "layouts/messaging.tsx": {
+    id: "layouts/messaging";
+    page: "/chat/:partnerId?";
+  };
+  "routes/main-chat.tsx": {
+    id: "routes/main-chat";
+    page: "/chat/:partnerId?";
   };
 };

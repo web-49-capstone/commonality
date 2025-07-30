@@ -1,20 +1,21 @@
-import {useState} from "react";
 import type { Route } from "./+types/home";
-import {ProfilePage} from "~/components/profile-page";
-import type {Profile} from "~/types/profile";
-import {MatchingBegin} from "~/routes/matching-begin";
+import MatchingBegin from "~/routes/matching-begin";
+import {redirect} from "react-router";
+import {getSession} from "~/utils/session.server";
 
 
- const dylan:Profile = {
-    userFirstName: 'dylan',
-    userLastName: "keck",
-    userBio: 'new here',
-    interests: ["baseball"],
-    userImgUrl : null,
-    userState:"New Mexico",
-     userCity: "Albuquerque"
+export async function loader({ request }: Route.LoaderArgs) {
+
+    const session = await getSession(request.headers.get("Cookie"));
+    const user = session.get("user");
+    const authorization = session.get("authorization");
+
+    if (!user || !authorization) {
+        return redirect("/login");
+    }
+
+    return null;
 }
-
 export function meta({}: Route.MetaArgs) {
   return [
     { title: "New React Router App" },
@@ -29,4 +30,3 @@ export default function Home() {
       </>
   )
 }
-
