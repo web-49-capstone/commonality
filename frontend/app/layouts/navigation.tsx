@@ -44,8 +44,8 @@ export default function Navigation({loaderData}: Route.ComponentProps) {
 
     return (
         <>
-        <div>
-            <nav>
+        <div className="flex flex-col">
+            <nav className="fixed top-0 w-full z-50 bg-white shadow-md mb-30">
                 {/*DESKTOP HEADER*/}
                 <div className="md:block bg-white border-b shadow-lg pb-2">
                     <div className="flex justify-center pt-1 md:py-3">
@@ -94,7 +94,7 @@ export default function Navigation({loaderData}: Route.ComponentProps) {
                                                        isPending
                                                    }) => isActive ? mobileCurrentNavClasses : mobileNavClasses}><CgProfile/>Profile</NavLink>
             </div>
-            <div className={"bg-black text-gray-200 py-2 text-center italic text-xs"}>
+            <div className={"bg-black text-gray-200 py-2 text-center italic text-xs fixed bottom-0 w-full"}>
                 <p>Copyright 2025 Commonality</p>
             </div>
         </div>

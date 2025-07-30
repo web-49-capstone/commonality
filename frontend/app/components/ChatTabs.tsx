@@ -18,8 +18,8 @@ const ChatTabs = ({partnerMessage} : ChatTabProps) =>
 
 {
     return (
-        <div className="flex-1 overflow-y-auto" >
-                <div>
+        <div className="flex-1 overflow-y-auto py-2">
+                <div className="border rounded-lg border-gray-200 bg-white px-4 py-6 flex items-center">
                     <div className="relative">
                         <div
                             className="w-[3em] h-[3em] rounded-full overflow-hidden">
