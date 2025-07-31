@@ -36,18 +36,19 @@ export async function loader({request, params}: Route.LoaderArgs) {
 
 export default function Navigation({loaderData}: Route.ComponentProps) {
     const {unreadMessages} = useLoaderData<typeof loader>()
-    const desktopNavClasses = "flex items-center gap-2 text-lg text-gray-700 hover:text-blue-700 hover:border-b-2 transition-colors"
-    const mobileNavClasses = "flex flex-col items-center gap-2 text-md hover:text-blue-600 hover:border-b-2 transition-colors"
-    const desktopCurrentNavClasses = "flex items-center gap-2 text-lg text-blue-700 border-b-2 border-blue-700 transition-colors"
-    const mobileCurrentNavClasses = "flex flex-col items-center gap-2 text-md text-blue-600 border-b-2 transition-colors"
+    const desktopNavClasses = "flex items-center gap-2 text-lg text-gray-700 hover:text-blue-600 hover:border-b-2 transition-colors"
+    const mobileNavClasses = "flex flex-col items-center gap-2 text-md hover:text-blue-500 hover:border-b-2 transition-colors"
+    const desktopCurrentNavClasses = "flex items-center gap-2 text-lg text-blue-600 border-b-2 border-blue-700 transition-colors"
+    const mobileCurrentNavClasses = "flex flex-col items-center gap-2 text-md text-blue-500 border-b-2 transition-colors"
 
 
     return (
         <>
         <div className="flex flex-col">
-            <nav className="fixed top-0 w-full z-50 bg-white shadow-md mb-30">
+            <nav className="fixed top-0 w-full z-50 bg-white shadow-xl rounded-b-3xl">
                 {/*DESKTOP HEADER*/}
-                <div className="md:block bg-white border-b shadow-lg pb-2">
+                <div className="md:block bg-white pb-2 rounded-b-3xl">
+
                     <div className="flex justify-center pt-1 md:py-3">
                         <Link to="/">
                             <img src="/commonality-logo.png" className="mr-3 h-10" alt="Flowbite React Logo"/>
@@ -77,7 +78,7 @@ export default function Navigation({loaderData}: Route.ComponentProps) {
                 </div>
 
         </div>
-        {/*MOBILE HEADER with FOOTER*/}
+                {/*MOBILE HEADER*/}
         <div className="md:hidden fixed bottom-0 w-full bg-white border-t shadow-inner z-50 text-gray-700">
             <div className="md:hidden flex justify-evenly items-center gap-3 px-2 py-2 min-h-20">
                 <NavLink to="/chat" className={({

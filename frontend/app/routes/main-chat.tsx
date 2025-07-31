@@ -158,7 +158,7 @@ export default function MainChat({loaderData}: Route.ComponentProps) {
         <>
             <div className="flex-1 h-[40rem] flex flex-col transition-all">
                 {/* Chat Header */}
-                <div className="flex items-center justify-between p-5 border-b border-gray-200 bg-white">
+                <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-white">
                     <div className="flex items-center">
                         <div className="relative">
                             <div className="w-[5em] h-[5em] rounded-full overflow-hidden">
@@ -207,7 +207,7 @@ export default function MainChat({loaderData}: Route.ComponentProps) {
                                     className='ml-3 float-right right-2 bottom-2 p-2 rounded-full bg-blue-500 text-white hover:bg-blue-600'
                                     type="submit"
                                 >
-                                    <BsFillSendFill size={30}/>
+                                    <BsFillSendFill size={30} className="pr-0.5 pt-0.5"/>
                                 </button>
                               </div>
                             </Form>

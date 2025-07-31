@@ -13,11 +13,11 @@ export function ProfileMatchingSection({user, userInterests}: Props) {
 
     return(
         <>
-            <div className="w-11/12 lg:w-3/4 mx-auto">
-                <div className="w-[250px] h-[250px] mx-auto rounded-full overflow-hidden mt-5">
-                    <img src={user.userImgUrl} alt="Profile Image" className="rounded-full h-full object-cover w-full"/>
+            <div className="w-11/12 lg:w-3/4 mx-auto bg-gradient-to-br from-indigo-50 to-indigo-100 shadow-xl rounded-3xl pt-1 pb-3 px-6 transition-all">
+                <div className="w-[14rem] h-[14rem] mx-auto rounded-full overflow-hidden mt-3">
+                    <img src={user.userImgUrl} alt="Profile Image" className="rounded-full border-3 border-indigo-300 shadow-md h-full object-cover w-full"/>
                 </div>
-                <h2 className="text-4xl mt-3 mx-auto">{user.userName}</h2>
+                <h2 className="text-4xl mt-2 mx-auto">{user.userName}</h2>
                 <p className="text-lg mb-3 mx-auto">{user.userCity}, {user.userState}</p>
                 <p className="text-lg"><strong>Interests: </strong>
                     <span className="flex flex-wrap gap-2 mb-2">
@@ -25,7 +25,7 @@ export function ProfileMatchingSection({user, userInterests}: Props) {
                                     <span key={index} className={"bg-gray-600 text-gray-100 px-3 py-1 rounded-xl text-sm"}>{interest.interestName}</span>))}</span>
                 </p>
                 <p className="text-lg"><strong>Availability: </strong>{user.userAvailability}</p>
-                <div className="bg-gray-100 border-1 border-gray-900 rounded-2xl py-3 px-5 my-3">
+                <div className="bg-gradient-to-br from-white to-gray-50 border-1 border-gray-400 rounded-2xl py-2 px-4 my-3">
                     <p className="text-lg text-gray-900 font-bold">About {user.userName}:</p>
                     <p className="text-md text-gray-900">{user.userBio}</p>
                 </div>

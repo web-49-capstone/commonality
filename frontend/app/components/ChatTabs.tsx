@@ -1,12 +1,13 @@
 import type {User} from "~/utils/types/user";
 import type {Message} from "~/utils/types/message"
 import type {PartnerMessage} from "~/utils/models/message.model";
-import {redirect} from "react-router";
+import {useParams} from "react-router";
 
 interface ChatTabProps {
     // user: User
     // message: Message
     partnerMessage: PartnerMessage
+    isActive?: boolean
 }
 
 //     setSelectedChat: (index: number) => void;
@@ -14,13 +15,16 @@ interface ChatTabProps {
 //     index: number;
 // }
 
-const ChatTabs = ({partnerMessage} : ChatTabProps) =>
+
+const ChatTabs = ({partnerMessage, isActive = false} : ChatTabProps) =>
 
 {
     return (
         <div className="flex-1 overflow-y-auto py-2">
-                <div className="border rounded-lg border-gray-200 bg-white px-4 py-6 flex items-center">
-                    <div className="relative">
+            <div className={`border rounded-lg px-4 py-6 flex items-center transition-colors
+                ${isActive
+                ? "bg-gradient-to-br from-blue-50 to-blue-200 border-blue-200 text-blue-700 shadow"
+                : "border-gray-200 bg-white"}`}>
                         <div
                             className="w-[3em] h-[3em] rounded-full overflow-hidden">
                             <img
@@ -31,7 +35,6 @@ const ChatTabs = ({partnerMessage} : ChatTabProps) =>
                             />
 
                         </div>
-                    </div>
                     <div className="ml-3 flex-1 min-w-0">
                         <div className="flex justify-between items-center">
                             <h3 className="font-semibold text-lg text-gray-900 truncate">{partnerMessage.partnerName}</h3>

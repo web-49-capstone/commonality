@@ -35,9 +35,9 @@ export function EditProfile (props: Props) {
     }
     return (
         <>
-            <section className="flex flex-col items-center gap-10 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
+            <section className="max-w-4xl min-w-1/2 px-6">
                 {/* ✅ Wrapper box around everything */}
-                <div className="w-full bg-white shadow-xl rounded-3xl p-6 sm:p-10 space-y-10 transition-all">
+                <div className="w-full bg-white shadow-xl rounded-3xl p-6 space-y-10 transition-all">
 
                     <Form method="put" encType="multipart/form-data" id="updateProfile"
                           className="w-full flex flex-col lg:flex-row justify-between items-start gap-8">
@@ -127,7 +127,7 @@ export function EditProfile (props: Props) {
                             <div className="flex justify-end mt-2">
                                 <button
                                     type="submit"
-                                    className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-semibold shadow-md transition duration-200 ease-in-out"
+                                    className="hover:cursor-pointer bg-gradient-to-br from-blue-500 to-blue-400 text-white hover:to-indigo-700 px-6 py-3 rounded-xl font-semibold shadow-md transition duration-200 ease-in-out"
                                 >
                                     Save Profile
                                 </button>
