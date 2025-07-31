@@ -164,7 +164,7 @@ export async function getGroupByIdController (request: Request, response: Respon
 
 export async function getGroupsByUserIdController(request: Request, response: Response): Promise<void> {
   try {
-    const userId = request.params.userId as string;
+    const userId = request.query.userId as string;
     if (!userId) {
       response.status(400).json({ status: 400, data: null, message: 'Missing userId parameter' });
       return;
