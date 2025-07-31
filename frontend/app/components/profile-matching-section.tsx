@@ -1,12 +1,14 @@
 import React from "react";
 
 import type {UserUpdated} from "~/utils/models/user-schema";
+import type {Interest} from "~/utils/types/interest";
 
 type Props = {
-    user: UserUpdated
+    user: UserUpdated,
+    userInterests: Interest[]
 }
 
-export function ProfileMatchingSection({user}: Props) {
+export function ProfileMatchingSection({user, userInterests}: Props) {
 
 
     return(
@@ -17,10 +19,10 @@ export function ProfileMatchingSection({user}: Props) {
                 </div>
                 <h2 className="text-4xl mt-3 mx-auto">{user.userName}</h2>
                 <p className="text-lg mb-3 mx-auto">{user.userCity}, {user.userState}</p>
-                <p className="text-lg"><strong>Shared Interests: </strong>
-                    {/*<span className="flex flex-wrap gap-2 mb-2">*/}
-                                {/*{user.userInterestPlaceholder.map((interest, index) => (*/}
-                                {/*    <span key={index} className={"bg-gray-600 text-gray-100 px-3 py-1 rounded-xl text-sm"}>{interest}</span>))}</span>*/}
+                <p className="text-lg"><strong>Interests: </strong>
+                    <span className="flex flex-wrap gap-2 mb-2">
+                                {userInterests.map((interest, index) => (
+                                    <span key={index} className={"bg-gray-600 text-gray-100 px-3 py-1 rounded-xl text-sm"}>{interest.interestName}</span>))}</span>
                 </p>
                 <p className="text-lg"><strong>Availability: </strong>{user.userAvailability}</p>
                 <div className="bg-gray-100 border-1 border-gray-900 rounded-2xl py-3 px-5 my-3">
