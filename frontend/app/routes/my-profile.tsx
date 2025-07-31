@@ -50,6 +50,16 @@ export default function MyProfile({loaderData}: Route.ComponentProps) {
                 </div>
 
                 {editMode ? (
+                    <div>
+                    <div className="flex justify-end mb-4 mr-9">
+                        <button
+                            onClick={() => setEditMode(false)}
+                            className="bg-red-600 text-gray-800 px-4 py-2 rounded-lg shadow hover:bg-gray-400 transition align-right text-white"
+                        >
+                            Cancel
+                        </button>
+                    </div>
+
                     <EditProfile
                         user={initialUser}
                         interests={interests}
@@ -57,6 +67,8 @@ export default function MyProfile({loaderData}: Route.ComponentProps) {
                         q={q}
                         userInterests={userInterests}
                     />
+</div>
+
                 ) : (
                     <div className="space-y-4 bg-white shadow-md p-6 rounded-xl">
                         <div className="flex items-center gap-4">
