@@ -143,9 +143,9 @@ export default function MainChat({loaderData}: Route.ComponentProps) {
 
     return (
         <>
-            <div className="flex-1 flex flex-col">
+            <div className="flex-1 h-[40rem] flex flex-col">
                 {/* Chat Header */}
-                <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-white">
+                <div className="flex items-center justify-between p-5 border-b border-gray-200 bg-white">
                     <div className="flex items-center">
                         <div className="relative">
                             <div className="w-[5em] h-[5em] rounded-full overflow-hidden">
@@ -171,7 +171,7 @@ export default function MainChat({loaderData}: Route.ComponentProps) {
                 </div>
 
                 {/* Messages */}
-                <div className="flex-1 overflow-y p-4 space-y-4 bg-gray-50">
+                <div className="flex-1 max-h-3/4 overflow-y-auto p-4 space-y-4 bg-gray-50">
                     {messages.map((message) => (
                         <MessageBubble key={message.messageId} message={message} userId={user.userId}/>
                     ))}
@@ -182,17 +182,19 @@ export default function MainChat({loaderData}: Route.ComponentProps) {
                     <div className="flex items-end gap-3">
                         <div className="flex-1">
                             <Form method="post" id="sendMessage" ref={formRef}>
+            <div className="flex justify-around items-center relative">
               <textarea
+                  className="w-full px-4 py-3 bg-gray-100 rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-12 max-h-32"
                   name="messageBody"
                   placeholder="Type a message..."
-                  className="w-full px-4 py-3 bg-gray-100 rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-12 max-h-32"
               />
                                 <button
-                                    className='right-2 bottom-2 p-2 rounded-full bg-blue-500 text-white hover:bg-blue-600'
+                                    className='ml-3 float-right right-2 bottom-2 p-2 rounded-full bg-blue-500 text-white hover:bg-blue-600'
                                     type="submit"
                                 >
                                     <BsFillSendFill size={30}/>
                                 </button>
+                              </div>
                             </Form>
                         </div>
 

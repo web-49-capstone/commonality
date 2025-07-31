@@ -39,7 +39,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
         {children}
         <ScrollRestoration />
         <Scripts />
-      <Footer />
       </body>
     </html>
   );
@@ -48,8 +47,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export default function App() {
   return (
       <>
-        <div className="max-h-screen flex flex-col pb-30 md:pb-0">
-          <main className="flex-1">
+        <div className="max-h-[100rem] flex flex-col pb-30 md:pb-0">
+          <main className="pt-[08rem]">
             <Outlet/>
           </main>
         </div>

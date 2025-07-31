@@ -57,7 +57,7 @@ export default function MessagingApp  ({loaderData} : Route.ComponentProps) {
     const isRootMessaging = useMatch("/chat")
 
     return (
-        <div className="flex bg-white shadow">
+        <div className="container mx-auto mt-10 shadow-md flex bg-white">
             {/* Sidebar */}
             <div className="w-80 bg-white border-r border-gray-200 flex flex-col">
                 {/* Header */}
@@ -152,7 +152,7 @@ export default function MessagingApp  ({loaderData} : Route.ComponentProps) {
                 </div>
 
                 {/* Chat List */}
-                <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50" >
+                <div className="flex-1 overflow-y-auto p-2 space-y-2 bg-gray-50" >
                     {lastMessage.map((lastMessage) => (
                         <NavLink to={`/chat/${lastMessage.partnerId}`}   className="">
                         <ChatTabs  partnerMessage={lastMessage}/>
