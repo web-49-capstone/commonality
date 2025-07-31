@@ -172,7 +172,7 @@ export default function MainChat({loaderData}: Route.ComponentProps) {
                                     setShowPreview(true)}}
                                 onMouseLeave={() => setShowPreview(false)}
                         >
-                            <CiCircleInfo size={20} className="text-blue-500"/>
+                            <CiCircleInfo size={30} className="text-blue-500 font-extrabold"/>
                         </button>
                       </Link>
                         {showPreview && partnerInfo && (

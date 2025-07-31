@@ -42,11 +42,6 @@ const ChatTabs = ({partnerMessage} : ChatTabProps) =>
                         </div>
                         <div className="flex justify-between items-center">
                             <p className="text-md text-gray-600 truncate">{partnerMessage.messageBody}</p>
-                                <span
-                                    className="bg-blue-500 text-white text-xs rounded-full px-3 py-1 min-w-5 text-center justify-center">
-                      {partnerMessage.messageOpened}
-                    </span>
-
                         </div>
                     </div>
                 </div>
