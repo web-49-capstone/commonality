@@ -94,9 +94,6 @@ export default function Navigation({loaderData}: Route.ComponentProps) {
                                                        isPending
                                                    }) => isActive ? mobileCurrentNavClasses : mobileNavClasses}><CgProfile/>Profile</NavLink>
             </div>
-            <div className={"bg-black text-gray-200 py-2 text-center italic text-xs fixed bottom-0 w-full"}>
-                <p>Copyright 2025 Commonality</p>
-            </div>
         </div>
         </nav>
     <Outlet/>
