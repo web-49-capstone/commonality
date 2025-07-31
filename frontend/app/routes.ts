@@ -12,6 +12,9 @@ export default [
         route("connect/:interestId?", "routes/matching-profiles.tsx"),
         route("profile", "routes/my-profile.tsx"),
         route("user/:partnerId?", "routes/user-profile-page.tsx"),
+        route("groups/create", "routes/create-group.tsx"),
+        route("groups/:groupId?", "routes/group-detail.tsx"),
+        route("my-groups", "routes/my-groups.tsx"),
         // route("messages", "routes/view-connections-messages.tsx"),
         layout("layouts/messaging.tsx", [
             route("chat/:partnerId?", "routes/main-chat.tsx"),

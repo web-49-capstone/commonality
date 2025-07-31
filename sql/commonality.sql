@@ -2,6 +2,9 @@ DROP TABLE IF EXISTS message;
 DROP TABLE IF EXISTS user_interest;
 DROP TABLE IF EXISTS interest;
 DROP TABLE IF EXISTS match;
+DROP TABLE IF EXISTS group_members;
+DROP TABLE IF EXISTS group_interests;
+DROP TABLE IF EXISTS "group";
 DROP TABLE IF EXISTS "user";
 
 
@@ -22,6 +25,39 @@ CREATE TABLE IF NOT EXISTS "user"(
     user_name         varchar(100),
     user_state        varchar(2)
 );
+
+CREATE TABLE IF NOT EXISTS "group"(
+    group_id uuid PRIMARY KEY NOT NULL,
+    group_name varchar(100) NOT NULL,
+    group_admin_user_id uuid NOT NULL,
+    group_description text,
+    group_size integer,
+    group_created timestamptz NOT NULL,
+    group_updated timestamptz NOT NULL,
+    FOREIGN KEY (group_admin_user_id) REFERENCES "user"(user_id)
+);
+CREATE INDEX ON "group" (group_admin_user_id);
+
+CREATE TABLE IF NOT EXISTS group_interests(
+    interest_id uuid NOT NULL,
+    group_id uuid NOT NULL,
+    FOREIGN KEY (interest_id) REFERENCES interest(interest_id),
+    FOREIGN KEY (group_id) REFERENCES "group"(group_id),
+    PRIMARY KEY (interest_id, group_id)
+);
+CREATE INDEX ON group_interests (interest_id);
+CREATE INDEX ON group_interests (group_id);
+
+CREATE TABLE IF NOT EXISTS group_members(
+    user_id uuid NOT NULL,
+    group_id uuid NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES "user"(user_id),
+    FOREIGN KEY (group_id) REFERENCES "group"(group_id),
+    PRIMARY KEY (user_id, group_id)
+);
+CREATE INDEX ON group_members (user_id);
+CREATE INDEX ON group_members (group_id);
+
 
 CREATE TABLE IF NOT EXISTS match(
     match_maker_id    uuid NOT NULL ,

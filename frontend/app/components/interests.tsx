@@ -68,7 +68,7 @@ export function InterestSelector(props: Props) {
                                     //Perform a fetch to /apis/post-user-interests
                                     fetcher.submit(userInterest, {
                                         method: "POST",
-                                        action: "/apis/post-user-interests",
+                                        action: "/post-user-interests",
                                         encType: "application/json"
                                     })
                                 }}
@@ -108,7 +108,7 @@ export function InterestSelector(props: Props) {
                                     deleteFetcher.submit(
                                         {userInterestInterestId: userInterest.interestId}, {
                                         method: "DELETE",
-                                        action: "/apis/delete-user-interests",
+                                        action: "/delete-user-interests",
                                         encType: "application/json"
                                     })
                                 }} type="submit" className="ml-2 font-bold text-xs hover:text-red-300 hover:cursor-pointer">✕</button>

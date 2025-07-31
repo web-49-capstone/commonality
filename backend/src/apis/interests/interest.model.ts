@@ -3,6 +3,7 @@ import {sql} from "../../utils/database.utils.ts";
 import type {Status} from "../../utils/interfaces/Status.ts";
 
 
+
 export const InterestSchema = z.object({
     interestId: z.uuidv7('please provide a valid uuid7 for interestId'),
     interestName: z.string('name must be a string')

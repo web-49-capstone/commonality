@@ -13,6 +13,7 @@ import {v7 as uuidv7} from "uuid"
 export async function loader({ request }: Route.LoaderArgs) {
     const url = new URL(request.url);
     const interestId = url.searchParams.get("interestId");
+    const matchType = url.searchParams.get("matchType") || 'individuals';
 
     // if (!interestId) {
     //     return { userInterests: [], interestId: null, matchingUsers: [], userId: null, match: null, matchDirection: null };
@@ -37,11 +38,25 @@ export async function loader({ request }: Route.LoaderArgs) {
     ).then(res => res.json());
     const userInterests = InterestSchema.array().parse(userInterestsFetch.data || []);
 
-    const sharedInterestsFetch = await fetch(
-        `${process.env.REST_API_URL}/users/userInterestInterestId/${interestId}`,
-        {headers: requestHeaders}
-    ).then(res => res.json());
-    const matchingUsers = UserUpdatedSchema.array().parse(sharedInterestsFetch.data || []);
+    let matchingUsers = [];
+    let matchingGroups = [];
+
+    if (matchType === 'individuals' || matchType === 'both') {
+        const sharedInterestsFetch = await fetch(
+            `${process.env.REST_API_URL}/users/userInterestInterestId/${interestId}`,
+            {headers: requestHeaders}
+        ).then(res => res.json());
+        matchingUsers = UserUpdatedSchema.array().parse(sharedInterestsFetch.data || []);
+    }
+
+    if (matchType === 'groups' || matchType === 'both') {
+        const groupInterestsFetch = await fetch(
+            `${process.env.REST_API_URL}/groups/interest/${interestId}`,
+            {headers: requestHeaders}
+        ).then(res => res.json());
+        matchingGroups = groupInterestsFetch.data || [];
+    }
+
 
     let match = null;
     let matchDirection = null;
@@ -56,7 +71,8 @@ export async function loader({ request }: Route.LoaderArgs) {
 
         // 1. Check if the current user (`userId`) has already sent a request to the other user.
         const matchDirectRes = await fetch(
-            `${process.env.REST_API_URL}/matching/pending/${userId}`, {headers: requestHeaders}
+            `${process.env.REST_API_URL}/matching/pending/${userId}`,
+            {headers: requestHeaders}
         );
 
         if (matchDirectRes.ok) {
@@ -71,7 +87,8 @@ export async function loader({ request }: Route.LoaderArgs) {
         // 2. If no direct match was found, check if the other user has sent a request to the current user.
         if (!match) {
             const matchReverseRes = await fetch(
-                `${process.env.REST_API_URL}/matching/pending/${otherUserId}`, {headers: requestHeaders}
+                `${process.env.REST_API_URL}/matching/pending/${otherUserId}`,
+                {headers: requestHeaders}
             );
 
             if (matchReverseRes.ok) {
@@ -89,9 +106,11 @@ export async function loader({ request }: Route.LoaderArgs) {
         userInterests,
         interestId,
         matchingUsers,
+        matchingGroups,
         userId,
         match,
         matchDirection,
+        matchType
     };
 }
 
@@ -188,7 +207,7 @@ export async function action({ request }: Route.ActionArgs) {
 }
 
 export default function MatchingProfiles() {
-    const {userInterests, match, matchingUsers, userId, matchDirection} = useLoaderData<typeof loader>();
+    const {userInterests, match, matchingUsers, matchingGroups, userId, matchDirection, matchType} = useLoaderData<typeof loader>();
     const [openModal, setOpenModal] = useState(false);
 
     let receiverId = '';
@@ -212,8 +231,19 @@ export default function MatchingProfiles() {
     };
 
     const getButtonState = () => {
-        if (!matchingUsers || matchingUsers.length === 0) {
+        if ((!matchingUsers || matchingUsers.length === 0) && (!matchingGroups || matchingGroups.length === 0)) {
             return null;
+        }
+
+        if (matchType === 'groups' || (matchType === 'both' && matchingGroups.length > 0)) {
+            const group = matchingGroups[0];
+            return {
+                connectText: `View ${group.groupName}`,
+                connectDisabled: false,
+                declineText: "Next Profile",
+                isGroup: true,
+                groupId: group.groupId
+            };
         }
 
         const otherUser = matchingUsers[0];
@@ -254,33 +284,58 @@ export default function MatchingProfiles() {
                     <hr className="my-5 md:my-10 w-3/4 mx-auto"></hr>
                     <h2 className="text-3xl lg:text-2xl mt-5 lg:mt-10">Finding profiles interested in:</h2>
                     <MyInterestsDropdown userInterests={userInterests}/>
+                    <div className="flex justify-center my-4">
+                        <label htmlFor="matchType" className="mr-2">Match with:</label>
+                        <select id="matchType" name="matchType" defaultValue="individuals" onChange={(e) => {
+                            const url = new URL(window.location.href);
+                            url.searchParams.set('matchType', e.target.value);
+                            window.location.href = url.toString();
+                        }}>
+                            <option value="individuals">Individuals</option>
+                            <option value="groups">Groups</option>
+                            <option value="both">Both</option>
+                        </select>
+                    </div>
                     <p className="text-sm text-gray-900 mx-10 pt-5 italic">Profiles within 40 miles are displayed. <a className="text-blue-500 hover:text-blue-700" href="/profile">Change your city and state</a> to search somewhere else.</p>
 
                 </div>
                 <div className="lg:col-span-2 order-1 lg:order-2">
-                    {!matchingUsers || matchingUsers.length === 0 ? (
+                    {(!matchingUsers || matchingUsers.length === 0) && (!matchingGroups || matchingGroups.length === 0) ? (
                         <div className="text-center pt-20">
                             <p className="text-red-900 text-xl">No new profiles for this interest.</p>
                             <p className="text-gray-600 mt-2">Try selecting another interest or check back later!</p>
                         </div>
                     ) : (
                         <>
-                            <ProfileMatchingSection user={matchingUsers[0]}/>
+                            {matchType === 'groups' || (matchType === 'both' && matchingGroups.length > 0) ? (
+                                <div>
+                                    <h2>{matchingGroups[0].groupName}</h2>
+                                    <p>{matchingGroups[0].groupDescription}</p>
+                                </div>
+                            ) : (
+                                <ProfileMatchingSection user={matchingUsers[0]}/>
+                            )}
                             {buttonState && (
                                 <Form method="post" className="mt-4 space-y-2">
                                     <input type="hidden" name="receiverId" value={receiverId}/>
                                     <input type="hidden" name="makerId" value={makerId}/>
                                     <input type="hidden" name="matchDirection" value={matchDirection || ''}/>
                                     <div className="flex flex-col md:flex-row gap-4 items-center justify-center w-3/4 mx-auto">
-                                    <button
-                                        onClick={handleConnectClick}
-                                        className="bg-gray-900 text-gray-200 border-1 border-gray-200 rounded-xl w-full py-3 px-6 hover:cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                                        name="actionType"
-                                        value="connect"
-                                        disabled={buttonState.connectDisabled}
-                                    >
-                                        {buttonState.connectText}
-                                    </button>
+                                    {buttonState.isGroup ? (
+                                        <Link to={`/groups/${buttonState.groupId}`} className="bg-gray-900 text-gray-200 border-1 border-gray-200 rounded-xl w-full py-3 px-6 hover:cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
+                                            {buttonState.connectText}
+                                        </Link>
+                                    ) : (
+                                        <button
+                                            onClick={handleConnectClick}
+                                            className="bg-gray-900 text-gray-200 border-1 border-gray-200 rounded-xl w-full py-3 px-6 hover:cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                                            name="actionType"
+                                            value="connect"
+                                            disabled={buttonState.connectDisabled}
+                                        >
+                                            {buttonState.connectText}
+                                        </button>
+                                    )}
                                     <button
                                         className="bg-gray-300 text-gray-900 border-1 border-gray-200 rounded-xl w-full py-3 px-6 hover:cursor-pointer"
                                         name="actionType"

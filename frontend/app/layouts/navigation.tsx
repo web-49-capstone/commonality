@@ -74,6 +74,12 @@ export default function Navigation({loaderData}: Route.ComponentProps) {
                     |
                     <NavLink to="/profile"><span
                         className={desktopNavClasses}><CgProfile/>Profile</span></NavLink>
+                    |
+                    <NavLink to="/groups/create"><span
+                        className={desktopNavClasses}>Create Group</span></NavLink>
+                    |
+                    <NavLink to="/my-groups"><span
+                        className={desktopNavClasses}>My Groups</span></NavLink>
                 </div>
 
         </div>
@@ -92,7 +98,15 @@ export default function Navigation({loaderData}: Route.ComponentProps) {
                 <NavLink to="/profile" className={({
                                                        isActive,
                                                        isPending
-                                                   }) => isActive ? mobileCurrentNavClasses : mobileNavClasses}><CgProfile/>Profile</NavLink>
+                                                   }) => isActive ? mobileCurrentNavClasses : mobileNavClasses}><CgProfile/>Profile</NavLink> |
+                <NavLink to="/groups/create" className={({
+                                                       isActive,
+                                                       isPending
+                                                   }) => isActive ? mobileCurrentNavClasses : mobileNavClasses}>Create Group</NavLink> |
+                <NavLink to="/my-groups" className={({
+                                                       isActive,
+                                                       isPending
+                                                   }) => isActive ? mobileCurrentNavClasses : mobileNavClasses}>My Groups</NavLink>
             </div>
             <div className={"bg-black text-gray-200 py-2 text-center italic text-xs"}>
                 <p>Copyright 2025 Commonality</p>

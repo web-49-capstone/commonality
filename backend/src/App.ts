@@ -11,6 +11,7 @@ import {userRoute} from "./apis/users/user.route.ts";
 import {interestRoute} from "./apis/interests/interest.route.ts";
 import {matchingRoute} from "./apis/matching/matching.route.ts";
 import {messageRoute} from "./apis/message/message.route.ts";
+import {groupRoute} from "./apis/groups/group.route.ts";
 import helmet from "helmet";
 
 export class App {
@@ -50,6 +51,7 @@ export class App {
         this.app.use(interestRoute.basePath, interestRoute.router)
         this.app.use(messageRoute.basePath, messageRoute.router)
         this.app.use(matchingRoute.basePath, matchingRoute.router)
+        this.app.use(groupRoute.basePath, groupRoute.router)
 
     }
 
