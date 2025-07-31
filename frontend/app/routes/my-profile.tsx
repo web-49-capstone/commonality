@@ -93,7 +93,7 @@ export default function MyProfile({loaderData}: Route.ComponentProps) {
                         </div>
 
                         <div>
-                            <h3 className="font-medium text-gray-700 mb-1">Your Interests</h3>
+                            <h3 className="font-medium text-gray-700 mb-1">Interests</h3>
                             <ul className="flex flex-wrap gap-2">
                                 {userInterests.map((interest) => (
                                     <li key={interest.interestId} className="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm">

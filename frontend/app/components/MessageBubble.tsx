@@ -17,7 +17,7 @@ export function MessageBubble  (props: Props)  {
                     : 'bg-white text-gray-900 rounded-bl-xl border border-gray-200'}
             `}>
                 <p className="text-base leading-relaxed break-words">{message.messageBody}</p>
-                <span className={`absolute -bottom-5 right-2 text-xs ${isOwn ? 'text-blue-400' : 'text-gray-400'}`}
+                <span className={`absolute whitespace-nowrap -bottom-5 right-2 text-xs ${isOwn ? 'text-blue-400' : 'text-gray-400 left-2'}`}
                     style={{fontSize: '0.75rem'}}>
                     {message.messageSentAt.toLocaleTimeString([], {
                         hour: 'numeric',

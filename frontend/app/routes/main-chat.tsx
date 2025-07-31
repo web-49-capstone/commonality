@@ -140,10 +140,23 @@ export default function MainChat({loaderData}: Route.ComponentProps) {
         }
     }, [actionData]);
 
+    function handleKeyDown(event: React.KeyboardEvent<HTMLTextAreaElement>) {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
+            if (formRef.current) {
+                formRef.current.requestSubmit();
+            }
+        }
+    }
+
+    const messagesEndRef = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, [messages]);
 
     return (
         <>
-            <div className="flex-1 h-[40rem] flex flex-col">
+            <div className="flex-1 h-[40rem] flex flex-col transition-all">
                 {/* Chat Header */}
                 <div className="flex items-center justify-between p-5 border-b border-gray-200 bg-white">
                     <div className="flex items-center">
@@ -175,6 +188,7 @@ export default function MainChat({loaderData}: Route.ComponentProps) {
                     {messages.map((message) => (
                         <MessageBubble key={message.messageId} message={message} userId={user.userId}/>
                     ))}
+                    <div ref={messagesEndRef} />
                 </div>
 
                 {/* Message Input */}
@@ -187,6 +201,7 @@ export default function MainChat({loaderData}: Route.ComponentProps) {
                   className="w-full px-4 py-3 bg-gray-100 rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-12 max-h-32"
                   name="messageBody"
                   placeholder="Type a message..."
+                  onKeyDown={handleKeyDown}
               />
                                 <button
                                     className='ml-3 float-right right-2 bottom-2 p-2 rounded-full bg-blue-500 text-white hover:bg-blue-600'

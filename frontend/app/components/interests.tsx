@@ -47,7 +47,7 @@ export function InterestSelector(props: Props) {
                     defaultValue={q || ""}
                     id="q"
                     name="q"
-                    placeholder="Search interests..."
+                    placeholder="Search interests to add..."
                     type="search"
                     className="w-full p-2 border rounded mb-2 text-black"
                 />
