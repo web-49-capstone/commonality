@@ -131,6 +131,7 @@ export function EditProfile (props: Props) {
                                 >
                                     Save Profile
                                 </button>
+
                             </div>
                         </div>
                     </Form>

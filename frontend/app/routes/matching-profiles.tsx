@@ -84,6 +84,11 @@ export async function loader({ request }: Route.LoaderArgs) {
             }
         }
     }
+    const otherUserInterestsFetch = await fetch(
+        `${process.env.REST_API_URL}/interest/userInterestUserId/${matchingUsers[0]?.userId}`,
+        {headers: requestHeaders}
+    ).then(res => res.json());
+    const otherUserInterests = InterestSchema.array().parse(otherUserInterestsFetch.data || []);
 
     return {
         userInterests,
@@ -92,6 +97,7 @@ export async function loader({ request }: Route.LoaderArgs) {
         userId,
         match,
         matchDirection,
+        otherUserInterests,
     };
 }
 
@@ -188,7 +194,7 @@ export async function action({ request }: Route.ActionArgs) {
 }
 
 export default function MatchingProfiles() {
-    const {userInterests, match, matchingUsers, userId, matchDirection} = useLoaderData<typeof loader>();
+    const {userInterests, match, matchingUsers, userId, matchDirection, otherUserInterests} = useLoaderData<typeof loader>();
     const [openModal, setOpenModal] = useState(false);
 
     let receiverId = '';
@@ -277,7 +283,7 @@ export default function MatchingProfiles() {
                         </div>
                     ) : (
                         <>
-                            <ProfileMatchingSection user={matchingUsers[0]}/>
+                            <ProfileMatchingSection user={matchingUsers[0]} userInterests={otherUserInterests}/>
                             {buttonState && (
                                 <Form method="post" className="mt-4 space-y-2">
                                     <input type="hidden" name="receiverId" value={receiverId}/>
