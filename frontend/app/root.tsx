@@ -48,7 +48,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export default function App() {
   return (
       <>
-        <div className="min-h-screen flex flex-col pb-30 md:pb-0">
+        <div className="max-h-screen flex flex-col pb-30 md:pb-0">
           <main className="flex-1">
             <Outlet/>
           </main>
