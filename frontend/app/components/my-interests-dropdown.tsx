@@ -28,7 +28,7 @@ export function MyInterestsDropdown({userInterests}: InterestProp) {
 
     return (
         <Form>
-            <div className="w-full max-w-xs mx-auto">
+            <div className="w-11/16 max-w-xs mx-auto">
                 <label htmlFor="userDropdown" className="block mb-2 text-sm font-medium text-gray-800">
                 </label>
                 <select
@@ -39,7 +39,7 @@ export function MyInterestsDropdown({userInterests}: InterestProp) {
                     className="block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                     <option value="" disabled>
-                        Select an Interest to Update Search
+                        -- Select an Interest --
                     </option>
 
                     {userInterests.map((interest) => (

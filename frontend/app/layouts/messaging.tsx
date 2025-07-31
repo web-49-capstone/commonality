@@ -11,7 +11,7 @@ import {getSession} from "~/utils/session.server";
 import {NavLink, Outlet, redirect} from "react-router";
 import {MessageSchema, PartnerMessageSchema} from "~/utils/models/message.model";
 import type {Message} from "~/utils/types/message";
-import { useLocation, useMatch } from "react-router";
+import { useLocation, useMatch, useParams } from "react-router";
 
 
 export async function loader ({request} : Route.LoaderArgs) {
@@ -55,6 +55,7 @@ export default function MessagingApp  ({loaderData} : Route.ComponentProps) {
 
     const location = useLocation();
     const isRootMessaging = useMatch("/chat")
+    const params = useParams();
 
     return (
         <div className="container mx-auto mt-10 shadow-md flex bg-white">
@@ -62,8 +63,8 @@ export default function MessagingApp  ({loaderData} : Route.ComponentProps) {
             <div className="w-80 bg-white border-r border-gray-200 flex flex-col">
                 {/* Header */}
                 <div className="p-4 border-b border-gray-200">
-                    <div className="flex items-center justify-between mb-4">
-                        <h1 className="text-2xl font-bold text-gray-900">Chats</h1>
+                    <div className="flex ml-2 items-center justify-between my-5">
+                        <h1 className="text-4xl font-bold text-gray-900">Your Chats:</h1>
                         <div className="flex gap-2">
 
                             <div
@@ -134,28 +135,18 @@ export default function MessagingApp  ({loaderData} : Route.ComponentProps) {
                                     </li>
                                 </ul>
                             </div>
-                            <nav className=""></nav>
-                            <button className="p-2 hover:bg-gray-100 rounded-full">
-                                <FaSearch size={20} className="text-gray-600"/>
-                            </button>
                         </div>
-                    </div>
-                    <div className="relative">
-                        <FaSearch size={16} className="absolute left-3 top-3 text-gray-400"/>
-                        <input
-                            type="text"
-                            placeholder="Search Messenger"
-                            className="w-full pl-10 pr-4 py-2 bg-gray-100 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-
                     </div>
                 </div>
 
                 {/* Chat List */}
                 <div className="flex-1 overflow-y-auto p-2 space-y-2 bg-gray-50" >
                     {lastMessage.map((lastMessage) => (
-                        <NavLink to={`/chat/${lastMessage.partnerId}`}   className="">
-                        <ChatTabs  partnerMessage={lastMessage}/>
+                        <NavLink to={`/chat/${lastMessage.partnerId}`} className="">
+                            <ChatTabs
+                                partnerMessage={lastMessage}
+                                isActive={params.partnerId === String(lastMessage.partnerId)}
+                            />
                         </NavLink>
                     ))}
                 </div>
@@ -213,3 +204,4 @@ export default function MessagingApp  ({loaderData} : Route.ComponentProps) {
 {/*    Individual*/}
 {/*</button>*/}
 {/*/!*Dropdown*!/*/}
+

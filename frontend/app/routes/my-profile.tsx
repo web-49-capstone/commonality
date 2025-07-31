@@ -37,14 +37,14 @@ export default function MyProfile({loaderData}: Route.ComponentProps) {
 
     return (
         <>
-            <section className="max-w-4xl mx-auto p-6">
+            <section className="max-w-4xl min-w-1/2 mx-auto p-6">
                 <div className="flex justify-between items-center mb-6">
                     <h1 className="text-3xl font-bold text-gray-900">My Profile</h1>
                     <div className="flex flex-row gap-4">
                     {!editMode && (
                         <button
                             onClick={() => setEditMode(true)}
-                            className="bg-indigo-600 text-white px-4 py-2 rounded-lg shadow hover:bg-indigo-700 transition"
+                            className="hover:cursor-pointer bg-gradient-to-br from-blue-500 to-blue-400 text-white px-4 py-2 rounded-lg shadow hover:to-indigo-700 transition"
                         >
                             Edit
                         </button>
@@ -53,7 +53,7 @@ export default function MyProfile({loaderData}: Route.ComponentProps) {
                     <Form method="post" action="/signout">
                         <button
                             type="submit"
-                            className="bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-700 transition"
+                            className="hover:cursor-pointer bg-gradient-to-br from-red-500 to-red-400 text-white px-4 py-2 rounded-lg shadow hover:to-red-700 transition"
                         >
                             Sign Out
                         </button>
@@ -83,20 +83,20 @@ export default function MyProfile({loaderData}: Route.ComponentProps) {
                         </div>
 
                         <div>
-                            <h3 className="font-medium text-gray-700">Bio</h3>
+                            <h3 className="font-bold text-gray-700">Bio:</h3>
                             <p className="text-gray-800">{initialUser.userBio || "No bio provided."}</p>
                         </div>
 
                         <div>
-                            <h3 className="font-medium text-gray-700">Availability</h3>
+                            <h3 className="font-bold text-gray-700">Availability:</h3>
                             <p className="text-gray-800">{initialUser.userAvailability || "Not specified."}</p>
                         </div>
 
                         <div>
-                            <h3 className="font-medium text-gray-700 mb-1">Interests</h3>
+                            <h3 className="font-bold text-gray-700 mb-1">Interests:</h3>
                             <ul className="flex flex-wrap gap-2">
                                 {userInterests.map((interest) => (
-                                    <li key={interest.interestId} className="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm">
+                                    <li key={interest.interestId} className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">
                                         {interest.interestName}
                                     </li>
                                 ))}
