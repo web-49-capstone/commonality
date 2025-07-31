@@ -204,7 +204,7 @@ export default function MainChat({loaderData}: Route.ComponentProps) {
                   onKeyDown={handleKeyDown}
               />
                                 <button
-                                    className='ml-3 float-right right-2 bottom-2 p-2 rounded-full bg-blue-500 text-white hover:bg-blue-600'
+                                    className='ml-3 float-right right-2 bottom-2 p-2 rounded-full hover:cursor-pointer bg-blue-500 text-white hover:bg-blue-600'
                                     type="submit"
                                 >
                                     <BsFillSendFill size={30} className="pr-0.5 pt-0.5"/>
