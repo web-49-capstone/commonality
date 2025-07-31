@@ -5,7 +5,8 @@ import {MessageSchema} from "~/utils/models/message.model";
 import {getSession} from "~/utils/session.server";
 import type {Route} from "./+types/main-chat";
 import * as z from "zod/v4";
-import {Form, Link, redirect, useActionData, useLocation, useParams, useRevalidator} from "react-router";
+import {Form, Link, redirect, useActionData, useLocation, useParams, useRevalidator} from "react-router";;
+import { ProfilePreview} from "~/components/ProfilePreview";
 import {MessageBubble} from "~/components/MessageBubble";
 import {UserSchema} from "~/utils/models/user-schema";
 import {v7 as uuidv7} from "uuid"
@@ -27,7 +28,7 @@ export async function loader({request, params}: Route.LoaderArgs) {
     if (!partnerId) {
         return {session, messages: [], partner: null}
     }
-
+    console.log("is this running?")
     const requestHeaders = new Headers()
     requestHeaders.append('Content-Type', 'application/json')
     requestHeaders.append('Authorization', session.data?.authorization || '')
@@ -139,6 +140,7 @@ export default function MainChat({loaderData}: Route.ComponentProps) {
             formRef.current?.reset();
         }
     }, [actionData]);
+    const [showPreview, setShowPreview] = useState(false);
 
 
     return (
@@ -163,10 +165,19 @@ export default function MainChat({loaderData}: Route.ComponentProps) {
                             <h2 className="font-semibold text-2xl text-gray-900">{partnerInfo?.userName}</h2>
                         </div>
                     </div>
-                    <div className="flex gap-3">
-                        <button className="p-2 hover:bg-gray-100 rounded-full">
+                    <div className="flex gap-3 relative">
+                      <Link to={`/user/${partnerInfo?.userId}`}>
+                        <button className="p-2 hover:bg-gray-100 rounded-full" type="button"
+                                onMouseEnter={() => {
+                                    setShowPreview(true)}}
+                                onMouseLeave={() => setShowPreview(false)}
+                        >
                             <CiCircleInfo size={20} className="text-blue-500"/>
                         </button>
+                      </Link>
+                        {showPreview && partnerInfo && (
+                            <ProfilePreview user={partnerInfo} />
+                        )}
                     </div>
                 </div>
 

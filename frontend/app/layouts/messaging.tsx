@@ -18,10 +18,10 @@ export async function loader ({request} : Route.LoaderArgs) {
     const session = await getSession(
         request.headers.get("Cookie"))
 
-
-    if (!session.has("user")) {
-        return redirect("/login")
-    }
+console.log("I made it here")
+    // if (!session.has("user")) {
+    //     return redirect("/login")
+    // }
     const requestHeaders = new Headers()
     requestHeaders.append('Content-Type', 'application/json')
     requestHeaders.append('Authorization', session.data?.authorization || '')
