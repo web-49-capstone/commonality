@@ -50,7 +50,7 @@ export async function createGroupAction (request: Request) {
     const responseHeaders = new Headers()
     responseHeaders.append('Set-Cookie', await commitSession(session))
     console.log("this",response)
-    return redirect(`/groups/${response.data.group.groupId}`, { headers: responseHeaders })
+    return redirect(`/groupsInterest/${response.data.group.groupId}`, { headers: responseHeaders })
   }
 
   return { success: false, error: response.message, status: response.status }

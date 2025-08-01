@@ -13,6 +13,7 @@ export default [
         route("profile", "routes/my-profile.tsx"),
         route("user/:partnerId?", "routes/user-profile-page.tsx"),
         route("groups/create", "routes/create-group.tsx"),
+        route("/groupsInterest/:groupId?", "routes/groups-interest.tsx"),
         route("groups/:groupId?", "routes/group-detail.tsx"),
         route("my-groups", "routes/my-groups.tsx"),
         // route("messages", "routes/view-connections-messages.tsx"),
