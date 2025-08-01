@@ -44,14 +44,14 @@ export default function Navigation({loaderData}: Route.ComponentProps) {
 
     return (
         <>
-        <div className="flex flex-col pt-[6rem]">
+        <div className="flex flex-col pt-[4rem] md:pt-[6rem]">
             <nav className="fixed top-0 w-full z-50 bg-white shadow-xl rounded-b-3xl">
                 {/*DESKTOP HEADER*/}
                 <div className="md:block pb-2 rounded-b-3xl">
 
                     <div className="flex justify-center pt-1 md:py-3">
                         <Link to="/">
-                            <img src="/commonality-logo.png" className="mr-3 h-10" alt="Flowbite React Logo"/>
+                            <img src="/commonality-logo.png" className="mr-3 h-10" alt="Commonality Logo"/>
                         </Link>
                         <h2 className="self-center whitespace-nowrap tracking-tight text-3xl font-semibold text-gray-800">Commonality</h2>
                     </div>

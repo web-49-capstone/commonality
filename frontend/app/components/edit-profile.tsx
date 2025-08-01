@@ -35,15 +35,15 @@ export function EditProfile (props: Props) {
     }
     return (
         <>
-            <section className="max-w-4xl min-w-1/2 px-6">
+            <section className="flex flex-col gap-10 px-4 sm:px-6 md:px-8">
                 {/* ✅ Wrapper box around everything */}
-                <div className="w-full bg-white shadow-xl rounded-3xl p-6 space-y-10 transition-all">
+                <div className="w-full bg-white shadow-xl rounded-3xl p-6 sm:p-10 space-y-10 transition-all">
 
                     <Form method="put" encType="multipart/form-data" id="updateProfile"
                           className="w-full flex flex-col lg:flex-row justify-between items-start gap-8">
 
                         {/* LEFT SIDE */}
-                        <div className="flex flex-col items-center gap-6 w-full lg:w-1/3">
+                        <div className="flex flex-col items-center gap-2 lg:gap-4 w-full lg:w-1/3">
 
                             <input
                                 type="file"
@@ -135,8 +135,7 @@ export function EditProfile (props: Props) {
                             </div>
                         </div>
                     </Form>
-
-                    {/* ✅ Interests are inside the same card box now */}
+                    {/*Interest Selector*/}
                     <div className="w-full">
                         <InterestSelector
                             user={user}

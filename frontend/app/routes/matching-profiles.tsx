@@ -248,31 +248,34 @@ export default function MatchingProfiles() {
     const buttonState = getButtonState()
     const location = useLocation()
     const [searchParams]= useSearchParams()
-    console.log("searchParams: ", searchParams)
-    const isRootMessaging = !searchParams.has('interestId')
-    console.log("search params??: ", isRootMessaging)
+    const isRootMatching = !searchParams.has('interestId')
 
     return (
         <>
-            <div className="grid grid-cols-1 lg:grid-cols-3 mt-5 lg:mt-10 container mx-auto bg-white shadow-xl rounded-3xl p-6 sm:px-5 space-y-10 transition-all">
-                <div className="text-center order-2 lg:order-1 py-3">
-                    <div className="text-center">
+            <div className="grid grid-cols-1 md:grid-cols-3 md:mt-10 container mx-auto bg-white shadow-xl rounded-3xl p-6 sm:px-5 space-y-10 transition-all">
+
+                <div className="text-center order-2 md:order-1 py-3">
+
+
+                    <div className={!isRootMatching ? "text-center hidden md:block" : "text-center"}>
                         <img src="/commonality-logo.png" alt="Commonality Logo" className="w-1/4 mx-auto"/>
                         <h2 className="text-4xl font-semibold my-3">Meet New People</h2>
                         <p className="text-xl text-gray-900 mx-10">Select an interest from your profile to view potential connections.</p>
                     </div>
+
+
                     <hr className="my-5 md:my-10 w-3/4 mx-auto"></hr>
-                    <h2 className="text-3xl lg:text-2xl font-medium mt-5 lg:mt-10">Finding profiles interested in:</h2>
+                    <h2 className="text-2xl md:text-2xl font-medium mt-5 md:mt-10">Finding profiles interested in:</h2>
                     <MyInterestsDropdown userInterests={userInterests}/>
                     <p className="text-sm text-gray-900 mx-10 pt-5 italic">Profiles within 40 miles are displayed. <a className="text-blue-500 hover:text-blue-700" href="/profile">Change your city and state</a> to search somewhere else.</p>
 
                 </div>
-                <div className="lg:col-span-2 order-1 lg:order-2">
+                <div className="md:col-span-2 order-1 md:order-2">
                     {!matchingUsers || matchingUsers.length === 0 ? (
                         <div className="text-center pt-20">
-                            {isRootMessaging ? (
-                                <div className="text-red-900 text-xl">
-                                    <p>Select an interest to the left to start matching.</p>
+                            {isRootMatching ? (
+                                <div className="text-red-900 text-xl hidden md:block">
+                                    <p>Select an interest to start matching.</p>
                                 </div>
                             ) : (
                                 <div>
