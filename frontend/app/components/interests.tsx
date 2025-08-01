@@ -57,7 +57,7 @@ export function InterestSelector(props: Props) {
                         {interests.map((interest) => (
                             <li
                                 key={interest.interestId}
-                                className="p-2 cursor-pointer hover:bg-gray-200"
+                                className="p-2 hover:cursor-pointer hover:bg-gray-200"
                                 onClick={() => {
                                     //Create a new user interest object
                                     const userInterest = {

@@ -53,7 +53,7 @@ export function EditProfile (props: Props) {
                                 onChange={handleFileChange}
                                 className="hidden"
                             />
-                            <label htmlFor="userImgUrl" className="cursor-pointer flex flex-col items-center group">
+                            <label htmlFor="userImgUrl" className="hover:cursor-pointer flex flex-col items-center group">
                                 <IconContext.Provider value={{ size: "6em" }}>
                                     <div className="w-32 h-32 bg-gradient-to-br from-blue-100 to-indigo-100 border border-gray-300 rounded-full overflow-hidden flex items-center justify-center shadow-md group-hover:scale-105 transition-transform duration-200 ease-out">
                                         {previewUrl ? (

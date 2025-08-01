@@ -158,14 +158,21 @@ export default function MainChat({loaderData}: Route.ComponentProps) {
 
     return (
         <>
-            <div className="flex-1 h-[40rem] flex flex-col transition-all">
+            <div className="flex-1 h-[82dvh] md:h-[38rem] flex flex-col transition-all">
                 {/* Chat Header */}
                 <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-white">
-                    <div className="flex items-center">
+                    <div className="md:hidden">
+                        <Link to={`/chat`} className="text-gray-900 hover:text-blue-700 mr-2 md:hidden">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M15 6L9 12L15 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </Link>
+                    </div>
+                    <div className="flex justify-between items-center">
                         <div className="relative">
                             <div className="w-[5em] h-[5em] rounded-full overflow-hidden">
                                 <Link to={`/user/${partnerInfo?.userId}`}>
-                                    <img
+                                <img
                                         className="object-cover w-full h-full"
                                         alt={`${partnerInfo?.userName} profile picture`}
                                         key={partnerInfo?.userImgUrl}
@@ -195,7 +202,7 @@ export default function MainChat({loaderData}: Route.ComponentProps) {
                 </div>
 
                 {/* Messages */}
-                <div className="flex-1 max-h-3/4 overflow-y-auto p-4 space-y-4 bg-gray-50">
+                <div className="flex-1 md:max-h-3/4 overflow-y-auto p-4 space-y-4 bg-gray-50 h-[80vh]">
                     {messages.map((message) => (
                         <MessageBubble key={message.messageId} message={message} userId={user.userId}/>
                     ))}
