@@ -1,5 +1,6 @@
 import { getSession } from "~/utils/session.server";
 import {redirect} from "react-router";
+import {GroupSchema} from "~/utils/models/group.model";
 
 export async function getGroupsByUserId(request: Request) {
     const session = await getSession(
@@ -29,20 +30,12 @@ export async function getGroupsByUserId(request: Request) {
     if (!user || !authorization) {
         return redirect('/login')
     }
+
     console.log(response);
-    if (!response.ok) {
-        return { error: "Failed to fetch groups" ,  status: 500 }
-    }
 
     const result = response.data
     console.log(result)
-    // If backend returns { status, data }, extract data
-    if (result && Array.isArray(result.data)) {
-        return { groups: result.data };
-    }
-    // fallback if backend returns array directly
-    if (Array.isArray(result)) {
-        return { groups: result };
-    }
-    return { groups: [] };
+   const groups = GroupSchema.array().parse(result)
+
+    return { groups};
 }

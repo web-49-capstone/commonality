@@ -183,5 +183,6 @@ export async function selectGroupsByUserId(userId: string): Promise<Group[]> {
            JOIN group_members gm ON g.group_id = gm.group_id
     WHERE gm.user_id = ${userId}
   `
+  console.log(rowList)
   return GroupSchema.array().parse(rowList)
 }

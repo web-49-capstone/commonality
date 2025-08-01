@@ -175,8 +175,9 @@ export async function getGroupsByUserIdController(request: Request, response: Re
     }
 const { userId } = validationResult.data
     // const userFromSession = request.session?.user
-    // const userId1 =  userFromSession?.userId ?? ""
-    // console.log("fasfsa",userFromSession)
+    // const userId1 =  userFromSession?.userId ?? "
+    // "
+    console.log("fasfsa",userId)
 
 
     const data = await selectGroupsByUserId(userId);
