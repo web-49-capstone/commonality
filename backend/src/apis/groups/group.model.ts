@@ -176,3 +176,12 @@ export async function selectGroupById(groupId: string): Promise<any | null> {
   }
 }
 
+export async function selectGroupsByUserId(userId: string): Promise<Group[]> {
+  const rowList = await sql`
+    SELECT g.*
+    FROM "group" g
+           JOIN group_members gm ON g.group_id = gm.group_id
+    WHERE gm.user_id = ${userId}
+  `
+  return GroupSchema.array().parse(rowList)
+}

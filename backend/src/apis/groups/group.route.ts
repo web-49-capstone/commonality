@@ -21,8 +21,8 @@ router.route('/')
 router.route('/matching')
     .get(isLoggedInController, getMatchingGroupsController)
 
-router.route('/user/:userId')
-  .get(getGroupsByUserIdController)
+router.route('/groupsUser/:userId')
+  .get( getGroupsByUserIdController)
 
 router.route('/:groupId')
   .get(getGroupByIdController)

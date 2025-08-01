@@ -13,9 +13,11 @@ import {
   GroupSchema,
   searchGroups,
   updateGroup,
-  selectGroupById, type Group,
-  findGroupsByUserId
+  selectGroupById, type Group, selectGroupsByUserId,
 } from './group.model.ts'
+import {PublicUserSchema} from "../users/user.model.ts";
+import {UserInterestSchema} from "../interests/interest.model.ts";
+import {updateMessageWhenOpened} from "../message/message.model.ts";
 
 export async function postGroupController (request: Request, response: Response): Promise<void> {
   try {
@@ -164,15 +166,24 @@ export async function getGroupByIdController (request: Request, response: Respon
 
 export async function getGroupsByUserIdController(request: Request, response: Response): Promise<void> {
   try {
-    const userId = request.query.userId as string;
-    if (!userId) {
-      response.status(400).json({ status: 400, data: null, message: 'Missing userId parameter' });
-      return;
+
+    const validationResult = PublicUserSchema.pick({userId: true}).safeParse(request.params)
+
+    if(!validationResult.success) {
+      zodErrorResponse(response, validationResult.error)
+      return
     }
-    const data = await findGroupsByUserId(userId);
+const { userId } = validationResult.data
+    // const userFromSession = request.session?.user
+    // const userId1 =  userFromSession?.userId ?? ""
+    // console.log("fasfsa",userFromSession)
+
+
+    const data = await selectGroupsByUserId(userId);
     const status: Status = { status: 200, data, message: null };
     response.json(status);
   } catch (error: any) {
     serverErrorResponse(response, error);
   }
 }
+

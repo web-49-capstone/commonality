@@ -8,8 +8,8 @@ export const loader: LoaderFunction = async ({ request }: Route.LoaderArgs) => {
 };
 
 export default function MyGroups({ loaderData }: Route.ComponentProps) {
-    const { data } = loaderData ?? {};
-    const groups = Array.isArray(data) ? data : [];
+    const { groups } = loaderData ?? {};
+    const groupList = Array.isArray(groups) ? groups : [];
 
     return (
         <section className="max-w-7xl mx-auto p-6">
@@ -19,8 +19,8 @@ export default function MyGroups({ loaderData }: Route.ComponentProps) {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {groups.length > 0 ? (
-                    groups.map((group) => (
+                {groupList.length > 0 ? (
+                    groupList.map((group) => (
                         <div key={group.groupId} className="bg-white rounded-lg shadow-md p-6 flex flex-col">
                             <div className="flex items-start mb-4">
                                 <img
