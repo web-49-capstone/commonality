@@ -46,18 +46,18 @@ export default function Signup() {
     return (
         <>
             <div className="container mx-auto text-center">
-                <h1 className="text-4xl">Welcome to Commonality</h1>
-                <p>Shared Interests. Real Connections</p>
-                <div className="  text-white flex flex-col items-center justify-center p-4">
+                <h1 className="text-4xl sm:text-5xl font-extrabold text-center pt-10 text-gray-900 tracking-tight">Welcome to Commonality</h1>
+                <p className="text-2xl">Shared Interests. Real Connections.</p>
+                <div className="text-white flex flex-col items-center justify-center w-full bg-white shadow-xl rounded-3xl p-6 pb-10 space-y-10 transition-all">
                     <div className="flex space-x-4 mb-6">
-                        <button className="text-xl px-4 py-2 rounded bg-zinc-300 hover:bg-zinc-600 hover:cursor-pointer" onClick={() => navigate('/login')}>
+                        <button className="hover:cursor-pointer bg-gradient-to-br from-blue-500 to-blue-400 text-white px-4 py-2 rounded-lg shadow hover:to-indigo-700 transition" onClick={() => navigate('/login')}>
                             Login
                         </button>
-                        <button className="text-xl px-4 py-2 rounded bg-blue-600">
+                        <button className="bg-gradient-to-br from-green-500 to-green-400 text-white px-4 py-2 rounded-lg shadow transition">
                             Sign Up
                         </button>
                     </div>
-            <Form id="signup" method="post" className="bg-zinc-300 p-6 rounded-xl space-y-4 w-full max-w-sm">
+            <Form id="signup" method="post" className="bg-gradient-to-br from-gray-100 to-gray-200 shadow-lg p-6 rounded-xl space-y-4 w-full max-w-sm">
                 <div className='relative'>
                     <ImProfile className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white"/>
 
@@ -130,7 +130,7 @@ export default function Signup() {
 
                     <button
                         type="submit"
-                        className={`w-full p-2 rounded text-white ${formData.userName && formData.userEmail && formData.userPassword && formData.userPasswordConfirm ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-400 cursor-not-allowed'}`}
+                        className={`w-full p-2 rounded text-white ${formData.userName && formData.userEmail && formData.userPassword && formData.userPasswordConfirm ? 'bg-gradient-to-br from-green-400 to-green-500 hover:cursor-pointer hover:to-green-600' : 'bg-gray-400 cursor-not-allowed'}`}
                         disabled={
                             !formData.userName ||
                             !formData.userEmail ||

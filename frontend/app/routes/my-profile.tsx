@@ -41,34 +41,38 @@ export default function MyProfile({loaderData}: Route.ComponentProps) {
                 <div className="flex justify-between items-center mb-6">
                     <h1 className="text-3xl font-bold text-gray-900">My Profile</h1>
                     <div className="flex flex-row gap-4">
-                    {!editMode && (
+                    {!editMode ? (
                         <button
                             onClick={() => setEditMode(true)}
                             className="hover:cursor-pointer bg-gradient-to-br from-blue-500 to-blue-400 text-white px-4 py-2 rounded-lg shadow hover:to-indigo-700 transition"
                         >
                             Edit
                         </button>
-                    )}
+                    ) : (
+                        <button
+                        onClick={() => setEditMode(false)}
+                        className="hover:cursor-pointer bg-gradient-to-br from-red-500 to-red-400 hover:to-red-700 text-white px-4 py-2 rounded-lg shadow hover:bg-gray-400 transition align-right"
+                    >
+                        Cancel
+                    </button>
+                        )}
                     {/* Sign Out Button */}
-                    <Form method="post" action="/signout">
+
+                        <Form method="post" action="/signout">
                         <button
                             type="submit"
-                            className="hover:cursor-pointer bg-gradient-to-br from-red-500 to-red-400 text-white px-4 py-2 rounded-lg shadow hover:to-red-700 transition"
+                            className="hover:cursor-pointer bg-gradient-to-br from-red-500 to-red-400 hover:to-red-700 text-white px-4 py-2 rounded-lg shadow transition"
                         >
                             Sign Out
                         </button>
                     </Form>
+
                   </div>
                 </div>
                 {editMode ? (
                     <div>
                     <div className="flex justify-end mb-4 mr-9">
-                        <button
-                            onClick={() => setEditMode(false)}
-                            className="bg-red-600 text-gray-800 px-4 py-2 rounded-lg shadow hover:bg-gray-400 transition align-right text-white"
-                        >
-                            Cancel
-                        </button>
+
                     </div>
 
                     <EditProfile

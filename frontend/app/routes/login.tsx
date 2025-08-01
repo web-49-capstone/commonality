@@ -128,26 +128,25 @@ console.log(errors)
                         </button>
                     </div>
                 )}
-            <h1 className="text-4xl">Welcome to Commonality</h1>
-            <p>Shared Interests. Real Connections</p>
-            <div className="  text-white flex flex-col items-center justify-center p-4">
+            <h1 className="text-4xl sm:text-5xl font-extrabold text-center pt-10 text-gray-900 tracking-tight">Welcome to Commonality</h1>
+            <p className="text-2xl">Shared Interests. Real Connections.</p>
+            <div className="text-white flex flex-col items-center justify-center w-full bg-white shadow-xl rounded-3xl p-6 pb-10 space-y-10 transition-all">
                 <div className="flex space-x-4 mb-6">
-                    <button className="text-xl px-4 py-2 rounded bg-blue-600">
+                    <button className="bg-gradient-to-br from-green-500 to-green-400 text-white px-4 py-2 rounded-lg shadow transition">
                         Login
                     </button>
-                    <button className="text-xl px-4 py-2 rounded bg-zinc-300 hover:bg-zinc-600 hover:cursor-pointer" onClick={() => navigate('/signup')}>
+                    <button className="hover:cursor-pointer bg-gradient-to-br from-blue-500 to-blue-400 text-white px-4 py-2 rounded-lg shadow hover:to-indigo-700 transition" onClick={() => navigate('/signup')}>
                         Sign Up
                     </button>
                 </div>
 
-                    <Form method="post" onSubmit={handleSubmit} id="login-form" className="bg-zinc-300 p-6 rounded-xl space-y-4 w-full max-w-sm" noValidate>
+                    <Form method="post" onSubmit={handleSubmit} id="login-form" className="bg-gradient-to-br from-gray-100 to-gray-200 shadow-lg p-6 rounded-xl space-y-4 w-full max-w-sm" noValidate>
                         {actionData?.error && (
-                            <div className="text-red-500 text-sm mb-4">
+                            <div className="text-red-500 text-sm mb-4 absolute">
                                 {actionData.error}
                             </div>
                         )}
                         <div className='relative'>
-
                             <MdOutlineEmail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white"/>
                             <input
                                 type="email"
@@ -156,8 +155,8 @@ console.log(errors)
                                 className="w-full p-2 pl-10 rounded bg-zinc-500 text-white"
                                 required
                             />
-                            {errors?.userEmail ? <p className="text-red-500">{errors?.userEmail.message}</p> : null}
                         </div>
+                        {errors?.userEmail ? <p className="text-red-500">{errors?.userEmail.message}</p> : null}
                         <div className='relative'>
                             <RiLockPasswordLine
                                 className="absolute left-3 top-1/5 transform -translate-y-1/2 text-white"/>
@@ -169,7 +168,6 @@ console.log(errors)
                                 className="w-full p-2 pl-10 rounded bg-zinc-500 text-white"
                                 required
                             />
-                            {errors?.userPassword ? <p className="text-red-500">{errors?.userPassword.message}</p> : null}
                             <IconContext.Provider value={{size: '1.5em'}}>
                                 <button type='button'
                                         onClick={() => setShowPassword((prev) => !prev)}
@@ -177,10 +175,11 @@ console.log(errors)
                                     <BiHide/> : <BiShow/>
                                 }</button>
                             </IconContext.Provider>
-                            <button className=" flex justify-start text-sm hover:text-red-600 my-2">Forgot Password?</button>
+                            {errors?.userPassword ? <p className="text-red-500">{errors?.userPassword.message}</p> : null}
+                            <button className=" flex justify-start text-blue-400 text-sm hover:text-red-600 hover:cursor-pointer my-2">Forgot Password?</button>
                             <button
                                 type="submit"
-                                className="w-full bg-blue-600 hover:bg-blue-700 p-2 rounded text-white disabled:bg-gray-500 disabled:cursor-not-allowed" disabled={buttonDisabled}
+                                className="w-full bg-gradient-to-br from-green-400 to-green-500 hover:cursor-pointer hover:to-green-600 p-2 rounded text-white disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed" disabled={buttonDisabled}
                             >Login
                             </button>
                         </div>

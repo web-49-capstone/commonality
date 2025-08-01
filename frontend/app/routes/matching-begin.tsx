@@ -12,7 +12,7 @@ export default function MatchingBegin() {
                         <h2 className="text-4xl my-3">Let's Get Started!</h2>
                         <h3 className="text-xl lg:text-xl my-5 lg:my-10">Click the button below to begin matching with others.</h3>
                         {/*<MyInterestsDropdown userInterests={userInterests} />*/}
-                        <Link to="/connect"><button className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 px-8 rounded-xl shadow transition cursor-pointer">Begin Matching</button></Link>
+                        <Link to="/connect"><button className="bg-gradient-to-br from-blue-400 to-blue-500 hover:to-indigo-700 text-white font-medium py-3 px-8 rounded-xl shadow transition cursor-pointer">Begin Matching</button></Link>
 
                         {/*<p className="text-xl text-gray-900 mx-10">Pick an interest from your profile to see other users with the same interest.</p>*/}
                         {/*<hr className="mt-10 lg:mb-10 w-3/5 mx-auto"/>*/}

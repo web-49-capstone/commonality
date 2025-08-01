@@ -30,15 +30,15 @@ export default function CreateProfile({loaderData}: Route.ComponentProps) {
 
     return (
         <>
-            <h1 className="text-4xl sm:text-5xl font-extrabold text-center pt-10 text-gray-900 tracking-tight">
-                Welcome to Commonality!
-            </h1>
-            <h2 className="text-lg sm:text-xl text-center pb-8 text-gray-600 max-w-xl mx-auto">
-                Let's create your profile and help others connect with you.
-            </h2>
-
-           <EditProfile user={initialUser} interests={interests} errorMessage={actionData?.error} q={q} userInterests={userInterests}/>
-
+                <h1 className="text-4xl sm:text-5xl font-extrabold text-center pt-10 text-gray-900 tracking-tight">
+                    Welcome to Commonality!
+                </h1>
+                <h2 className="text-lg sm:text-xl text-center text-gray-600 max-w-xl mx-auto">
+                    Let's create your profile and help others connect with you.
+                </h2>
+                <div className="flex justify-center items-center">
+               <EditProfile user={initialUser} interests={interests} errorMessage={actionData?.error} q={q} userInterests={userInterests}/>
+                </div>
 
 
         </>

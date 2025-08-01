@@ -44,10 +44,10 @@ export default function Navigation({loaderData}: Route.ComponentProps) {
 
     return (
         <>
-        <div className="flex flex-col">
+        <div className="flex flex-col pt-[6rem]">
             <nav className="fixed top-0 w-full z-50 bg-white shadow-xl rounded-b-3xl">
                 {/*DESKTOP HEADER*/}
-                <div className="md:block bg-white pb-2 rounded-b-3xl">
+                <div className="md:block pb-2 rounded-b-3xl">
 
                     <div className="flex justify-center pt-1 md:py-3">
                         <Link to="/">
@@ -79,8 +79,8 @@ export default function Navigation({loaderData}: Route.ComponentProps) {
 
         </div>
                 {/*MOBILE HEADER*/}
-        <div className="md:hidden fixed bottom-0 w-full bg-white border-t shadow-inner z-50 text-gray-700">
-            <div className="md:hidden flex justify-evenly items-center gap-3 px-2 py-2 min-h-20">
+        <div className="md:hidden fixed bottom-0 w-full z-50 text-gray-700">
+            <div className="md:hidden flex justify-evenly items-center gap-3 inset-shadow rounded-t-3xl border-t px-2 py-2 min-h-20 bg-gray-100">
                 <NavLink to="/chat" className={({
                                                         isActive,
                                                         isPending

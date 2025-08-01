@@ -48,7 +48,7 @@ export default function App() {
   return (
       <>
         <div className="max-h-[100rem] flex flex-col pb-30 md:pb-0">
-          <main className="pt-[6rem]">
+          <main>
             <Outlet/>
           </main>
         </div>
