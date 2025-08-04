@@ -13,11 +13,13 @@ import {
   GroupSchema,
   searchGroups,
   updateGroup,
-  selectGroupById, type Group, selectGroupsByUserId,
+  selectGroupById, type Group, selectGroupsByUserId, addGroupInterest
 } from './group.model.ts'
 import {PublicUserSchema} from "../users/user.model.ts";
 import {UserInterestSchema} from "../interests/interest.model.ts";
 import {updateMessageWhenOpened} from "../message/message.model.ts";
+
+const InterestIdsSchema = z.array(z.string().uuid())
 
 export async function postGroupController (request: Request, response: Response): Promise<void> {
   try {
@@ -26,18 +28,22 @@ export async function postGroupController (request: Request, response: Response)
     const validationResult = GroupCreationSchema.safeParse(request.body)
 
     if (!validationResult.success) {
+      console.error("Validation failed:", validationResult.error)
+      console.error("Received body:", request.body)
       zodErrorResponse(response, validationResult.error)
       return
     }
+    console.log("Validation passed, creating group:", validationResult.data)
+    
+    const groupData = validationResult.data
     const group = {
       groupId: uuidv7(),
-      groupName: validationResult.data.groupName,
-      groupAdminUserId: validationResult.data.groupAdminUserId,
-      groupDescription: validationResult.data.groupDescription,
-      groupSize: validationResult.data.groupSize
+      ...groupData
     }
-    const newGroup = await createGroup(group)
-    // console.log('DEBUG: groupId returned from createGroup:', groupId)
+    
+    await createGroup(group)
+    
+    console.log("Group created successfully:", group.groupId)
     const status: Status = { status: 200, data: { group }, message: 'Group created successfully' }
     response.json(status)
   } catch (error: any) {

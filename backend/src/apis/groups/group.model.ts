@@ -103,6 +103,15 @@ export async function addGroupMember(groupMember: GroupMember): Promise<string> 
   return 'Member added successfully'
 }
 
+export async function addGroupInterest(groupId: string, interestId: string): Promise<string> {
+  console.log(`Inserting interest ${interestId} into group ${groupId}`)
+  await sql`
+    INSERT INTO group_interests (group_id, interest_id)
+    VALUES (${groupId}, ${interestId})
+  `
+  return 'Interest added to group successfully'
+}
+
 export async function removeGroupMember(groupMember: GroupMember): Promise<string> {
   const { userId, groupId } = groupMember
   await sql`

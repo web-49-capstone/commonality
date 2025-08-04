@@ -1,9 +1,9 @@
 DROP TABLE IF EXISTS message;
 DROP TABLE IF EXISTS user_interest;
-DROP TABLE IF EXISTS interest;
-DROP TABLE IF EXISTS match;
-DROP TABLE IF EXISTS group_members;
 DROP TABLE IF EXISTS group_interests;
+DROP TABLE IF EXISTS group_members;
+DROP TABLE IF EXISTS match;
+DROP TABLE IF EXISTS interest;
 DROP TABLE IF EXISTS "group";
 DROP TABLE IF EXISTS "user";
 
@@ -38,15 +38,10 @@ CREATE TABLE IF NOT EXISTS "group"(
 );
 CREATE INDEX ON "group" (group_admin_user_id);
 
-CREATE TABLE IF NOT EXISTS group_interests(
-    interest_id uuid NOT NULL,
-    group_id uuid NOT NULL,
-    FOREIGN KEY (interest_id) REFERENCES interest(interest_id),
-    FOREIGN KEY (group_id) REFERENCES "group"(group_id),
-    PRIMARY KEY (interest_id, group_id)
+CREATE TABLE IF NOT EXISTS interest(
+    interest_id   uuid PRIMARY KEY,
+    interest_name varchar(50)
 );
-CREATE INDEX ON group_interests (interest_id);
-CREATE INDEX ON group_interests (group_id);
 
 CREATE TABLE IF NOT EXISTS group_members(
     user_id uuid NOT NULL,
@@ -58,6 +53,15 @@ CREATE TABLE IF NOT EXISTS group_members(
 CREATE INDEX ON group_members (user_id);
 CREATE INDEX ON group_members (group_id);
 
+CREATE TABLE IF NOT EXISTS group_interests(
+    interest_id uuid NOT NULL,
+    group_id uuid NOT NULL,
+    FOREIGN KEY (interest_id) REFERENCES interest(interest_id),
+    FOREIGN KEY (group_id) REFERENCES "group"(group_id),
+    PRIMARY KEY (interest_id, group_id)
+);
+CREATE INDEX ON group_interests (interest_id);
+CREATE INDEX ON group_interests (group_id);
 
 CREATE TABLE IF NOT EXISTS match(
     match_maker_id    uuid NOT NULL ,
@@ -71,12 +75,6 @@ CREATE TABLE IF NOT EXISTS match(
 );
 CREATE INDEX ON match (match_maker_id);
 CREATE INDEX ON match (match_receiver_id);
-
-
-CREATE TABLE IF NOT EXISTS interest(
-    interest_id   uuid PRIMARY KEY,
-    interest_name varchar(50)
-);
 
 CREATE TABLE IF NOT EXISTS user_interest(
     user_interest_interest_id uuid,
@@ -103,29 +101,17 @@ CREATE TABLE IF NOT EXISTS message(
 CREATE INDEX ON message(message_receiver_id);
 CREATE INDEX ON message(message_sender_id);
 
--- CREATE TABLE group_message (
---                                  group_message_id uuid PRIMARY KEY,
---                                  group_message_sender_id uuid,
---                                  group_message_group_id uuid,
---                                  group_message_body text,
---                                  group_message_sent_at timestamp
--- );
--- CREATE TABLE IF NOT EXISTS groups (
---                           group_id uuid PRIMARY KEY,
---                           group_name varchar,
---                           group_admin_user_id uuid,
---                           group_description text,
---                           group_size NUMBER(10)
--- );
--- CREATE TABLE group_interests (
---                                    tied_group_id uuid,
---                                    tied_interest_id uuid
--- );
-
--- CREATE TABLE group_members (
---                                  member_user_id uuid,
---                                  member_group_id uuid
--- );
+CREATE TABLE IF NOT EXISTS group_match (
+    group_match_user_id uuid NOT NULL,
+    group_match_group_id uuid NOT NULL,
+    group_match_accepted bool,
+    group_match_created timestamptz NOT NULL,
+    FOREIGN KEY (group_match_user_id) REFERENCES "user" (user_id),
+    FOREIGN KEY (group_match_group_id) REFERENCES "group" (group_id),
+    PRIMARY KEY (group_match_user_id, group_match_group_id)
+);
+CREATE INDEX ON group_match (group_match_user_id);
+CREATE INDEX ON group_match (group_match_group_id);
 
 INSERT INTO interest (interest_id, interest_name) VALUES ('019837fd-b294-7db7-9de3-320d4078618c', 'Gaming');
 INSERT INTO interest (interest_id, interest_name) VALUES ('019837fd-b294-7b32-987d-d40fbfb8f19b', 'Hiking');

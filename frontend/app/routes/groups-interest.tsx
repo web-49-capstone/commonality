@@ -12,7 +12,7 @@ export async function loader({ request, params }: Route.LoaderArgs) {
     const session = await getSession(
         request.headers.get("Cookie")
     )
-    if (!session.has("user")) {
+    if (!session.data.user) {
         return redirect("/login")
     }
     const url = new URL(request.url)
@@ -20,14 +20,23 @@ export async function loader({ request, params }: Route.LoaderArgs) {
     const interests = await fetchInterestsByInterestName(q)
     const groupId = params.groupId;
 
-    const response = await fetch(`${process.env.REST_API_URL}/group-interest/${groupId}`)
-        .then(res => {
-            if (!res.ok) {
-                throw new Error('failed to fetch interests')
-            }
-            return res.json()
+    const requestHeaders = new Headers();
+    requestHeaders.append('Content-Type', 'application/json');
+    requestHeaders.append('Authorization', session.data?.authorization || '');
+    const cookie = request.headers.get('Cookie');
+    if (cookie) {
+        requestHeaders.append('Cookie', cookie);
+    }
+
+    let groupInterests = [];
+    
+    if (groupId) {
+        const response = await fetch(`${process.env.REST_API_URL}/group-interest/${groupId}`, {
+            headers: requestHeaders
         })
-    const groupInterests = InterestSchema.array().parse(response.data || [])
+        const data = await response.json()
+        groupInterests = InterestSchema.array().parse(data.data || [])
+    }
     return {session, interests, q, groupInterests, groupId}
 }
 export async function action({ request}: Route.ActionArgs) {

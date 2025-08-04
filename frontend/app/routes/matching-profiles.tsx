@@ -1,5 +1,6 @@
 import {MyInterestsDropdown} from "~/components/my-interests-dropdown";
 import {ProfileMatchingSection} from "~/components/profile-matching-section";
+import GroupMatchingSection from "~/components/group-matching-section";
 import {Form, Link, redirect, useLoaderData} from "react-router";
 // import type {ActionArgs, LoaderArgs} from "@remix-run/node";
 import {UserSchema, UserUpdatedSchema} from "~/utils/models/user-schema";
@@ -40,6 +41,8 @@ export async function loader({ request }: Route.LoaderArgs) {
 
     let matchingUsers = [];
     let matchingGroups = [];
+    let groupMatch = null;
+    let groupMatchDirection = null;
 
     if (matchType === 'individuals' || matchType === 'both') {
         const sharedInterestsFetch = await fetch(
@@ -50,11 +53,18 @@ export async function loader({ request }: Route.LoaderArgs) {
     }
 
     if (matchType === 'groups' || matchType === 'both') {
-        const groupInterestsFetch = await fetch(
-            `${process.env.REST_API_URL}/groups/interest/${interestId}`,
+        const sharedGroupsFetch = await fetch(
+            `${process.env.REST_API_URL}/group-matching`,
             {headers: requestHeaders}
         ).then(res => res.json());
-        matchingGroups = groupInterestsFetch.data || [];
+        matchingGroups = sharedGroupsFetch.data || [];
+        
+        // Filter by selected interest if provided
+        if (interestId && matchingGroups.length > 0) {
+            matchingGroups = matchingGroups.filter((group: any) => 
+                group.sharedInterests?.includes(interestId)
+            );
+        }
     }
 
 
@@ -102,6 +112,43 @@ export async function loader({ request }: Route.LoaderArgs) {
         }
     }
 
+    // Check group matches if groups are selected
+    if (matchingGroups.length > 0) {
+        const group = matchingGroups[0];
+        
+        // Check if user has already sent a request to this group
+        const userGroupMatchRes = await fetch(
+            `${process.env.REST_API_URL}/group-matching/pending/user/${userId}`,
+            {headers: requestHeaders}
+        );
+        
+        if (userGroupMatchRes.ok) {
+            const result = await userGroupMatchRes.json();
+            const pendingMatch = result.data?.find((m: any) => m.groupId === group.groupId);
+            if (pendingMatch) {
+                groupMatch = pendingMatch;
+                groupMatchDirection = 'direct';
+            }
+        }
+        
+        // Check if group admin has sent a request to this user
+        if (!groupMatch) {
+            const groupAdminMatchRes = await fetch(
+                `${process.env.REST_API_URL}/group-matching/pending/group/${group.groupId}`,
+                {headers: requestHeaders}
+            );
+            
+            if (groupAdminMatchRes.ok) {
+                const result = await groupAdminMatchRes.json();
+                const pendingMatch = result.data?.find((m: any) => m.userId === userId);
+                if (pendingMatch) {
+                    groupMatch = pendingMatch;
+                    groupMatchDirection = 'reverse';
+                }
+            }
+        }
+    }
+
     return {
         userInterests,
         interestId,
@@ -110,21 +157,25 @@ export async function loader({ request }: Route.LoaderArgs) {
         userId,
         match,
         matchDirection,
+        groupMatch,
+        groupMatchDirection,
         matchType
     };
 }
 
 export async function action({ request }: Route.ActionArgs) {
     const session = await getSession(request.headers.get("Cookie"));
-    const user = session.get("user");
-    const authorization = session.get("authorization");
+    const user = session.data.user;
+    const authorization = session.data.authorization;
     if (!user || !authorization) return redirect("/login");
 
     const formData = await request.formData();
     const makerId = formData.get("makerId") as string;
     const receiverId = formData.get("receiverId") as string;
+    const groupId = formData.get("groupId") as string;
     const actionValue = formData.get("actionType");
     const matchDirection = formData.get("matchDirection");
+    const matchType = formData.get("matchType") as string;
 
     if (user.userId !== makerId && user.userId !== receiverId) {
         console.error("Invalid action: User is not part of this match.");
@@ -132,25 +183,47 @@ export async function action({ request }: Route.ActionArgs) {
     }
 
     let acceptedStatus: boolean | null;
+    let endpoint: string;
+    let body: any;
 
-    if (actionValue === "false") {
-        acceptedStatus = false;
-    } else if (actionValue === "connect") {
-        if (matchDirection === 'reverse') {
-            acceptedStatus = true;
+    if (matchType === 'groups' && groupId) {
+        // Group matching logic
+        if (actionValue === "false") {
+            acceptedStatus = false;
+        } else if (actionValue === "connect") {
+            if (matchDirection === 'reverse') {
+                acceptedStatus = true;
+            } else {
+                acceptedStatus = null;
+            }
         } else {
-            acceptedStatus = null;
+            return redirect(request.url);
         }
-    } else {
-        return redirect(request.url);
-    }
 
-    const matchBody = {
-        matchMakerId: makerId,
-        matchReceiverId: receiverId,
-        matchCreated: null,
-        matchAccepted: acceptedStatus,
-    };
+        endpoint = `${process.env.REST_API_URL}/group-matching/${receiverId}/${groupId}`;
+        body = { groupMatchAccepted: acceptedStatus };
+    } else {
+        // User matching logic
+        if (actionValue === "false") {
+            acceptedStatus = false;
+        } else if (actionValue === "connect") {
+            if (matchDirection === 'reverse') {
+                acceptedStatus = true;
+            } else {
+                acceptedStatus = null;
+            }
+        } else {
+            return redirect(request.url);
+        }
+
+        endpoint = `${process.env.REST_API_URL}/matching/updateMatch/${makerId}/${receiverId}`;
+        body = {
+            matchMakerId: makerId,
+            matchReceiverId: receiverId,
+            matchCreated: null,
+            matchAccepted: acceptedStatus,
+        };
+    }
 
     const requestHeaders = new Headers();
     requestHeaders.append("Content-Type", "application/json");
@@ -159,72 +232,94 @@ export async function action({ request }: Route.ActionArgs) {
     if (cookie) requestHeaders.append("Cookie", cookie);
 
     const isExistingMatch = matchDirection === 'direct' || matchDirection === 'reverse';
+    const isGroupMatch = matchType === 'groups' && groupId;
 
-    if (isExistingMatch) {
-        await fetch(`${process.env.REST_API_URL}/matching/updateMatch/${makerId}/${receiverId}`, {
+    if (isExistingMatch || isGroupMatch) {
+        await fetch(endpoint, {
             method: "PUT",
             headers: requestHeaders,
-            body: JSON.stringify(matchBody),
+            body: JSON.stringify(body),
         });
 
-        if (matchDirection === 'reverse' && acceptedStatus === true) {
+        if ((matchDirection === 'reverse' || isGroupMatch) && acceptedStatus === true) {
             try {
                 const messageResponse = await fetch(`${process.env.REST_API_URL}/message`, {
                     method: "POST",
                     headers: requestHeaders,
                     body: JSON.stringify({
                         messageId: uuidv7(),
-                        messageSenderId: receiverId,
+                        messageSenderId: isGroupMatch ? groupId : receiverId,
                         messageReceiverId: makerId,
-                        messageBody: "You have a new match!",
+                        messageBody: isGroupMatch ? `Welcome to the group!` : "You have a new match!",
                         messageOpened: false,
                         messageSentAt: null,
                     }),
                 });
 
-
                 if (!messageResponse.ok) {
                     const errorText = await messageResponse.text();
                     console.error("Failed to post message:", errorText);
-                } else {
                 }
 
             } catch (error) {
                 console.error("Error during message POST fetch:", error);
             }
 
-            return redirect(`/chat/${makerId}`);
+            return redirect(isGroupMatch ? `/groups/${groupId}` : `/chat/${makerId}`);
         }
     } else {
-        await fetch(`${process.env.REST_API_URL}/matching`, {
-            method: "POST",
-            headers: requestHeaders,
-            body: JSON.stringify(matchBody),
-        });
+        if (isGroupMatch) {
+            await fetch(`${process.env.REST_API_URL}/group-matching`, {
+                method: "POST",
+                headers: requestHeaders,
+                body: JSON.stringify({
+                    groupMatchUserId: receiverId,
+                    groupMatchGroupId: groupId,
+                    groupMatchAccepted: null
+                }),
+            });
+        } else {
+            await fetch(`${process.env.REST_API_URL}/matching`, {
+                method: "POST",
+                headers: requestHeaders,
+                body: JSON.stringify(body),
+            });
+        }
     }
 
     return redirect(request.url);
 }
 
 export default function MatchingProfiles() {
-    const {userInterests, match, matchingUsers, matchingGroups, userId, matchDirection, matchType} = useLoaderData<typeof loader>();
+    const {userInterests, match, matchingUsers, matchingGroups, userId, matchDirection, groupMatch, groupMatchDirection, matchType} = useLoaderData<typeof loader>();
     const [openModal, setOpenModal] = useState(false);
 
     let receiverId = '';
     let makerId = '';
+    let currentGroupId = '';
 
-    if (match) {
-        // If a match already exists from the loader, respect the roles from the database.
+    const isGroupView = matchType === 'groups' || (matchType === 'both' && matchingGroups.length > 0);
+
+    if (isGroupView) {
+        // Group matching
+        const group = matchingGroups[0];
+        if (group) {
+            currentGroupId = group.groupId;
+            receiverId = userId || ''; // Current user is the one requesting to join
+            makerId = group.adminUserId || ''; // Group admin is the receiver
+        }
+    } else if (match) {
+        // User matching
         makerId = match.matchMakerId;
         receiverId = match.matchReceiverId;
     } else if (matchingUsers.length > 0 && userId) {
-        // For a new match, the current user is the "maker" and the user on screen is the "receiver".
+        // For a new user match
         makerId = userId;
         receiverId = matchingUsers[0].userId;
     }
 
     const handleConnectClick = () => {
-        if (!matchDirection) {
+        if (!matchDirection && !groupMatchDirection) {
             setOpenModal(true);
             setTimeout(() => setOpenModal(false), 1500);
         }
@@ -235,12 +330,32 @@ export default function MatchingProfiles() {
             return null;
         }
 
-        if (matchType === 'groups' || (matchType === 'both' && matchingGroups.length > 0)) {
+        if (isGroupView) {
             const group = matchingGroups[0];
+            if (!group) return null;
+
+            if (groupMatchDirection === 'reverse') {
+                return {
+                    connectText: `Accept invitation to ${group.groupName}`,
+                    connectDisabled: false,
+                    declineText: "Decline",
+                    isGroup: true,
+                    groupId: group.groupId
+                };
+            }
+            if (groupMatchDirection === 'direct') {
+                return {
+                    connectText: "Request Sent!",
+                    connectDisabled: true,
+                    declineText: "Next Group",
+                    isGroup: true,
+                    groupId: group.groupId
+                };
+            }
             return {
-                connectText: `View ${group.groupName}`,
+                connectText: `Request to join ${group.groupName}`,
                 connectDisabled: false,
-                declineText: "Next Profile",
+                declineText: "Next Group",
                 isGroup: true,
                 groupId: group.groupId
             };
@@ -253,6 +368,7 @@ export default function MatchingProfiles() {
                 connectText: `Accept ${otherUser.userName}'s Request`,
                 connectDisabled: false,
                 declineText: "Decline",
+                isGroup: false
             };
         }
         if (matchDirection === 'direct') {
@@ -260,12 +376,14 @@ export default function MatchingProfiles() {
                 connectText: "Request Sent!",
                 connectDisabled: true,
                 declineText: "Next Profile",
+                isGroup: false
             };
         }
         return {
             connectText: `Connect with ${otherUser.userName}`,
             connectDisabled: false,
             declineText: "Next Profile",
+            isGroup: false
         };
     };
 
@@ -307,44 +425,45 @@ export default function MatchingProfiles() {
                         </div>
                     ) : (
                         <>
-                            {matchType === 'groups' || (matchType === 'both' && matchingGroups.length > 0) ? (
-                                <div>
-                                    <h2>{matchingGroups[0].groupName}</h2>
-                                    <p>{matchingGroups[0].groupDescription}</p>
-                                </div>
+                            {isGroupView ? (
+                                <GroupMatchingSection 
+                                    group={matchingGroups[0]} 
+                                    onConnect={handleConnectClick}
+                                    onDecline={() => window.location.reload()}
+                                    isConnected={groupMatchDirection === 'reverse' && groupMatch?.groupMatchAccepted === true}
+                                    isPending={groupMatchDirection === 'direct' || (groupMatchDirection === 'reverse' && groupMatch?.groupMatchAccepted === null)}
+                                />
                             ) : (
-                                <ProfileMatchingSection user={matchingUsers[0]}/>
-                            )}
-                            {buttonState && (
-                                <Form method="post" className="mt-4 space-y-2">
-                                    <input type="hidden" name="receiverId" value={receiverId}/>
-                                    <input type="hidden" name="makerId" value={makerId}/>
-                                    <input type="hidden" name="matchDirection" value={matchDirection || ''}/>
-                                    <div className="flex flex-col md:flex-row gap-4 items-center justify-center w-3/4 mx-auto">
-                                    {buttonState.isGroup ? (
-                                        <Link to={`/groups/${buttonState.groupId}`} className="bg-gray-900 text-gray-200 border-1 border-gray-200 rounded-xl w-full py-3 px-6 hover:cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
-                                            {buttonState.connectText}
-                                        </Link>
-                                    ) : (
-                                        <button
-                                            onClick={handleConnectClick}
-                                            className="bg-gray-900 text-gray-200 border-1 border-gray-200 rounded-xl w-full py-3 px-6 hover:cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                                            name="actionType"
-                                            value="connect"
-                                            disabled={buttonState.connectDisabled}
-                                        >
-                                            {buttonState.connectText}
-                                        </button>
+                                <>
+                                    <ProfileMatchingSection user={matchingUsers[0]}/>
+                                    {buttonState && (
+                                        <Form method="post" className="mt-4 space-y-2">
+                                            <input type="hidden" name="receiverId" value={receiverId}/>
+                                            <input type="hidden" name="makerId" value={makerId}/>
+                                            <input type="hidden" name="matchDirection" value={matchDirection || ''}/>
+                                            <input type="hidden" name="groupId" value={currentGroupId}/>
+                                            <input type="hidden" name="matchType" value={matchType}/>
+                                            <div className="flex flex-col md:flex-row gap-4 items-center justify-center w-3/4 mx-auto">
+                                                <button
+                                                    onClick={handleConnectClick}
+                                                    className="bg-gray-900 text-gray-200 border-1 border-gray-200 rounded-xl w-full py-3 px-6 hover:cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                                                    name="actionType"
+                                                    value="connect"
+                                                    disabled={buttonState.connectDisabled}
+                                                >
+                                                    {buttonState.connectText}
+                                                </button>
+                                                <button
+                                                    className="bg-gray-300 text-gray-900 border-1 border-gray-200 rounded-xl w-full py-3 px-6 hover:cursor-pointer"
+                                                    name="actionType"
+                                                    value="false"
+                                                >
+                                                    {buttonState.declineText}
+                                                </button>
+                                            </div>
+                                        </Form>
                                     )}
-                                    <button
-                                        className="bg-gray-300 text-gray-900 border-1 border-gray-200 rounded-xl w-full py-3 px-6 hover:cursor-pointer"
-                                        name="actionType"
-                                        value="false"
-                                    >
-                                        {buttonState.declineText}
-                                    </button>
-                                    </div>
-                                </Form>
+                                </>
                             )}
                         </>
                     )}

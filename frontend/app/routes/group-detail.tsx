@@ -15,7 +15,9 @@ export default function GroupDetail ({ loaderData }: Route.ComponentProps) {
     return redirect('/login')
   }
 
-  const isMember = Array.isArray(group.members) && group.members.some((member: any) => member.userId === user.userId)
+  const members = group.members || []
+  const interests = group.interests || []
+  const isMember = Array.isArray(members) && members.some((member: any) => member.userId === user.userId)
   const isAdmin = group.groupAdminUserId === user.userId
 
   return (
@@ -35,8 +37,8 @@ export default function GroupDetail ({ loaderData }: Route.ComponentProps) {
               <dt className="text-sm font-medium text-gray-500">Members</dt>
               <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                 <ul>
-                  {Array.isArray(group.members) && group.members.length > 0 ? (
-                    group.members.map((member: any) => (
+                  {members.length > 0 ? (
+                    members.map((member: any) => (
                       <li key={member.userId}>{member.userName}</li>
                     ))
                   ) : (
@@ -49,8 +51,8 @@ export default function GroupDetail ({ loaderData }: Route.ComponentProps) {
               <dt className="text-sm font-medium text-gray-500">Interests</dt>
               <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                 <ul>
-                  {Array.isArray(group.interests) && group.interests.length > 0 ? (
-                    group.interests.map((interest: any) => (
+                  {interests.length > 0 ? (
+                    interests.map((interest: any) => (
                       <li key={interest.interestId}>{interest.interestName}</li>
                     ))
                   ) : (

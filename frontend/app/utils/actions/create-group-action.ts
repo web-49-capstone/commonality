@@ -1,5 +1,4 @@
 import { commitSession, getSession } from '~/utils/session.server'
-import { parseFormData } from '@remix-run/form-data-parser'
 import { redirect } from 'react-router'
 
 export async function createGroupAction (request: Request) {
@@ -7,13 +6,12 @@ export async function createGroupAction (request: Request) {
     request.headers.get('Cookie')
   )
 
-  const formData = await parseFormData(request)
+  const formData = await request.formData()
   const groupInfo = Object.fromEntries(formData)
 
-  const newGroup = {
-    ...groupInfo,
-    groupAdminUserId: session.data.user?.userId
-  }
+  console.log("Raw form data interests:", groupInfo.interests)
+  const interests = JSON.parse(groupInfo.interests || '[]')
+  console.log("Parsed interests:", interests)
 
   const requestHeaders = new Headers()
   requestHeaders.append('Content-Type', 'application/json')
@@ -23,35 +21,54 @@ export async function createGroupAction (request: Request) {
     requestHeaders.append('Cookie', cookie)
   }
 
-  const response = await fetch(`${process.env.REST_API_URL}/groups`,
+  // Step 1: Create the group without interests
+  const groupData = {
+    groupName: groupInfo.groupName,
+    groupDescription: groupInfo.groupDescription,
+    groupSize: parseInt(groupInfo.groupSize),
+    groupAdminUserId: session.data.user?.userId
+  }
+  
+  console.log("Step 1: Creating group:", groupData)
+  const groupResponse = await fetch(`${process.env.REST_API_URL}/groups`,
     {
       method: 'POST',
       headers: requestHeaders,
-      body: JSON.stringify(newGroup)
+      body: JSON.stringify(groupData)
     })
       .then(res => {
-        if (!res.ok) {
-          throw new Error('failed to fetch interests')
-        }
+        console.log("Group creation status:", res.status)
         return res.json()
       })
 
-  // let data;
-  // const contentType = response.headers.get('content-type') || '';
-  // if (response.ok && contentType.includes('application/json')) {
-  //   data = await response.json();
-  // } else {
-  //   // Try to get error message from text, fallback to generic
-  //   const errorText = await response.text();
-  //   return { success: false, error: errorText || 'Unexpected server error', status: response.status };
-  // }
-
-  if (response.status === 200) {
-    const responseHeaders = new Headers()
-    responseHeaders.append('Set-Cookie', await commitSession(session))
-    console.log("this",response)
-    return redirect(`/groupsInterest/${response.data.group.groupId}`, { headers: responseHeaders })
+  console.log("Group creation response:", groupResponse)
+  
+  if (groupResponse.status !== 200) {
+    return { success: false, error: groupResponse.message || 'Failed to create group', status: groupResponse.status }
+  }
+  
+  const groupId = groupResponse.data.group.groupId
+  console.log("Step 2: Adding interests to group:", groupId, interests)
+  
+  // Step 2: Add interests to the created group
+  for (const interestId of interests) {
+    try {
+      console.log(`Adding interest ${interestId} to group ${groupId}`)
+      const interestResponse = await fetch(`${process.env.REST_API_URL}/apis/group-interest`,
+        {
+          method: 'POST',
+          headers: requestHeaders,
+          body: JSON.stringify({ groupId, interestId })
+        })
+      
+      const interestResult = await interestResponse.json()
+      console.log(`Interest ${interestId} response:`, interestResult)
+    } catch (error) {
+      console.error(`Failed to add interest ${interestId}:`, error)
+    }
   }
 
-  return { success: false, error: response.message, status: response.status }
+  const responseHeaders = new Headers()
+  responseHeaders.append('Set-Cookie', await commitSession(session))
+  return redirect(`/groups/${groupId}`, { headers: responseHeaders })
 }
