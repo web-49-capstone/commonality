@@ -7,7 +7,7 @@ export async function loader({request}: Route.LoaderArgs) {
 }
 
 export default function MyGroups({ loaderData }: Route.ComponentProps) {
-    const { groups } = loaderData;
+    const { groups, user } = loaderData;
 
 
     return (
@@ -47,9 +47,14 @@ export default function MyGroups({ loaderData }: Route.ComponentProps) {
                                 >
                                     View Group
                                 </a>
-                                <button className="px-6 py-2 border border-gray-300 text-gray-700 rounded-full font-medium hover:bg-gray-50 transition-colors">
-                                    Message
-                                </button>
+                                {group.groupAdminUserId === user.userId && (
+                                    <a
+                                        href={`/groups/${group.groupId}/edit`}
+                                        className="px-6 py-2 bg-green-600 text-white rounded-full font-medium hover:bg-green-700 transition-colors"
+                                    >
+                                        Edit
+                                    </a>
+                                )}
                             </div>
                         </div>
                     ))

@@ -4,16 +4,12 @@ import type { Group } from '~/utils/models/group.model'
 
 interface GroupMatchingSectionProps {
   group: any
-  onConnect: () => void
-  onDecline: () => void
   isConnected?: boolean
   isPending?: boolean
 }
 
 export default function GroupMatchingSection({ 
   group, 
-  onConnect, 
-  onDecline, 
   isConnected = false, 
   isPending = false 
 }: GroupMatchingSectionProps) {
@@ -61,7 +57,7 @@ export default function GroupMatchingSection({
             </div>
           )}
 
-          <div className="mt-6 flex space-x-3">
+          <div className="mt-6">
             {isConnected ? (
               <div className="px-4 py-2 bg-green-100 text-green-800 rounded-lg text-sm font-medium">
                 ✓ Connected
@@ -70,22 +66,7 @@ export default function GroupMatchingSection({
               <div className="px-4 py-2 bg-yellow-100 text-yellow-800 rounded-lg text-sm font-medium">
                 ⏳ Pending Approval
               </div>
-            ) : (
-              <>
-                <button
-                  onClick={onConnect}
-                  className="flex-1 bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition-colors font-medium"
-                >
-                  Request to Join
-                </button>
-                <button
-                  onClick={onDecline}
-                  className="flex-1 bg-gray-200 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors font-medium"
-                >
-                  Next Group
-                </button>
-              </>
-            )}
+            ) : null}
           </div>
         </div>
       </div>

@@ -35,7 +35,29 @@ export async function getGroupsByUserId(request: Request) {
 
     const result = response.data
     console.log(result)
-   const groups = GroupSchema.array().parse(result)
+    const groups = GroupSchema.array().parse(result)
 
-    return { groups};
+    return { groups, user: session.data.user };
+}
+
+export async function getGroupById(request: Request, groupId: string) {
+  const session = await getSession(request.headers.get('Cookie'))
+  if (!session.has('user')) {
+    return redirect('/login')
+  }
+
+  const requestHeaders = new Headers()
+  requestHeaders.append('Content-Type', 'application/json')
+  requestHeaders.append('Authorization', session.data?.authorization || '')
+  const cookie = request.headers.get('Cookie')
+  if (cookie) {
+    requestHeaders.append('Cookie', cookie)
+  }
+
+  const response = await fetch(`${process.env.REST_API_URL}/groups/${groupId}`, {
+    headers: requestHeaders
+  })
+  
+  const data = await response.json()
+  return data.data
 }

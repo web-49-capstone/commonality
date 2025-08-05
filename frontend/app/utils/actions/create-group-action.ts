@@ -54,11 +54,11 @@ export async function createGroupAction (request: Request) {
   for (const interestId of interests) {
     try {
       console.log(`Adding interest ${interestId} to group ${groupId}`)
-      const interestResponse = await fetch(`${process.env.REST_API_URL}/apis/group-interest`,
+      const interestResponse = await fetch(`${process.env.REST_API_URL}/group-interest`,
         {
           method: 'POST',
           headers: requestHeaders,
-          body: JSON.stringify({ groupId, interestId })
+          body: JSON.stringify({ groupInterestGroupId: groupId, groupInterestInterestId: interestId })
         })
       
       const interestResult = await interestResponse.json()

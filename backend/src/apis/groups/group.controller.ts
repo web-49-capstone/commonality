@@ -13,11 +13,9 @@ import {
   GroupSchema,
   searchGroups,
   updateGroup,
-  selectGroupById, type Group, selectGroupsByUserId, addGroupInterest
+  selectGroupById, type Group, selectGroupsByUserId
 } from './group.model.ts'
 import {PublicUserSchema} from "../users/user.model.ts";
-import {UserInterestSchema} from "../interests/interest.model.ts";
-import {updateMessageWhenOpened} from "../message/message.model.ts";
 
 const InterestIdsSchema = z.array(z.string().uuid())
 
@@ -110,24 +108,6 @@ export async function getGroupsController (request: Request, response: Response)
   }
 }
 
-export async function getGroupsByInterestController (request: Request, response: Response): Promise<void> {
-  try {
-    const validationResult = z.object({ interestId: z.string().uuid() }).safeParse(request.params)
-
-    if (!validationResult.success) {
-      zodErrorResponse(response, validationResult.error)
-      return
-    }
-
-    const { interestId } = validationResult.data
-    const data = await findGroupsByInterest(interestId)
-    const status: Status = { status: 200, data, message: null }
-    response.json(status)
-  } catch (error: any) {
-    serverErrorResponse(response, error)
-  }
-}
-
 export async function getMatchingGroupsController (request: Request, response: Response): Promise<void> {
   try {
     // @ts-ignore
@@ -140,6 +120,31 @@ export async function getMatchingGroupsController (request: Request, response: R
 
     const data = await findMatchingGroups(userId)
     const status: Status = { status: 200, data, message: null }
+    response.json(status)
+  } catch (error: any) {
+    serverErrorResponse(response, error)
+  }
+}
+
+export async function getGroupsByInterestController (request: Request, response: Response): Promise<void> {
+  try {
+    // @ts-ignore
+    const { userId } = request.session.user
+    const { interestId } = request.params
+
+    if (userId === undefined) {
+      response.json({ status: 401, data: null, message: 'Unauthorized' })
+      return
+    }
+
+    const data = await findGroupsByInterest(interestId)
+    
+    // Filter out groups where user is admin or already member
+    const filteredGroups = data.filter(group => 
+      group.groupAdminUserId !== userId
+    )
+    
+    const status: Status = { status: 200, data: filteredGroups, message: null }
     response.json(status)
   } catch (error: any) {
     serverErrorResponse(response, error)
@@ -183,7 +188,6 @@ const { userId } = validationResult.data
     // const userFromSession = request.session?.user
     // const userId1 =  userFromSession?.userId ?? "
     // "
-    console.log("fasfsa",userId)
 
 
     const data = await selectGroupsByUserId(userId);

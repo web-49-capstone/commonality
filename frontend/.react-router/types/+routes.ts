@@ -54,6 +54,11 @@ type Pages = {
       "groupId"?: string;
     };
   };
+  "/groups/:groupId/edit": {
+    params: {
+      "groupId": string;
+    };
+  };
   "/my-groups": {
     params: {};
   };
@@ -67,7 +72,7 @@ type Pages = {
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/login" | "/signup" | "/create-profile" | "/apis/post-user-interests" | "/apis/delete-user-interests" | "/connect/:interestId?" | "/profile" | "/user/:partnerId?" | "/groups/create" | "/groupsInterest/:groupId?" | "/groups/:groupId?" | "/my-groups" | "/chat/:partnerId?";
+    page: "/" | "/login" | "/signup" | "/create-profile" | "/apis/post-user-interests" | "/apis/delete-user-interests" | "/connect/:interestId?" | "/profile" | "/user/:partnerId?" | "/groups/create" | "/groupsInterest/:groupId?" | "/groups/:groupId?" | "/groups/:groupId/edit" | "/my-groups" | "/chat/:partnerId?";
   };
   "routes/login.tsx": {
     id: "routes/login";
@@ -91,7 +96,7 @@ type RouteFiles = {
   };
   "layouts/navigation.tsx": {
     id: "layouts/navigation";
-    page: "/" | "/connect/:interestId?" | "/profile" | "/user/:partnerId?" | "/groups/create" | "/groupsInterest/:groupId?" | "/groups/:groupId?" | "/my-groups" | "/chat/:partnerId?";
+    page: "/" | "/connect/:interestId?" | "/profile" | "/user/:partnerId?" | "/groups/create" | "/groupsInterest/:groupId?" | "/groups/:groupId?" | "/groups/:groupId/edit" | "/my-groups" | "/chat/:partnerId?";
   };
   "routes/home.tsx": {
     id: "routes/home";
@@ -120,6 +125,10 @@ type RouteFiles = {
   "routes/group-detail.tsx": {
     id: "routes/group-detail";
     page: "/groups/:groupId?";
+  };
+  "routes/edit-group.tsx": {
+    id: "routes/edit-group";
+    page: "/groups/:groupId/edit";
   };
   "routes/my-groups.tsx": {
     id: "routes/my-groups";
