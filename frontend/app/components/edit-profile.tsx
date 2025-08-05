@@ -35,7 +35,7 @@ export function EditProfile (props: Props) {
     }
     return (
         <>
-            <section className="flex flex-col gap-10 px-4 sm:px-6 md:px-8">
+            <section className="flex flex-col gap-10 px-4 sm:px-6 md:px-8 pb-[5rem] md:pb-0">
                 {/* ✅ Wrapper box around everything */}
                 <div className="w-full bg-white shadow-xl rounded-3xl p-6 sm:p-10 space-y-10 transition-all">
 

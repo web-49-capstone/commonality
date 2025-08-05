@@ -12,7 +12,10 @@
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",
     "@react-router/node": "^7.5.3",
+    "cloudinary": "^2.7.0",
     "@react-router/serve": "^7.5.3",
+    "@remix-run/form-data-parser": "^0.10.1",
+    "geocodio-library-node": "^1.11.0",
     "flowbite": "^3.1.2",
     "flowbite-react": "^0.11.8",
     "isbot": "^5.1.27",

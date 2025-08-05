@@ -9,4 +9,4 @@ project.env
 .flowbite-react
 .react-router
 /frontend/.env.development
-**/.env.development
+frontend/.env.development
