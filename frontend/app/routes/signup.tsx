@@ -12,20 +12,50 @@ import * as process from "node:process";
 
 
 export async function action({request}: Route.ActionArgs) {
-    const formData = await request.formData()
-    const user = Object.fromEntries(formData)
-const response = await fetch(`${process.env.REST_API_URL}/sign-up`, {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(user)
-})
-const data = await response.json();
-console.log(data);
-if (data.status === 200) {
-    return redirect("/login?message=Please check your email to verify your account")
-}
+    try {
+        const formData = await request.formData();
+        const user = Object.fromEntries(formData);
+        // Basic validation
+        if (!user.userName || !user.userEmail || !user.userPassword || !user.userPasswordConfirm) {
+            return { success: false, error: "All fields are required." };
+        }
+        // Email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(user.userEmail)) {
+            return { success: false, error: "Please enter a valid email address." };
+        }
+        // Password match validation
+        if (user.userPassword !== user.userPasswordConfirm) {
+            return { success: false, error: "Passwords do not match." };
+        }
+        // Password length validation
+        if (user.userPassword.length < 8) {
+            return { success: false, error: "Password must be at least 8 characters long." };
+        }
+        const response = await fetch(`${process.env.REST_API_URL}/sign-up`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        });
+        const data = await response.json();
+        if (data.status === 200) {
+            return redirect("/login?message=Please check your email to verify your account");
+        }
+        // Show backend error if present
+        if (data.error) {
+            if (data.error.includes("already exists") || data.error.includes("duplicate")) {
+                return { success: false, error: "An account with this email already exists." };
+            }
+            return { success: false, error: data.error };
+        }
+        return { success: false, error: "Email already exists." };
+    } catch (error: any) {
+        return { success: false, error: error instanceof Error ? error.message : 'Unknown error', status: 500 };
+    }
+
+
 }
 export default function Signup() {
     const [showPassword, setShowPassword] = useState(false);
@@ -49,6 +79,8 @@ export default function Signup() {
                 <h1 className="text-4xl sm:text-5xl font-extrabold text-center pt-10 text-gray-900 tracking-tight">Welcome to Commonality</h1>
                 <p className="text-2xl">Shared Interests. Real Connections.</p>
                 <div className="text-white flex flex-col items-center justify-center w-full bg-white shadow-xl rounded-3xl p-6 pb-10 space-y-10 transition-all">
+                    {/* Error message above form */}
+
                     <div className="flex space-x-4 mb-6">
                         <button className="hover:cursor-pointer bg-gradient-to-br from-blue-500 to-blue-400 text-white px-4 py-2 rounded-lg shadow hover:to-indigo-700 transition" onClick={() => navigate('/login')}>
                             Login
@@ -139,8 +171,14 @@ export default function Signup() {
                         }
                     >Sign Up
                     </button>
+                {actionData?.error && (
+                    <div className="text-red-500 text-sm mb-4 absolute">
+                        {actionData.error}
+                    </div>
+                )}
 
             </Form>
+
                 </div>
             </div>
         </>
