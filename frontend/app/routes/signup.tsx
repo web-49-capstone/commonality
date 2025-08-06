@@ -43,15 +43,19 @@ export async function action({request}: Route.ActionArgs) {
         if (data.status === 200) {
             return redirect("/login?message=Please check your email to verify your account");
         }
+        if (data.status === 409) {
+            return { success: false, error: "An account with this email already exists." };
+        }
         // Show backend error if present
         if (data.error) {
-            if (data.error.includes("already exists") || data.error.includes("duplicate")) {
-                return { success: false, error: "An account with this email already exists." };
-            }
+
             return { success: false, error: data.error };
         }
-        return { success: false, error: "Email already exists." };
+
+        return { success: false, error: "Unknown error" };
+
     } catch (error: any) {
+
         return { success: false, error: error instanceof Error ? error.message : 'Unknown error', status: 500 };
     }
 
@@ -171,11 +175,14 @@ export default function Signup() {
                         }
                     >Sign Up
                     </button>
-                {actionData?.error && (
-                    <div className="text-red-500 text-sm mb-4 absolute">
-                        {actionData.error}
-                    </div>
-                )}
+                <p className="text-red-600 text-sm text-center min-h-[1.25rem]">
+                    {actionData?.error || ""}
+                </p>
+                {/*{actionData?.error && (*/}
+                {/*    <div className="text-red-500 text-sm mb-4 absolute">*/}
+                {/*        {actionData.error}*/}
+                {/*    </div>*/}
+                {/*)}*/}
 
             </Form>
 
