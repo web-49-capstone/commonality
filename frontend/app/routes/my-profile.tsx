@@ -35,7 +35,7 @@ export default function MyProfile({loaderData}: Route.ComponentProps) {
 
     return (
         <>
-            <section className="max-w-4xl min-w-1/2 mx-auto p-6 sm:pt-[4rem]">
+            <section className="max-w-4xl min-w-1/2 md:mx-auto p-6 sm:pt-[4rem]">
                 <div className="flex justify-between mb-6">
                     <h1 className="text-3xl font-bold text-gray-900">My Profile</h1>
                     <div className="flex flex-row gap-4">
