@@ -24,7 +24,11 @@ export function EditProfile (props: Props) {
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0] || null
-
+        const maxFileSize = 1
+        if (file && file.size > maxFileSize * 1024 * 1024) {
+            alert(`File size exceeds ${maxFileSize}MB limit.`);
+            return;
+        }
 
         if (file) {
             const objectUrl = URL.createObjectURL(file);

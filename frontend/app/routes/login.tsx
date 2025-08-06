@@ -132,10 +132,10 @@ console.log(errors)
             <p className="text-2xl">Shared Interests. Real Connections.</p>
             <div className="text-white flex flex-col items-center justify-center w-full bg-white shadow-xl rounded-3xl p-6 pb-10 space-y-10 transition-all">
                 <div className="flex space-x-4 mb-6">
-                    <button className="bg-gradient-to-br from-green-500 to-green-400 text-white px-4 py-2 rounded-lg shadow transition">
+                    <button className="bg-gradient-to-br from-blue-500 to-blue-400 text-white px-4 py-2 rounded-lg shadow transition">
                         Login
                     </button>
-                    <button className="hover:cursor-pointer bg-gradient-to-br from-blue-500 to-blue-400 text-white px-4 py-2 rounded-lg shadow hover:to-indigo-700 transition" onClick={() => navigate('/signup')}>
+                    <button className="hover:cursor-pointer bg-gradient-to-br from-gray-500 to-gray-400 text-white px-4 py-2 rounded-lg shadow hover:to-indigo-700 transition" onClick={() => navigate('/signup')}>
                         Sign Up
                     </button>
                 </div>

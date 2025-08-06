@@ -20,7 +20,7 @@ const ChatTabs = ({partnerMessage, isActive = false} : ChatTabProps) =>
 
 {
     return (
-        <div className="flex-1 overflow-y-auto py-2">
+        <div className="flex-1 overflow-y-auto py-2 md:w-[16rem]">
             <div className={`hover:cursor-pointer border rounded-lg px-4 py-6 flex items-center transition-colors
                 ${isActive
                 ? "bg-gradient-to-br from-blue-50 to-blue-200 border-blue-200 text-blue-700 shadow"
