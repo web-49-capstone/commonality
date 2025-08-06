@@ -4,9 +4,10 @@ export default [
     route("login", "routes/login.tsx"),
     route("signup", "routes/signup.tsx"),
     route("create-profile", "routes/create-profile.tsx"),
-    route("apis/post-user-interests", "routes/interest-component-route.tsx"),
-    route("apis/delete-user-interests", "routes/delete-interest-route.tsx"),
+    route("api/post-user-interests", "routes/interest-component-route.tsx"),
+    route("api/delete-user-interests", "routes/delete-interest-route.tsx"),
     route("signout", "routes/signout.tsx"),
+    route("activate/:userActivationToken?", "routes/activation.tsx"),
 
     layout("layouts/navigation.tsx", [
         index("routes/home.tsx"),

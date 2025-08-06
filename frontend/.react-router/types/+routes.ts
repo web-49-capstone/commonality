@@ -22,14 +22,19 @@ type Pages = {
   "/create-profile": {
     params: {};
   };
-  "/apis/post-user-interests": {
+  "/api/post-user-interests": {
     params: {};
   };
-  "/apis/delete-user-interests": {
+  "/api/delete-user-interests": {
     params: {};
   };
   "/signout": {
     params: {};
+  };
+  "/activate/:userActivationToken?": {
+    params: {
+      "userActivationToken"?: string;
+    };
   };
   "/connect/:interestId?": {
     params: {
@@ -54,7 +59,7 @@ type Pages = {
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/login" | "/signup" | "/create-profile" | "/apis/post-user-interests" | "/apis/delete-user-interests" | "/signout" | "/connect/:interestId?" | "/profile" | "/user/:partnerId?" | "/chat/:partnerId?";
+    page: "/" | "/login" | "/signup" | "/create-profile" | "/api/post-user-interests" | "/api/delete-user-interests" | "/signout" | "/activate/:userActivationToken?" | "/connect/:interestId?" | "/profile" | "/user/:partnerId?" | "/chat/:partnerId?";
   };
   "routes/login.tsx": {
     id: "routes/login";
@@ -70,15 +75,19 @@ type RouteFiles = {
   };
   "routes/interest-component-route.tsx": {
     id: "routes/interest-component-route";
-    page: "/apis/post-user-interests";
+    page: "/api/post-user-interests";
   };
   "routes/delete-interest-route.tsx": {
     id: "routes/delete-interest-route";
-    page: "/apis/delete-user-interests";
+    page: "/api/delete-user-interests";
   };
   "routes/signout.tsx": {
     id: "routes/signout";
     page: "/signout";
+  };
+  "routes/activation.tsx": {
+    id: "routes/activation";
+    page: "/activate/:userActivationToken?";
   };
   "layouts/navigation.tsx": {
     id: "layouts/navigation";

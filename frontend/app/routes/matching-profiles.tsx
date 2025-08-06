@@ -252,7 +252,7 @@ export default function MatchingProfiles() {
 
     return (
         <>
-            <div className="grid grid-cols-1 md:grid-cols-3 md:mt-10 container mx-auto bg-white shadow-xl rounded-3xl p-6 sm:px-5 space-y-10 transition-all">
+            <div className="grid grid-cols-1 md:grid-cols-3 md:mt-10 container mx-auto bg-white shadow-xl rounded-3xl p-6 sm:px-5 md:space-y-10 transition-all">
 
                 <div className="text-center order-2 md:order-1 py-3">
 
@@ -265,20 +265,20 @@ export default function MatchingProfiles() {
 
 
                     <hr className="my-5 md:my-10 w-3/4 mx-auto"></hr>
-                    <h2 className="text-2xl md:text-2xl font-medium mt-5 md:mt-10">Finding profiles interested in:</h2>
+                    <h2 className="text-2xl md:text-2xl font-medium mt-5 md:mt-10">Find profiles interested in:</h2>
                     <MyInterestsDropdown userInterests={userInterests}/>
                     <p className="text-sm text-gray-900 mx-10 pt-5 italic">Profiles within 40 miles are displayed. <a className="text-blue-500 hover:text-blue-700" href="/profile">Change your city and state</a> to search somewhere else.</p>
 
                 </div>
                 <div className="md:col-span-2 order-1 md:order-2">
                     {!matchingUsers || matchingUsers.length === 0 ? (
-                        <div className="text-center pt-20">
+                        <div className="text-center">
                             {isRootMatching ? (
-                                <div className="text-red-900 text-xl hidden md:block">
+                                <div className="text-red-900 text-xl hidden pt-20 md:block">
                                     <p>Select an interest to start matching.</p>
                                 </div>
                             ) : (
-                                <div>
+                                <div className="pt-20">
                                     <p className="text-red-900 text-xl">No new profiles for this interest.</p>
                                     <p className="text-gray-600 mt-2">Try selecting another interest or check back later!</p>
                                 </div>
