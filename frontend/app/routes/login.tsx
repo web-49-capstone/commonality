@@ -17,7 +17,7 @@ import {getValidatedFormData, useRemixForm} from "remix-hook-form";
 
 export function meta({}: Route.MetaArgs) {
     return [
-        { title: "rethread" },
+        { title: "Commonality" },
         { name: "description", content: "please sign in or sign up" },
     ];
 }
