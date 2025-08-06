@@ -18,8 +18,8 @@ export async function loader({ request }: Route.LoaderArgs) {
 }
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "New React Router App" },
-    { name: "description", content: "Welcome to React Router!" },
+    { title: "Commonality" },
+    { name: "description", content: "Welcome to Commonality!" },
   ];
 }
 

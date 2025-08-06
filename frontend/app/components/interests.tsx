@@ -40,6 +40,7 @@ export function InterestSelector(props: Props) {
                 const isFirstSearch = q === null;
                 submit(event.currentTarget, {
                     replace: !isFirstSearch,
+                    preventScrollReset: true
                 })
             }}>
                 <input

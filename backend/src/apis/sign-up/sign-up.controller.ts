@@ -24,7 +24,7 @@ export async function signupUserController( request: Request, response: Response
 
         const userActivationToken = setActivationToken()
 
-        const userImgUrl = 'https://res.cloudinary.com/cnm-ingenuity-deep-dive-bootcamp/image/upload/v1726159504/t32ematygvtcyz4ws9p5.png'
+        const userImgUrl = 'https://res.cloudinary.com/dkwrrd3nn/image/upload/v1754511439/commonality-avatars/bub8zuxzclduu5ywfczw.png'
 
         const basePath: string = `${request.protocol}://kilian.ddfullstack.cloud/activate/${userActivationToken}`
 
