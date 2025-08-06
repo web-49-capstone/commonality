@@ -31,10 +31,8 @@ export async function getGroupsByUserId(request: Request) {
         return redirect('/login')
     }
 
-    console.log(response);
 
     const result = response.data
-    console.log(result)
     const groups = GroupSchema.array().parse(result)
 
     return { groups, user: session.data.user };

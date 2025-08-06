@@ -14,6 +14,8 @@ import {messageRoute} from "./apis/message/message.route.ts";
 import {groupRoute} from "./apis/groups/group.route.ts";
 import {groupInterestRoute} from "./apis/group-interests/group-interest.route.ts";
 import {groupMatchingRoute} from "./apis/group-matching/group-matching.route.ts";
+import {groupMessageRoute} from "./apis/group-message/group-message.route.ts";
+import {debugRoute} from "./apis/debug/debug.route.ts";
 import helmet from "helmet";
 
 export class App {
@@ -56,6 +58,8 @@ export class App {
         this.app.use(groupRoute.basePath, groupRoute.router)
         this.app.use(groupInterestRoute.basePath, groupInterestRoute.router)
         this.app.use(groupMatchingRoute.basePath, groupMatchingRoute.router)
+        this.app.use(groupMessageRoute.basePath, groupMessageRoute.router)
+        this.app.use(debugRoute.basePath, debugRoute.router)
 
     }
 

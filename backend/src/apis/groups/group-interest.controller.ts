@@ -10,8 +10,7 @@ const AddInterestSchema = z.object({
 
 export async function postGroupInterestController (request: Request, response: Response): Promise<void> {
   try {
-    console.log("Adding interest to group:", request.params.groupId, request.body)
-    
+
     const paramsValidation = z.object({
       groupId: z.string().uuid()
     }).safeParse(request.params)

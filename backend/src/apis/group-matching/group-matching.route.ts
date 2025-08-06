@@ -6,7 +6,9 @@ import {
   getPendingGroupMatchesByUserIdController,
   getMatchingGroupsController,
   getAcceptedGroupMatchesByUserIdController,
-  putGroupMatchController
+  putGroupMatchController,
+  getGroupMatchStatusController,
+  getPendingGroupMatchesCountController
 } from './group-matching.controller.ts'
 
 const basePath = '/apis/group-matching'
@@ -22,8 +24,14 @@ router.route('/pending/user/:userId')
 router.route('/pending/group/:groupId')
   .get(isLoggedInController, getPendingGroupMatchesByGroupIdController)
 
+router.route('/pending/count/:groupId')
+  .get(isLoggedInController, getPendingGroupMatchesCountController)
+
 router.route('/accepted/user/:userId')
   .get(isLoggedInController, getAcceptedGroupMatchesByUserIdController)
+
+router.route('/status/:userId/:groupId')
+  .get(isLoggedInController, getGroupMatchStatusController)
 
 router.route('/:userId/:groupId')
   .put(isLoggedInController, putGroupMatchController)

@@ -1,5 +1,7 @@
 import { z } from 'zod/v4'
 import { sql } from '../../utils/database.utils.ts'
+import {v7 as uuidv7} from "uuid"
+
 
 export const GroupMatchSchema = z.object({
   groupMatchUserId: z.uuidv7('Please provide a valid UUIDv7 for groupMatchUserId'),
@@ -29,11 +31,48 @@ export async function insertGroupMatch(groupMatch: Omit<GroupMatch, 'groupMatchC
 }
 
 export async function updateGroupMatch(userId: string, groupId: string, accepted: boolean): Promise<string> {
-  await sql`
+  const result = await sql`
     UPDATE group_match
     SET group_match_accepted = ${accepted}
     WHERE group_match_user_id = ${userId} AND group_match_group_id = ${groupId}
+    RETURNING group_match_accepted
   `
+  
+  if (accepted && result.length > 0) {
+    // Add user to group members if accepted
+    try {
+      await sql`
+        INSERT INTO group_members (user_id, group_id)
+        VALUES (${userId}, ${groupId})
+        ON CONFLICT (user_id, group_id) DO NOTHING
+      `
+      
+      // Send welcome message to group chat
+      const welcomeMessage = `Welcome a new member to the group! 👋`
+      
+      await sql`
+        INSERT INTO group_message (
+          group_message_id,
+          group_message_group_id,
+          group_message_user_id,
+          group_message_body,
+          group_message_sent_at
+        ) VALUES (
+          ${uuidv7()},
+          ${groupId},
+          ${userId},
+          ${welcomeMessage},
+          NOW()
+        )
+      `
+      
+      return 'Group match accepted and user added to group'
+    } catch (error) {
+      // If user is already a member, just update the match status
+      return 'Group match updated successfully'
+    }
+  }
+  
   return 'Group match updated successfully'
 }
 

@@ -1,5 +1,7 @@
 import { z } from 'zod/v4'
 import { sql } from '../../utils/database.utils.ts'
+import {v7 as uuidv7} from "uuid"
+
 
 
 export const GroupSchema = z.object({
@@ -71,6 +73,25 @@ export async function createGroup(group: Omit<Group,'groupCreated' | 'groupUpdat
       )
     `
 
+    // Create welcome message in group thread
+    const welcomeMessage = `Welcome to ${groupName}! This is the beginning of your group chat. Start connecting with your new group members!`
+    
+    await sql`
+      INSERT INTO group_message (
+        group_message_id,
+        group_message_group_id,
+        group_message_user_id,
+        group_message_body,
+        group_message_sent_at
+      ) VALUES (
+        ${uuidv7()},
+        ${groupId},
+        ${groupAdminUserId},
+        ${welcomeMessage},
+        NOW()
+      )
+    `
+
 return 'Group created successfully with ID'
 }
 
@@ -104,7 +125,6 @@ export async function addGroupMember(groupMember: GroupMember): Promise<string> 
 }
 
 export async function addGroupInterest(groupId: string, interestId: string): Promise<string> {
-  console.log(`Inserting interest ${interestId} into group ${groupId}`)
   await sql`
     INSERT INTO group_interests (group_id, interest_id)
     VALUES (${groupId}, ${interestId})
@@ -192,6 +212,13 @@ export async function selectGroupsByUserId(userId: string): Promise<Group[]> {
            JOIN group_members gm ON g.group_id = gm.group_id
     WHERE gm.user_id = ${userId}
   `
-  console.log(rowList)
   return GroupSchema.array().parse(rowList)
+}
+
+export async function checkUserIsGroupMember(userId: string, groupId: string): Promise<boolean> {
+  const rowList = await sql`
+    SELECT 1 FROM group_members 
+    WHERE user_id = ${userId} AND group_id = ${groupId}
+  `
+  return rowList.length > 0
 }

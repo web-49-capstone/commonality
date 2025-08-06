@@ -21,7 +21,6 @@ const InterestIdsSchema = z.array(z.string().uuid())
 
 export async function postGroupController (request: Request, response: Response): Promise<void> {
   try {
-    console.log("➡️ Received request to create group:", request.body)
 
     const validationResult = GroupCreationSchema.safeParse(request.body)
 
@@ -31,8 +30,7 @@ export async function postGroupController (request: Request, response: Response)
       zodErrorResponse(response, validationResult.error)
       return
     }
-    console.log("Validation passed, creating group:", validationResult.data)
-    
+
     const groupData = validationResult.data
     const group = {
       groupId: uuidv7(),
@@ -41,7 +39,6 @@ export async function postGroupController (request: Request, response: Response)
     
     await createGroup(group)
     
-    console.log("Group created successfully:", group.groupId)
     const status: Status = { status: 200, data: { group }, message: 'Group created successfully' }
     response.json(status)
   } catch (error: any) {

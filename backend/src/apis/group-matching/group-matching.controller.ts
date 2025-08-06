@@ -208,5 +208,101 @@ export async function putGroupMatchController(request: Request, response: Respon
   }
 }
 
+export async function getGroupMatchStatusController(request: Request, response: Response): Promise<void> {
+  try {
+    const validationResult = z.object({
+      userId: z.string().uuid(),
+      groupId: z.string().uuid()
+    }).safeParse(request.params)
+
+    if (!validationResult.success) {
+      zodErrorResponse(response, validationResult.error)
+      return
+    }
+
+    const { userId, groupId } = validationResult.data
+    const user = request.session?.user
+    const userIdFromSession = user?.userId
+
+    if (!userIdFromSession || userId !== userIdFromSession) {
+      response.json({ status: 401, message: 'Unauthorized', data: null })
+      return
+    }
+
+    const rowList = await sql`
+      SELECT 
+        group_match_accepted as "status",
+        group_match_created as "createdAt"
+      FROM group_match 
+      WHERE group_match_user_id = ${userId} AND group_match_group_id = ${groupId}
+    `
+
+    if (rowList.length === 0) {
+      response.json({ status: 200, message: null, data: null })
+      return
+    }
+
+    const match = rowList[0]
+    let status: 'pending' | 'accepted' | 'rejected'
+    
+    if (match.status === null) {
+      status = 'pending'
+    } else if (match.status === true) {
+      status = 'accepted'
+    } else {
+      status = 'rejected'
+    }
+
+    response.json({ status: 200, message: null, data: { status, createdAt: match.createdAt } })
+  } catch (error) {
+    console.error(error)
+    serverErrorResponse(response, null)
+  }
+}
+
+export async function getPendingGroupMatchesCountController(request: Request, response: Response): Promise<void> {
+  try {
+    const validationResult = z.object({
+      groupId: z.string().uuid()
+    }).safeParse(request.params)
+
+    if (!validationResult.success) {
+      zodErrorResponse(response, validationResult.error)
+      return
+    }
+
+    const { groupId } = validationResult.data
+    const user = request.session?.user
+    const userId = user?.userId
+
+    if (!userId) {
+      response.json({ status: 401, message: 'Unauthorized', data: null })
+      return
+    }
+
+    // Verify user is admin of the group
+    const groupResult = await sql`
+      SELECT group_admin_user_id FROM "group" WHERE group_id = ${groupId}
+    `
+    
+    if (groupResult.length === 0 || groupResult[0].group_admin_user_id !== userId) {
+      response.json({ status: 403, message: 'Only group admin can view pending matches count', data: null })
+      return
+    }
+
+    const rowList = await sql`
+      SELECT COUNT(*) as count
+      FROM group_match 
+      WHERE group_match_group_id = ${groupId} 
+        AND group_match_accepted IS NULL
+    `
+
+    response.json({ status: 200, message: null, data: rowList[0]?.count || 0 })
+  } catch (error) {
+    console.error(error)
+    serverErrorResponse(response, null)
+  }
+}
+
 // Import sql at the top
 import { sql } from '../../utils/database.utils.ts'

@@ -113,6 +113,10 @@ CREATE TABLE IF NOT EXISTS group_match (
 CREATE INDEX ON group_match (group_match_user_id);
 CREATE INDEX ON group_match (group_match_group_id);
 
+
+
+
+
 INSERT INTO interest (interest_id, interest_name) VALUES ('019837fd-b294-7db7-9de3-320d4078618c', 'Gaming');
 INSERT INTO interest (interest_id, interest_name) VALUES ('019837fd-b294-7b32-987d-d40fbfb8f19b', 'Hiking');
 INSERT INTO interest (interest_id, interest_name) VALUES ('019837fd-b294-751d-b90d-e70a3458bfc5', 'Coding');
@@ -180,3 +184,18 @@ BEGIN
     RETURN distance;
 END;
 $$;
+-- Create group_message table for group messaging
+CREATE TABLE IF NOT EXISTS group_message (
+                                             group_message_id uuid PRIMARY KEY,
+                                             group_message_group_id uuid NOT NULL,
+                                             group_message_user_id uuid NOT NULL,
+                                             group_message_body text NOT NULL,
+                                             group_message_sent_at timestamptz NOT NULL DEFAULT NOW(),
+                                             FOREIGN KEY (group_message_group_id) REFERENCES "group"(group_id) ON DELETE CASCADE,
+                                             FOREIGN KEY (group_message_user_id) REFERENCES "user"(user_id) ON DELETE CASCADE
+);
+
+-- Create indexes for group messaging
+CREATE INDEX idx_group_message_group_id ON group_message (group_message_group_id);
+CREATE INDEX idx_group_message_user_id ON group_message (group_message_user_id);
+CREATE INDEX idx_group_message_sent_at ON group_message (group_message_sent_at);

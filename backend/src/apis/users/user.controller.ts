@@ -29,7 +29,6 @@ export async function putUserController (request: Request, response: Response): 
         }
         const {userId} = paramsValidationResult.data
         const {userName, userBio, userAvailability, userCity, userState, userImgUrl, userLat, userLng} = bodyValidationResult.data
-        console.log("bodyvalidationresult data = ", bodyValidationResult.data)
         const userFromSession = request.session.user
         const userIdFromSession = userFromSession?.userId
         if (userId !== userIdFromSession) {
