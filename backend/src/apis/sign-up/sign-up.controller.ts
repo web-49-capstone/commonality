@@ -69,6 +69,14 @@ export async function signupUserController( request: Request, response: Response
 
         response.status(200).json(status)
     } catch (error: any) {
+        if (error.message.includes("duplicate key") || error.message.includes("already exists")) {
+            const status: Status = {
+                status: 409,
+                message: "An account with this email already exists.",
+                data: null
+            }
+            return response.status(409).json(status)
+        }
         console.error(error)
         const status:Status = {
             status: 500,
