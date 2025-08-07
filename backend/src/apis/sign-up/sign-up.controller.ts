@@ -26,7 +26,7 @@ export async function signupUserController( request: Request, response: Response
 
         const userImgUrl = 'https://res.cloudinary.com/dkwrrd3nn/image/upload/v1754511439/commonality-avatars/bub8zuxzclduu5ywfczw.png'
 
-        const basePath: string = `${request.protocol}://kilian.ddfullstack.cloud/activate/${userActivationToken}`
+        const basePath: string = `${request.protocol}://commonality.ddfullstack.cloud/activate/${userActivationToken}`
 
         const message = `<h2>Welcome to Commonality!</h2><p>Please click the link below to activate your account.</p><a href="${basePath}">${basePath}</a>`
 

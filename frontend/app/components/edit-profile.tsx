@@ -24,8 +24,8 @@ export function EditProfile (props: Props) {
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0] || null
-        const maxFileSize = 1
-        if (file && file.size > maxFileSize * 1024 * 1024) {
+        const maxFileSize = 5 * 1024 * 1024; // 5MB
+        if (file && file.size > maxFileSize) {
             alert(`File size exceeds ${maxFileSize}MB limit.`);
             return;
         }
@@ -40,7 +40,7 @@ export function EditProfile (props: Props) {
     return (
         <>
             <section className="flex flex-col gap-10 px-4 sm:px-6 md:px-8 pb-[5rem] md:pb-0">
-                {/* ✅ Wrapper box around everything */}
+                {/* wrapper box around everything */}
                 <div className="w-full bg-white shadow-xl rounded-3xl p-6 sm:p-10 space-y-10 transition-all">
 
                     <Form method="put" encType="multipart/form-data" id="updateProfile"
