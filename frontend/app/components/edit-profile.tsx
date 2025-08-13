@@ -14,6 +14,18 @@ type Props = {
     q: string | null;
     errorMessage?: string;
 };
+
+/**
+ * EditProfile component renders a form for editing user profile details.
+ * Allows updating profile image, state, city, bio, availability, and interests.
+ * Shows error messages for invalid input or file size.
+ *
+ * @param user Current user object
+ * @param interests List of all available interests
+ * @param userInterests List of user's selected interests
+ * @param q Search query for interests
+ * @param errorMessage Optional error message to display
+ */
 export function EditProfile (props: Props) {
     const {user, interests, userInterests, q, errorMessage} = props;
     const [formData, setFormData] = useState({
@@ -25,11 +37,12 @@ export function EditProfile (props: Props) {
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0] || null
         const maxFileSize = 5 * 1024 * 1024; // 5MB
+        // Validate file size before preview
         if (file && file.size > maxFileSize) {
             alert(`File size exceeds ${maxFileSize}MB limit.`);
             return;
         }
-
+        // Show preview if file is valid
         if (file) {
             const objectUrl = URL.createObjectURL(file);
             setPreviewUrl(objectUrl);
@@ -42,11 +55,10 @@ export function EditProfile (props: Props) {
             <section className="flex flex-col gap-10 px-4 sm:px-6 md:px-8 pb-[5rem] md:pb-0">
                 {/* wrapper box around everything */}
                 <div className="w-full bg-white shadow-xl rounded-3xl p-6 sm:p-10 space-y-10 transition-all">
-
+                    {/* Profile update form */}
                     <Form method="put" encType="multipart/form-data" id="updateProfile"
                           className="w-full flex flex-col lg:flex-row justify-between items-start gap-8">
-
-                        {/* LEFT SIDE */}
+                        {/* LEFT SIDE: Profile image, name, state, city */}
                         <div className="flex flex-col items-center gap-2 lg:gap-4 w-full lg:w-1/3">
 
                             <input

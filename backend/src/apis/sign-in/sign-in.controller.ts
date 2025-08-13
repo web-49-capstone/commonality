@@ -1,3 +1,8 @@
+/**
+ * Controller for handling user sign-in requests.
+ * Validates credentials, checks user existence, verifies password, and issues JWT.
+ * Sets session data for authenticated users.
+ */
 import type {Request, Response} from 'express';
 import {type PrivateUser, PrivateUserSchema, selectPrivateUserByUserEmail} from "../users/user.model.ts";
 import {z} from "zod/v4";
@@ -7,8 +12,16 @@ import {generateJwt, validatePassword} from "../../utils/auth.utils.ts";
 import {v7 as uuidv7} from "uuid"
 import "../../index.ts";
 
+/**
+ * POST /apis/sign-in
+ * Authenticates a user and starts a session.
+ * Validates request body using Zod schema.
+ * @param request Express request object
+ * @param response Express response object
+ */
 export async function signInController (request: Request, response: Response): Promise<void> {
     try {
+        // Validate request body for email and password
         const validationResult = PrivateUserSchema
             .pick({userEmail: true})
             .extend({
@@ -23,6 +36,7 @@ export async function signInController (request: Request, response: Response): P
         }
 
         const {userEmail, userPassword} = validationResult.data
+        // Look up user by email
         const user: PrivateUser | null = await selectPrivateUserByUserEmail(userEmail)
         const signInFailedStatus: Status = {status: 400, message: 'email or password is incorrect, please try again.', data: null}
         if (user === null) {
@@ -30,12 +44,14 @@ export async function signInController (request: Request, response: Response): P
             return
         }
 
+        // Validate password
         const isPasswordValid = await validatePassword(user.userHash, userPassword)
         if (!isPasswordValid) {
             response.json(signInFailedStatus)
             return
         }
 
+        // Prepare JWT payload and session
         const { userId, userBio, userImgUrl, userName, userCity, userState, userLng, userLat, userAvailability, userCreated } = user
         const signature: string = uuidv7()
         const authorization: string = generateJwt({
@@ -51,10 +67,12 @@ export async function signInController (request: Request, response: Response): P
             userName
         },signature)
 
+        // Set session data
         request.session.user = user
         request.session.jwt = authorization
         request.session.signature = signature
 
+        // Set authorization header
         response.header ({
             authorization
         })
@@ -62,6 +80,7 @@ export async function signInController (request: Request, response: Response): P
         response.json({ status: 200, message: "sign in successful", data:null})
         return
     } catch (error:any) {
+        // Handle unexpected errors
         response.json({ status: 500, data: null, message: error.message})
     }
 }

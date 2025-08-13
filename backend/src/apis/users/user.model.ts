@@ -2,6 +2,24 @@ import { z } from 'zod/v4'
 import {sql} from "../../utils/database.utils.ts";
 import {type Interest, InterestSchema} from "../interests/interest.model.ts";
 
+/**
+ * Zod schema for validating private user objects (full user data).
+ * Used for internal operations and authentication.
+ * Field constraints:
+ * - userId: UUID
+ * - userActivationToken: nullable string (32 chars)
+ * - userAvailability: nullable string (max 127 chars)
+ * - userBio: nullable string (max 255 chars)
+ * - userCity: nullable string (max 50 chars)
+ * - userCreated: nullable date
+ * - userEmail: email (max 128 chars)
+ * - userHash: string (97 chars)
+ * - userImgUrl: string (max 255 chars)
+ * - userLat: nullable number (-90 to 90)
+ * - userLng: nullable number (-180 to 180)
+ * - userName: string (1-100 chars)
+ * - userState: nullable string (2 chars)
+ */
 export const PrivateUserSchema = z.object ({
     userId: z.uuid('Please provide a valid uuid for userId'),
     userActivationToken: z.string('Please provide valid activation token')
@@ -46,11 +64,26 @@ export const PrivateUserSchema = z.object ({
         .nullable(),
 })
 
+/**
+ * Zod schema for validating public user objects (safe for exposure).
+ * Omits sensitive fields: activation token, hash, email.
+ */
 export const PublicUserSchema = PrivateUserSchema.omit({userActivationToken: true, userHash: true, userEmail: true})
 
+/**
+ * Type representing a private user (full user data).
+ */
 export type PrivateUser = z.infer<typeof PrivateUserSchema>
+/**
+ * Type representing a public user (safe for exposure).
+ */
 export type PublicUser = z.infer<typeof PublicUserSchema>
 
+/**
+ * Inserts a new user into the database.
+ * @param user PrivateUser object to insert
+ * @returns Success message
+ */
 export async function insertUser (user: PrivateUser): Promise<string> {
     PrivateUserSchema.parse(user)
     const { userId, userActivationToken, userAvailability, userBio, userCity, userCreated, userEmail, userHash, userImgUrl, userLat, userLng, userName, userState } = user
@@ -58,6 +91,11 @@ export async function insertUser (user: PrivateUser): Promise<string> {
     return 'User created successfully'
 }
 
+/**
+ * Retrieves a private user by activation token.
+ * @param userActivationToken Activation token string
+ * @returns PrivateUser object or null if not found
+ */
 export async function selectPrivateUserByUserActivationToken (userActivationToken: string | null): Promise<PrivateUser | null> {
 
     const rowList = await sql`SELECT user_id, user_bio, user_activation_token, user_email, user_hash, user_img_url, user_availability, user_name, user_lng, user_lat, user_state, user_city, user_created FROM "user" WHERE user_activation_token = ${userActivationToken}`
@@ -65,24 +103,45 @@ export async function selectPrivateUserByUserActivationToken (userActivationToke
     return result[0] ?? null
 }
 
+/**
+ * Updates a user in the database (full user data).
+ * @param user PrivateUser object to update
+ * @returns Success message
+ */
 export async function updateUser (user: PrivateUser): Promise<string> {
     const {userId, userBio, userActivationToken, userAvailability, userCity, userCreated, userEmail, userHash, userImgUrl, userLat, userLng, userName, userState} = user
     await sql`UPDATE "user" SET user_bio = ${userBio}, user_activation_token = ${userActivationToken}, user_availability =  ${userAvailability}, user_city = ${userCity}, user_created = ${userCreated}, user_email =  ${userEmail}, user_hash = ${userHash}, user_img_url =  ${userImgUrl}, user_lat = ${userLat}, user_lng = ${userLng}, user_name = ${userName}, user_state = ${userState} WHERE user_id = ${userId}`
     return 'User updated successfully'
 }
 
+/**
+ * Retrieves a private user by email.
+ * @param userEmail Email address
+ * @returns PrivateUser object or null if not found
+ */
 export async function selectPrivateUserByUserEmail (userEmail: string): Promise<PrivateUser | null> {
     const rowList = await sql`SELECT user_id, user_bio, user_activation_token, user_email, user_hash, user_img_url, user_name, user_city, user_state, user_lng, user_lat, user_availability, user_created FROM "user" WHERE user_email = ${userEmail}`
     const result = PrivateUserSchema.array().max(1).parse(rowList)
     return result[0] ?? null
 }
 
+/**
+ * Retrieves a public user by userId.
+ * @param userId UUID of the user
+ * @returns PublicUser object or null if not found
+ */
 export async function selectPublicUserByUserId (userId: string): Promise<PublicUser | null> {
     const rowList = await sql`SELECT user_id, user_availability, user_bio, user_city, user_created, user_img_url, user_name, user_state, user_lat, user_lng FROM "user" WHERE user_id = ${userId}`
     const result = PublicUserSchema.array().max(1).parse(rowList)
     return result[0] ?? null
 
 }
+
+/**
+ * Updates a public user in the database (safe fields only).
+ * @param user PublicUser object to update
+ * @returns Success message
+ */
 export async function updatePublicUser (user: PublicUser): Promise<string> {
     const {userId, userBio, userAvailability, userCity, userCreated, userImgUrl, userName, userState, userLat, userLng} = user
     await sql`UPDATE "user"
@@ -99,11 +158,15 @@ export async function updatePublicUser (user: PublicUser): Promise<string> {
     return 'User updated successfully'
 }
 
-// export async function selectPublicUserByInterestId (userInterestInterestId: string): Promise<PublicUser[]> {
-//     const rowList = await sql`SELECT user_id, user_availability, user_bio, user_city, user_created, user_img_url, user_name, user_state, user_lat, user_lng FROM "user" JOIN user_interest ON user_id = user_interest.user_interest_user_id WHERE user_interest.user_interest_interest_id = ${userInterestInterestId}`
-//     return PublicUserSchema.array().parse(rowList)
-// }
-
+/**
+ * Retrieves public users by interest ID, filtered by location and match status.
+ * @param interestId Interest ID
+ * @param currentUserId Current user's ID
+ * @param currentUserLat Current user's latitude
+ * @param currentUserLng Current user's longitude
+ * @param radiusMiles Search radius in miles (default 40)
+ * @returns Array of PublicUser objects
+ */
 export async function selectPublicUserByInterestId(
     interestId: string,
     currentUserId: string,

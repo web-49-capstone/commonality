@@ -6,6 +6,13 @@ import {Form, Link, NavLink, useNavigate, useSearchParams} from "react-router";
 interface InterestProp {
     userInterests: Interest[]
 }
+
+/**
+ * MyInterestsDropdown component renders a dropdown for selecting user interests.
+ * Updates search params on selection change.
+ *
+ * @param userInterests List of user's interests
+ */
 export function MyInterestsDropdown({userInterests}: InterestProp) {
     // const [searchParams] = useSearchParams()
     const navigate = useNavigate()
@@ -29,7 +36,9 @@ export function MyInterestsDropdown({userInterests}: InterestProp) {
     return (
         <Form>
             <div className="w-11/16 max-w-xs mx-auto">
+                {/* Dropdown for selecting an interest */}
                 <label htmlFor="userDropdown" className="block mb-2 text-sm font-medium text-gray-800">
+                    {/* Label intentionally left blank for accessibility */}
                 </label>
                 <select
                     name="interestId"
@@ -41,13 +50,14 @@ export function MyInterestsDropdown({userInterests}: InterestProp) {
                     <option value="" disabled>
                         Select an Interest
                     </option>
-
+                    {/* Render user's interests as options */}
                     {userInterests.map((interest) => (
-                            <option id="selectedItem" key={interest.interestId} value={interest.interestId}>
-                                {interest.interestName}
-                            </option>
+                        <option id="selectedItem" key={interest.interestId} value={interest.interestId}>
+                            {interest.interestName}
+                        </option>
                     ))}
                 </select>
+                {/* Uncomment the button below to allow manual search update */}
                 {/*<button type="submit" className="bg-gray-900 text-gray-200 border-1 border-gray-200 rounded-xl mt-5 py-3 px-6 w-3/4 mx-auto lg:order-2 hover:cursor-pointer">Update Search</button>*/}
             </div>
         </Form>

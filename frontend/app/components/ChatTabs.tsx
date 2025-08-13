@@ -16,6 +16,14 @@ interface ChatTabProps {
 // }
 
 
+/**
+ * ChatTabs component displays a chat tab for a conversation partner.
+ * Shows partner's profile image, name, last message, and time.
+ * Highlights the active tab.
+ *
+ * @param partnerMessage PartnerMessage object containing chat info
+ * @param isActive Whether this tab is currently selected
+ */
 const ChatTabs = ({partnerMessage, isActive = false} : ChatTabProps) =>
 
 {
