@@ -47,6 +47,13 @@ export async function loader({request}: Route.LoaderArgs) {
     return {session, lastMessage}
 }
 
+/**
+ * MessagingApp layout displays the messaging interface with chat sidebar and chat content.
+ * Sidebar shows a list of chat partners and their last message.
+ * Main content area displays the selected chat conversation.
+ *
+ * @param loaderData Contains session and lastMessage data from loader
+ */
 export default function MessagingApp({loaderData}: Route.ComponentProps) {
     const {session, lastMessage} = loaderData;
     // const {session, lastMessage, userMessages} = loaderData;
@@ -59,7 +66,7 @@ export default function MessagingApp({loaderData}: Route.ComponentProps) {
 
     return (
         <div className="container mx-auto md:mt-10 md:shadow-md flex bg-white">
-            {/* Sidebar */}
+            {/* Sidebar: displays chat partners and last messages */}
             <div className={isRootMessaging ? ("w-full md:w-60 lg:w-80 bg-white border-r border-gray-200 flex flex-col") : ("hidden w-full md:w-60 lg:w-80 bg-white border-r border-gray-200 md:flex flex-col")}>
                 {/* Header */}
                 <div className="p-4 border-b border-gray-200">
@@ -68,7 +75,7 @@ export default function MessagingApp({loaderData}: Route.ComponentProps) {
                     </div>
                 </div>
 
-                {/* Chat List */}
+                {/* Chat List: maps over lastMessage to show chat partners */}
                 <div className="flex-1 overflow-y-auto p-2 space-y-2 bg-gray-50">
                     {lastMessage.map((lastMessage) => (
                         <NavLink to={`/chat/${lastMessage.partnerId}`} className="">

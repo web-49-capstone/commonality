@@ -80,6 +80,7 @@ export default function Navigation({loaderData}: Route.ComponentProps) {
         </div>
                 {/*MOBILE HEADER*/}
         <div className="md:hidden fixed bottom-0 w-full z-50 text-gray-700">
+            {/* Mobile navigation bar */}
             <div className="md:hidden flex justify-evenly items-center gap-3 inset-shadow rounded-t-3xl border-t px-2 py-2 min-h-20 bg-gray-100">
                 <NavLink to="/chat" className={({
                                                         isActive,

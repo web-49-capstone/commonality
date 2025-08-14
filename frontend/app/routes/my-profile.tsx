@@ -10,12 +10,21 @@ export async function loader({request}: Route.LoaderArgs) {
     return await getProfileLoaderData(request);
 }
 
+/**
+ * Action for my-profile route.
+ * Handles profile updates and redirects user after submission.
+ *
+ * @param request Action request object
+ */
 export async function action({request}: Route.ActionArgs) {
     return await editProfileAction(request);
 
 }
 
-
+/**
+ * MyProfile component renders the user's profile page.
+ * Displays user information and profile edit options.
+ */
 export default function MyProfile({loaderData}: Route.ComponentProps) {
     const {session, interests, q, userInterests} = loaderData
     const initialUser = session.data.user

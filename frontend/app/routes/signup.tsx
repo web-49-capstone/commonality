@@ -9,8 +9,6 @@ import {useState} from "react";
 import type {Route} from "../+types/root";
 import * as process from "node:process";
 
-
-
 export async function action({request}: Route.ActionArgs) {
     try {
         const formData = await request.formData();

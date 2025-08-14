@@ -82,6 +82,10 @@ session.set('user', validationResult.data)
 }
 }
 
+/**
+ * Login component renders the login form and handles UI logic.
+ * Displays error messages and manages form state.
+ */
 export default function Login() {
     const actionData = useActionData<{success: boolean; validationErrors?: any; error?: string}>()
 

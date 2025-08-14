@@ -5,23 +5,36 @@ import {InterestSchema} from "~/utils/models/interest.model";
 import type {Route} from "../../.react-router/types/app/+types/root";
 import type {Interest} from "~/utils/types/interest";
 
+/**
+ * Loader function for the user profile page.
+ * Fetches the session, target user data, and their interests.
+ * Throws a 404 error if the partnerId is missing.
+ *
+ * @param {Route.LoaderArgs} args - Loader arguments containing params and request.
+ * @returns {Promise<any>} Data for rendering the user profile page.
+ */
 export async function loader({params, request}: Route.LoaderArgs) {
+    // Retrieve the current session to identify the viewer
     const session = await getSession(request.headers.get("Cookie"));
     const viewerId = session.data.user?.userId ?? null;
 
+    // Extract the partnerId from route params
     const partnerId = params.partnerId;
     if (!partnerId) {
+        // If no partnerId is provided, return a 404 error
         throw new Response("User not found", {status: 404});
     }
 
-    // Fetch the target user
+    // Fetch the target user's data from the REST API
     const userRes = await fetch(`${process.env.REST_API_URL}/users/${partnerId}`);
     const userData = await userRes.json();
+    // Validate and parse the user data using UserSchema
     const viewedUser = UserSchema.parse(userData.data);
 
-    // Fetch their interests
+    // Fetch the user's interests from the REST API
     const interestRes = await fetch(`${process.env.REST_API_URL}/interest/userInterestUserId/${partnerId}`);
     const interestData = await interestRes.json();
+    // Validate and parse the interests using InterestSchema
     const userInterests = InterestSchema.array().parse(interestData.data);
 
     return {viewedUser, userInterests, viewerId};

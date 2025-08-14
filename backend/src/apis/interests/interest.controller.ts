@@ -1,8 +1,3 @@
-/**
- * Controller functions for Interest-related API endpoints.
- * Handles CRUD operations for interests and user interests.
- * Uses Zod schemas for validation and provides consistent error handling.
- */
 import {
     deleteUserInterest,
     insertInterest,

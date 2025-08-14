@@ -10,6 +10,13 @@ import React, {useState} from "react";
 import type {Route} from "../../.react-router/types/app/+types/root";
 import {v7 as uuidv7} from "uuid"
 
+/**
+ * Loader for matching-profiles route.
+ * Loads session and user data for the matching profiles page.
+ * Redirects to login if user is not authenticated.
+ *
+ * @param request Loader request object
+ */
 export async function loader({ request }: Route.LoaderArgs) {
     const url = new URL(request.url);
     const interestId = url.searchParams.get("interestId");
@@ -193,6 +200,10 @@ export async function action({ request }: Route.ActionArgs) {
     return redirect(request.url);
 }
 
+/**
+ * MatchingProfiles component renders the matching profiles page.
+ * Displays a list of profiles that match the user's interests.
+ */
 export default function MatchingProfiles() {
     const {userInterests, match, matchingUsers, userId, matchDirection, otherUserInterests} = useLoaderData<typeof loader>();
     const [openModal, setOpenModal] = useState(false);

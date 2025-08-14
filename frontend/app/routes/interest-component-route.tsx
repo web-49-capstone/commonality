@@ -2,6 +2,13 @@ import {getSession} from "../utils/session.server";
 import {redirect} from "react-router";
 import type {Route} from "../+types/root";
 
+/**
+ * Action for adding a user interest.
+ * Sends a POST request to the backend to add the interest for the user.
+ * Returns success status and message from backend.
+ *
+ * @param request Action request object
+ */
 export async function action({ request}: Route.ActionArgs) {
     const session = await getSession(
         request.headers.get("Cookie")

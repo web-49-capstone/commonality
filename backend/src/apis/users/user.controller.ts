@@ -3,21 +3,6 @@
  * Handles user profile updates, retrieval by userId, and user search by interest.
  * Uses Zod schemas for validation and provides consistent error handling.
  */
-import {
-    type PublicUser,
-    PublicUserSchema, selectPublicUserByInterestId,
-    selectPublicUserByUserId,
-    updatePublicUser,
-    updateUser
-} from "./user.model.ts";
-import {type Request, type Response} from 'express'
-import {serverErrorResponse, zodErrorResponse} from "../../utils/response.utils.ts";
-import type {Status} from "../../utils/interfaces/Status.ts";
-import {UserInterestSchema} from "../interests/interest.model.ts";
-import {generateJwt} from "../../utils/auth.utils.ts";
-import pkg from "jsonwebtoken";
-const {verify} = pkg
-
 /**
  * PUT /apis/users/:userId
  * Updates a user's public profile.
@@ -25,11 +10,38 @@ const {verify} = pkg
  * @param request Express request object
  * @param response Express response object
  */
+        // Validate params and body
+        // Retrieve and update user
+        // Update JWT and session
+
+/**
+ * GET /apis/users/:userId
+ * Retrieves a public user profile by userId.
+ * Validates params using Zod schema.
+ * @param request Express request object
+ * @param response Express response object
+ */
+        // Validate params
+        // Retrieve user profile
+/**
+ * GET /apis/users/userInterestInterestId/:userInterestInterestId
+ * Retrieves public user profiles by interest ID, filtered by location and match status.
+ * Validates params using Zod schema and uses session for location.
+ * @param request Express request object
+ * @param response Express response object
+ */
+        // Validate params
+        // Retrieve users by interest
+import {generateJwt} from "../../utils/auth.utils.ts";
+import pkg from "jsonwebtoken";
+const {verify} = pkg
+
+
 export async function putUserController (request: Request, response: Response): Promise<void> {
     try {
-        // Validate params and body
         const paramsValidationResult = PublicUserSchema.pick({userId: true}).safeParse(request.params)
         const bodyValidationResult = PublicUserSchema.safeParse(request.body)
+
         if (!paramsValidationResult.success) {
             zodErrorResponse(response, paramsValidationResult.error)
             return
@@ -40,13 +52,14 @@ export async function putUserController (request: Request, response: Response): 
         }
         const {userId} = paramsValidationResult.data
         const {userName, userBio, userAvailability, userCity, userState, userImgUrl, userLat, userLng} = bodyValidationResult.data
+        console.log("bodyvalidationresult data = ", bodyValidationResult.data)
         const userFromSession = request.session.user
         const userIdFromSession = userFromSession?.userId
         if (userId !== userIdFromSession) {
             response.json({status: 400, data: null,message: "You are not allowed to preform this task" })
         }
-        // Retrieve and update user
         const user: PublicUser | null = await selectPublicUserByUserId(userId)
+
         if(user === null) {
             response.json({status: 400, data: null,message:"User does not exist" })
             return
@@ -59,8 +72,9 @@ export async function putUserController (request: Request, response: Response): 
         user.userImgUrl = userImgUrl
         user.userLat = userLat
         user.userLng = userLng
+
         await updatePublicUser(user)
-        // Update JWT and session
+
         const jwt = request.session.jwt ?? ''
         const signature = request.session.signature ?? ''
         const parsedJwt = verify(jwt, signature) as any;
@@ -79,6 +93,7 @@ export async function putUserController (request: Request, response: Response): 
             userLat: user.userLat,
             userLng: user.userLng
         }
+
         const newJwt = generateJwt(parsedJwt.auth, signature)
         request.session.user = {
             userId: user.userId,
@@ -92,33 +107,25 @@ export async function putUserController (request: Request, response: Response): 
             userLat: user.userLat,
             userLng: user.userLng
         }
+
         request.session.jwt = newJwt
         response.header({
             authorization: newJwt
         })
         response.json({status: 200, data: null,message:"User updated" })
+
     } catch (error: any) {
         serverErrorResponse(response, null)
     }
 }
-
-/**
- * GET /apis/users/:userId
- * Retrieves a public user profile by userId.
- * Validates params using Zod schema.
- * @param request Express request object
- * @param response Express response object
- */
 export async function getUserByUserIdController (request: Request, response: Response): Promise<void> {
     try {
-        // Validate params
         const validationResult = PublicUserSchema.pick({userId: true}).safeParse(request.params)
         if (!validationResult.success) {
             zodErrorResponse(response, validationResult.error)
             return
         }
         const {userId} = validationResult.data
-        // Retrieve user profile
         const data = await selectPublicUserByUserId(userId)
         const status: Status = {status: 200, data, message: null}
         response.json(status)
@@ -128,28 +135,21 @@ export async function getUserByUserIdController (request: Request, response: Res
     }
 }
 
-/**
- * GET /apis/users/userInterestInterestId/:userInterestInterestId
- * Retrieves public user profiles by interest ID, filtered by location and match status.
- * Validates params using Zod schema and uses session for location.
- * @param request Express request object
- * @param response Express response object
- */
 export async function getPublicUserByInterestIdController (request: Request, response: Response): Promise<void> {
     try {
-        // Validate params
         const validationResult = UserInterestSchema.pick({userInterestInterestId: true}).safeParse(request.params)
         if (!validationResult.success) {
             zodErrorResponse(response, validationResult.error)
             return
         }
+
         const userFromSession = request.session.user
         const userIdFromSession = userFromSession?.userId ?? ''
+
         const {userInterestInterestId} = validationResult.data
         const userLat = userFromSession?.userLat ?? 0
         const userLng = userFromSession?.userLng ?? 0
         const radius = 40
-        // Retrieve users by interest
         const data = await selectPublicUserByInterestId(userInterestInterestId, userIdFromSession, userLat, userLng, radius)
         const staus: Status = {status: 200, data, message: null}
         response.json(staus)

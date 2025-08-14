@@ -19,7 +19,13 @@ export const handle = {
     }
 };
 
-
+/**
+ * Loader for main-chat route.
+ * Loads session, partner info, and message thread for the chat.
+ *
+ * @param request Loader request object
+ * @param params Route parameters (expects partnerId)
+ */
 export async function loader({request, params}: Route.LoaderArgs) {
     const session = await getSession(
         request.headers.get("Cookie")
@@ -127,7 +133,10 @@ function useAutoRevalidate(interval = 10000) {
     }, [revalidator, interval, location.pathname]); // depend on pathname to restart on nav
 }
 
-
+/**
+ * MainChat component renders the chat interface for a conversation.
+ * Displays partner profile preview and message bubbles.
+ */
 export default function MainChat({loaderData}: Route.ComponentProps) {
     // @ts-ignore
     const {session: {user}, messages, partnerInfo} = loaderData;

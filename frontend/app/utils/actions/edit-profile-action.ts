@@ -1,3 +1,13 @@
+/**
+ * Handles the edit profile action, including image upload and location geocoding.
+ * Parses form data, uploads profile image to Cloudinary if provided, and geocodes the user's city/state.
+ * Returns an error if location is invalid.
+ *
+ * @param {Request} request - The HTTP request containing form data.
+ * @param {Session} session - The current user session.
+ * @returns {Promise<Object>} The updated user object or error response.
+ */
+
 import {commitSession, getSession} from "~/utils/session.server";
 import {type FileUpload, parseFormData} from "@remix-run/form-data-parser";
 import {uploadToCloudinary} from "~/utils/cloudinary.server";
@@ -15,11 +25,13 @@ export async function editProfileAction(request: Request) {
 
     const uploadHandler = async (file: FileUpload | string | undefined | null) => {
         if (!file || typeof file === "string" || !file.stream) {
+            // No file uploaded or invalid file type
             return undefined;
         }
 
         if (file.fieldName === 'userImgUrl') {
             try {
+                // Upload image to Cloudinary and return the URL
                 const cloudinaryUrl = await uploadToCloudinary(file.stream());
                 return cloudinaryUrl;
             } catch (error) {
@@ -28,16 +40,20 @@ export async function editProfileAction(request: Request) {
             }
         }
 
+        // Only handle userImgUrl uploads
         return undefined;
     };
 
-
+    // Parse form data and handle file uploads
     const formData = await parseFormData(request, uploadHandler)
     const userInfo = Object.fromEntries(formData)
+
+    // Geocode the user's city and state to get latitude and longitude
     const geocoder = new Geocodio(`${process.env.GEOCODIO_API_KEY}`);
     const location = await geocoder.geocode(`${userInfo.userCity}, ${userInfo.userState}`, [], 1)
 
     if (!location?.results?.length || !location.results[0]?.location) {
+        // Return error if location is invalid
         return {
             success: false,
             error: 'Invalid location. Please enter a valid city and state.',
@@ -45,9 +61,11 @@ export async function editProfileAction(request: Request) {
         }
     }
 
+    // Extract latitude and longitude from geocoding result
     const userLat = location.results[0].location.lat
     const userLng = location.results[0].location.lng
 
+    // Merge updated user info with session data
     const updatedUser = {
         ...session.data.user,
         ...userInfo,

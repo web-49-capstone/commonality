@@ -1,6 +1,13 @@
 import type {Route} from "../../.react-router/types/app/+types/root";
 import {getSession} from "~/utils/session.server";
 
+/**
+ * Action for deleting a user interest.
+ * Sends a DELETE request to the backend to remove the interest for the user.
+ * Returns success status and message from backend.
+ *
+ * @param request Action request object
+ */
 export async function action({request}: Route.ActionArgs) {
     const session = await getSession(
         request.headers.get("Cookie")
