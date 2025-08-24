@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@anthropic-ai/claude-code": "^1.0.89",
     "@remix-run/form-data-parser": "^0.10.1",
     "cloudinary": "^2.7.0",
     "flowbite": "^3.1.2",
