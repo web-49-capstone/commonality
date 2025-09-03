@@ -7,6 +7,7 @@ services:
     env_file:
       - ./project.env
     environment:
+      PORT: 3000
       NODE_ENV: production
     depends_on:
       - backend
@@ -15,6 +16,8 @@ services:
       file: docker-compose.yml
       service: backend
   sql:
+    ports:
+      - "127.0.0.1:6543:5432"
     extends:
       file: docker-compose.yml
       service: sql
