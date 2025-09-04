@@ -11,7 +11,6 @@ import {postSignIn, type SignIn, SignInSchema} from "~/utils/models/sign-in.mode
 import {jwtDecode} from "jwt-decode";
 import {UserSchema} from "~/utils/models/user-schema";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {useSubmit} from "react-router";
 import {getValidatedFormData, useRemixForm} from "remix-hook-form";
 
 
@@ -39,9 +38,7 @@ try {
     const session = await getSession(
         request.headers.get("Cookie")
     )
-    // const formData = await request.formData();
 
-    // const signInObject = Object.fromEntries(formData)
 
     const validatedData = SignInSchema.parse(data);
 
@@ -91,34 +88,32 @@ export default function Login() {
 
 
 
-    const submit = useSubmit();
     const {
     register,
-        formState: {errors, isSubmitting, touchedFields},
+        formState: {errors, isSubmitting},
         reset,
         handleSubmit,
+        watch,
     } = useRemixForm<SignIn>({
         resolver,
-        mode: "onBlur"
+        mode: "onChange"
     })
 console.log(errors)
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const initialMessage = searchParams.get("message");
-    const [formData, setFormData] = useState({
-        userEmail: '',
-        userPassword: ''
-    });
-    const handleInputChange = (event: any) => {
-        const { name, value } = event.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
-    }
-    const isFormComplete = formData.userEmail && formData.userPassword;
-console.log(formData.userPassword.length)
+
+    const userEmail = watch("userEmail") ?? "";
+    const userPassword = watch("userPassword") ?? "";
+
+    const isFormComplete = userEmail.length > 0 && userPassword.length > 0;
+    const buttonDisabled =
+        isSubmitting ||
+        Object.keys(errors).length > 0 ||
+        userPassword.length < 8 ||
+        !isFormComplete;
+
 
     const [showToast, setShowToast] = useState(!!initialMessage);
     const [message, setMessage] = useState(initialMessage);
@@ -129,7 +124,7 @@ console.log(formData.userPassword.length)
             return () => clearTimeout(timer);
         }
     }, [message]);
-    const buttonDisabled = isSubmitting || Object.keys(errors).length > 0 || formData.userPassword.length < 8 || !isFormComplete;
+
     return (
         <>
             <div className="container mx-auto text-center">
@@ -170,8 +165,6 @@ console.log(formData.userPassword.length)
                                 {...register("userEmail")}
                                 placeholder="Email"
                                 className="w-full p-2 pl-10 rounded bg-zinc-500 text-white"
-                                value={formData.userEmail}
-                                onChange={handleInputChange}
                                 required
                             />
                         </div>
@@ -185,8 +178,6 @@ console.log(formData.userPassword.length)
                                 {...register("userPassword")}
                                 placeholder="Password"
                                 className="w-full p-2 pl-10 rounded bg-zinc-500 text-white"
-                                value={formData.userPassword}
-                                onChange={handleInputChange}
                                 required
                             />
                             <IconContext.Provider value={{size: '1.5em'}}>
