@@ -44,6 +44,7 @@ try {
     // const signInObject = Object.fromEntries(formData)
 
     const validatedData = SignInSchema.parse(data);
+        console.log(validatedData);
 
     const {result, headers} = await postSignIn(validatedData);
 
@@ -102,6 +103,18 @@ console.log(errors)
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const initialMessage = searchParams.get("message");
+    const [formData, setFormData] = useState({
+        userEmail: '',
+        userPassword: ''
+    });
+    const handleInputChange = (event: any) => {
+        const { name, value } = event.target;
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    }
+    const isFormComplete = formData.userEmail && formData.userPassword;
 
     const [showToast, setShowToast] = useState(!!initialMessage);
     const [message, setMessage] = useState(initialMessage);
@@ -153,6 +166,8 @@ console.log(errors)
                                 {...register("userEmail")}
                                 placeholder="Email"
                                 className="w-full p-2 pl-10 rounded bg-zinc-500 text-white"
+                                value={formData.userEmail}
+                                onChange={handleInputChange}
                                 required
                             />
                         </div>
@@ -166,6 +181,8 @@ console.log(errors)
                                 {...register("userPassword")}
                                 placeholder="Password"
                                 className="w-full p-2 pl-10 rounded bg-zinc-500 text-white"
+                                value={formData.userPassword}
+                                onChange={handleInputChange}
                                 required
                             />
                             <IconContext.Provider value={{size: '1.5em'}}>
@@ -179,7 +196,7 @@ console.log(errors)
                             <button className=" flex justify-start text-blue-400 text-sm hover:text-red-600 hover:cursor-pointer my-2">Forgot Password?</button>
                             <button
                                 type="submit"
-                                className="w-full bg-gradient-to-br from-green-400 to-green-500 hover:cursor-pointer hover:to-green-600 p-2 rounded text-white disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed" disabled={buttonDisabled}
+                                className="w-full bg-gradient-to-br from-green-400 to-green-500 hover:cursor-pointer hover:to-green-600 p-2 rounded text-white disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed" disabled={!isFormComplete}
                             >Login
                             </button>
                         </div>
