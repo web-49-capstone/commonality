@@ -106,6 +106,19 @@ console.log(errors)
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const initialMessage = searchParams.get("message");
+    const [formData, setFormData] = useState({
+        userEmail: '',
+        userPassword: ''
+    });
+    const handleInputChange = (event: any) => {
+        const { name, value } = event.target;
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    }
+    const isFormComplete = formData.userEmail && formData.userPassword;
+console.log(formData.userPassword.length)
 
     const [showToast, setShowToast] = useState(!!initialMessage);
     const [message, setMessage] = useState(initialMessage);
@@ -116,7 +129,7 @@ console.log(errors)
             return () => clearTimeout(timer);
         }
     }, [message]);
-    const buttonDisabled = isSubmitting || Object.keys(errors).length > 0 || Object.keys(touchedFields).length !== 2;
+    const buttonDisabled = isSubmitting || Object.keys(errors).length > 0 || formData.userPassword.length < 8 || !isFormComplete;
     return (
         <>
             <div className="container mx-auto text-center">
@@ -157,6 +170,8 @@ console.log(errors)
                                 {...register("userEmail")}
                                 placeholder="Email"
                                 className="w-full p-2 pl-10 rounded bg-zinc-500 text-white"
+                                value={formData.userEmail}
+                                onChange={handleInputChange}
                                 required
                             />
                         </div>
@@ -170,6 +185,8 @@ console.log(errors)
                                 {...register("userPassword")}
                                 placeholder="Password"
                                 className="w-full p-2 pl-10 rounded bg-zinc-500 text-white"
+                                value={formData.userPassword}
+                                onChange={handleInputChange}
                                 required
                             />
                             <IconContext.Provider value={{size: '1.5em'}}>
@@ -184,6 +201,7 @@ console.log(errors)
                             <button
                                 type="submit"
                                 className="w-full bg-gradient-to-br from-green-400 to-green-500 hover:cursor-pointer hover:to-green-600 p-2 rounded text-white disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed" disabled={buttonDisabled}
+
                             >Login
                             </button>
                         </div>

@@ -13,7 +13,6 @@ export const SignInSchema = z.object({
 
 export type SignIn = z.infer<typeof SignInSchema>;
 export async function postSignIn(data: SignIn): Promise<{result: Status, headers: Headers}> {
-    console.log(process.env)
     const response = await fetch(`${process.env.REST_API_URL}/sign-in`, {
         method: 'POST',
         headers: {
