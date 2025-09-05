@@ -87,7 +87,6 @@ export default function Login() {
     const actionData = useActionData<{success: boolean; validationErrors?: any; error?: string}>()
 
 
-
     const {
     register,
         formState: {errors, isSubmitting},
@@ -98,7 +97,6 @@ export default function Login() {
         resolver,
         mode: "onChange"
     })
-console.log(errors)
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
@@ -152,12 +150,8 @@ console.log(errors)
                     </button>
                 </div>
 
-                    <Form method="post" onSubmit={handleSubmit} id="login-form" className="bg-gradient-to-br from-gray-100 to-gray-200 shadow-lg p-6 rounded-xl space-y-4 w-full max-w-sm" noValidate>
-                        {actionData?.error && (
-                            <div className="text-red-500 text-sm mb-4 absolute">
-                                {actionData.error}
-                            </div>
-                        )}
+                    <Form method="post" onSubmit={handleSubmit} id="login-form" className="bg-gradient-to-br from-gray-100 to-gray-200 shadow-lg p-6 rounded-xl space-y-4 w-full max-w-sm" >
+
                         <div className='relative'>
                             <MdOutlineEmail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white"/>
                             <input
@@ -197,6 +191,11 @@ console.log(errors)
                             </button>
                         </div>
                     </Form>
+                {actionData?.error && (
+                    <div className="text-red-500 text-sm mb-4">
+                        {actionData.error}
+                    </div>
+                )}
             </div>
             </div>
         </>

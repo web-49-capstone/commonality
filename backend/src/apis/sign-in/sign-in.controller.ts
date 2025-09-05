@@ -50,6 +50,10 @@ export async function signInController (request: Request, response: Response): P
             response.json(signInFailedStatus)
             return
         }
+        if (user.userActivationToken !== null) {
+            response.json({status: 400, message: 'Please activate your account before signing in', data: null})
+            return
+        }
 
         // Prepare JWT payload and session
         const { userId, userBio, userImgUrl, userName, userCity, userState, userLng, userLat, userAvailability, userCreated } = user

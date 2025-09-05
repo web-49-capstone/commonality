@@ -34,7 +34,6 @@ export async function loader({request, params}: Route.LoaderArgs) {
     if (!partnerId) {
         return {session, messages: [], partner: null}
     }
-    console.log("is this running?")
     const requestHeaders = new Headers()
     requestHeaders.append('Content-Type', 'application/json')
     requestHeaders.append('Authorization', session.data?.authorization || '')

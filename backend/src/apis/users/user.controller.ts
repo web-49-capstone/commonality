@@ -1,3 +1,16 @@
+import {
+    type PublicUser,
+    PublicUserSchema, selectPublicUserByInterestId,
+    selectPublicUserByUserId,
+    updatePublicUser,
+    updateUser
+} from "./user.model.ts";
+import {type Request, type Response} from 'express'
+import {serverErrorResponse, zodErrorResponse} from "../../utils/response.utils.ts";
+import type {Status} from "../../utils/interfaces/Status.ts";
+import {UserInterestSchema} from "../interests/interest.model.ts";
+
+
 /**
  * Controller functions for User-related API endpoints.
  * Handles user profile updates, retrieval by userId, and user search by interest.
@@ -52,7 +65,6 @@ export async function putUserController (request: Request, response: Response): 
         }
         const {userId} = paramsValidationResult.data
         const {userName, userBio, userAvailability, userCity, userState, userImgUrl, userLat, userLng} = bodyValidationResult.data
-        console.log("bodyvalidationresult data = ", bodyValidationResult.data)
         const userFromSession = request.session.user
         const userIdFromSession = userFromSession?.userId
         if (userId !== userIdFromSession) {
